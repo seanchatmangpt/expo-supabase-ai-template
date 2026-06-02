@@ -1,3 +1,8 @@
+import { GlassCard } from '@pcp/ui/glassmorphism/GlassCard';
+import { GlassButton } from '@pcp/ui/glassmorphism/GlassButton';
+import { HolographicGlassCard } from '@pcp/2030/ui-holographic/HolographicGlassCard';
+import { Ionicons } from '@expo/vector-icons';
+import { useMembrane } from '@pcp/core';
 /**
  * @fileoverview Home Screen Component
  * The main dashboard screen that welcomes users and provides navigation to key app features.
@@ -23,7 +28,7 @@ import { Link } from "expo-router";
  * <HomeScreen />
  */
 export default function HomeScreen() {
-  const { session, loading } = useSession();
+  const { session, loading } = useSession(); const membrane = useMembrane(); const membraneMode = membrane.getConfig().mode;
 
   // Show loading state while session is being determined
   if (loading) {
@@ -44,7 +49,7 @@ export default function HomeScreen() {
       <View className="bg-white border-b border-gray-200">
         <View className="px-6 py-8">
           <Text className="text-2xl font-bold text-gray-900 mb-2">
-            Welcome back, {userName}! 👋
+            {membraneMode.toUpperCase()} | Welcome back, {userName}! 👋
           </Text>
           <Text className="text-gray-600">
             What would you like to do today?

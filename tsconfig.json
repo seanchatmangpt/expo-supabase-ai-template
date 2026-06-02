@@ -5,6 +5,18 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "@pcp/*": [
+        "../pcp/src/framework/*"
+      ],
+      "@/src/lib/*": [
+        "../pcp/src/lib/*"
+      ],
+      "@wasm4pm-compat/*": [
+        "../wasm4pm-compat/src/ts/*"
+      ],
+      "@wasm4pm/types": [
+        "../pcp/src/types/bindings.d.ts"
       ]
     }
   },
@@ -14,5 +26,9 @@
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
     "nativewind-env.d.ts"
+  ],
+  "exclude": [
+    "supabase",
+    "**/__tests__/*"
   ]
 }

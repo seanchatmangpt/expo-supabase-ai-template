@@ -43,6 +43,20 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="audit"
+        options={{
+          title: "Audit",
+          tabBarIcon: ({ color }) => <TabBarIcon name="line-chart" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="process"
+        options={{
+          title: "Process",
+          tabBarIcon: ({ color }) => <TabBarIcon name="code-fork" color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="account"
         options={{
           title: "Account",
