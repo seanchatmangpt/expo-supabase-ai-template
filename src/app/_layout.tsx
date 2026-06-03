@@ -57,11 +57,13 @@ function AvatarRelativeProjectionSplashController() {
 
 export default function RootLayout() {
   return (
-    <SessionProvider>
-      <AutonomicSimulationManager />
-      <AvatarRelativeProjectionSplashController />
-      <RootLayoutNav />
-    </SessionProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <SessionProvider>
+        <AutonomicSimulationManager />
+        <AvatarRelativeProjectionSplashController />
+        <RootLayoutNav />
+      </SessionProvider>
+    </GestureHandlerRootView>
   );
 }
 

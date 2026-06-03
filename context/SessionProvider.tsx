@@ -79,6 +79,10 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
       setTimeout(() => {
         initialized = true;
       }, 100);
+    }).catch(err => {
+      console.error('SessionProvider getSession error:', err);
+      setLoading(false);
+      initialized = true;
     });
 
     // Listen for auth state changes

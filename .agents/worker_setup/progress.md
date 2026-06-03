@@ -1,6 +1,6 @@
 # Progress Heartbeat
 
-Last visited: 2026-06-03T17:25:40-07:00
+Last visited: 2026-06-03T17:46:40-07:00
 
 - [x] Log original request.
 - [x] Initialize briefing.
@@ -8,9 +8,9 @@ Last visited: 2026-06-03T17:25:40-07:00
 - [x] Implement Task 2 (AutonomicSimulationManager compilation).
 - [x] Implement Task 3 (pcp/mmkvStorage syntax & imports).
 - [x] Implement Task 4 (pcp/storage MMKV bridge).
-- [/] Verify Task 5 (Typechecks & Jest tests in both repos).
+- [x] Verify Task 5 (Typechecks & Jest tests in both repos).
   - [x] Typecheck expo-supabase-ai-template.
   - [x] Jest tests expo-supabase-ai-template.
   - [x] Typecheck pcp.
-  - [/] Jest tests pcp (running --runInBand with max-old-space-size=8192).
-- [ ] Document Task 6 (handoff.md & message to Orchestrator).
+  - [x] Jest tests pcp.
+- [x] Document Task 6 (handoff.md & message to Orchestrator).

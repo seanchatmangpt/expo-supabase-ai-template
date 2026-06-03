@@ -568,7 +568,7 @@ export default function Account() {
               accessibilityState={{ checked: !networkOnline }}
             >
               <View
-                className={`w-5 h-5 rounded-full bg-white shadow-sm transform-gpu transition-all ${
+                className={`w-5 h-5 rounded-full bg-white shadow-sm transition-all ${
                   !networkOnline ? 'translate-x-5' : 'translate-x-0'
                 }`}
               />
@@ -591,7 +591,7 @@ export default function Account() {
               accessibilityState={{ checked: remoteRejectActive }}
             >
               <View
-                className={`w-5 h-5 rounded-full bg-white shadow-sm transform-gpu transition-all ${
+                className={`w-5 h-5 rounded-full bg-white shadow-sm transition-all ${
                   remoteRejectActive ? 'translate-x-5' : 'translate-x-0'
                 }`}
               />
@@ -614,7 +614,7 @@ export default function Account() {
               accessibilityState={{ checked: darkMode }}
             >
               <View
-                className={`w-5 h-5 rounded-full bg-white shadow-sm transform-gpu transition-all ${
+                className={`w-5 h-5 rounded-full bg-white shadow-sm transition-all ${
                   darkMode ? 'translate-x-5' : 'translate-x-0'
                 }`}
               />
@@ -637,7 +637,7 @@ export default function Account() {
               accessibilityState={{ checked: saveLogs }}
             >
               <View
-                className={`w-5 h-5 rounded-full bg-white shadow-sm transform-gpu transition-all ${
+                className={`w-5 h-5 rounded-full bg-white shadow-sm transition-all ${
                   saveLogs ? 'translate-x-5' : 'translate-x-0'
                 }`}
               />

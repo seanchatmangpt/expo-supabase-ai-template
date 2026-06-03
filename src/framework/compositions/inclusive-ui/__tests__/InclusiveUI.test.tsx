@@ -63,11 +63,11 @@ describe('Inclusive UI Compositions', () => {
 
     it('registers voice intents for focus', async () => {
       const onVoiceFocus = jest.fn();
-      let capturedIntents: any[] = [];
+      let getIntents: () => any[] = () => [];
 
       const IntentTracker = () => {
-        const { activeIntents } = useVoiceContext();
-        capturedIntents = activeIntents;
+        const { getActiveIntents } = useVoiceContext();
+        getIntents = getActiveIntents;
         return <VoiceAccessibleText i18nKey="hello" onVoiceFocus={onVoiceFocus} />;
       };
 
@@ -77,7 +77,7 @@ describe('Inclusive UI Compositions', () => {
         </AllProviders>
       );
 
-      const intent = capturedIntents.find((i) => i.id.startsWith('voice-text-'));
+      const intent = getIntents().find((i) => i.id.startsWith('voice-text-'));
       expect(intent).toBeDefined();
       expect(intent.commands).toContain('focus Hello World');
       expect(intent.commands).toContain('Hello World');
@@ -89,11 +89,11 @@ describe('Inclusive UI Compositions', () => {
     });
 
     it('supports extra voice commands', () => {
-      let capturedIntents: any[] = [];
+      let getIntents: () => any[] = () => [];
 
       const IntentTracker = () => {
-        const { activeIntents } = useVoiceContext();
-        capturedIntents = activeIntents;
+        const { getActiveIntents } = useVoiceContext();
+        getIntents = getActiveIntents;
         return (
           <VoiceAccessibleText
             i18nKey="hello"
@@ -108,7 +108,7 @@ describe('Inclusive UI Compositions', () => {
         </AllProviders>
       );
 
-      const intent = capturedIntents.find((i) => i.id.startsWith('voice-text-'));
+      const intent = getIntents().find((i) => i.id.startsWith('voice-text-'));
       expect(intent.commands).toContain('custom command');
       expect(intent.commands).toContain('another one');
     });
@@ -117,7 +117,7 @@ describe('Inclusive UI Compositions', () => {
   describe('useInclusiveInteraction', () => {
     it('provides a11y props and registers voice intents', async () => {
       const action = jest.fn();
-      let capturedIntents: any[] = [];
+      let getIntents: () => any[] = () => [];
 
       const TestComponent = () => {
         const { a11yProps, label } = useInclusiveInteraction({
@@ -126,8 +126,8 @@ describe('Inclusive UI Compositions', () => {
           action,
           a11yOptions: { hint: 'Test Hint' },
         });
-        const { activeIntents } = useVoiceContext();
-        capturedIntents = activeIntents;
+        const { getActiveIntents } = useVoiceContext();
+        getIntents = getActiveIntents;
         return <View {...a11yProps} testID="target" />;
       };
 
@@ -140,7 +140,7 @@ describe('Inclusive UI Compositions', () => {
       expect(screen.getByTestId('target').props.accessibilityLabel).toBe('Hello World');
       expect(screen.getByTestId('target').props.accessibilityHint).toBe('Test Hint');
 
-      const intent = capturedIntents.find((i) => i.id === 'inclusive-test-action');
+      const intent = getIntents().find((i) => i.id === 'inclusive-test-action');
       expect(intent).toBeDefined();
       expect(intent.commands).toContain('Hello World');
 
@@ -170,7 +170,7 @@ describe('Inclusive UI Compositions', () => {
     });
 
     it('supports custom voice commands and priority', () => {
-      let capturedIntents: any[] = [];
+      let getIntents: () => any[] = () => [];
 
       const TestComponent = () => {
         useInclusiveInteraction({
@@ -180,8 +180,8 @@ describe('Inclusive UI Compositions', () => {
           priority: 100,
           action: () => {},
         });
-        const { activeIntents } = useVoiceContext();
-        capturedIntents = activeIntents;
+        const { getActiveIntents } = useVoiceContext();
+        getIntents = getActiveIntents;
         return null;
       };
 
@@ -191,7 +191,7 @@ describe('Inclusive UI Compositions', () => {
         </AllProviders>
       );
 
-      const intent = capturedIntents.find((i) => i.id === 'inclusive-custom-test');
+      const intent = getIntents().find((i) => i.id === 'inclusive-custom-test');
       expect(intent.commands).toEqual(['do action']);
       expect(intent.priority).toBe(100);
     });

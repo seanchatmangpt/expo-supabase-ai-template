@@ -9,7 +9,7 @@ import { mmkvInstance } from '../../lib/store/mmkvStorage';
 import { Ionicons } from '@expo/vector-icons';
 const Switch = ({ active, colorClass }: { active: boolean; colorClass: string }) => (
   <View className={`w-12 h-7 rounded-full p-1 justify-center ${active ? colorClass : 'bg-slate-700/80 border border-slate-600/50'}`}>
-    <View className={`w-5 h-5 rounded-full bg-white shadow-sm transform-gpu transition-transform duration-200 ${active ? 'translate-x-5' : 'translate-x-0'}`} />
+    <View className={`w-5 h-5 rounded-full bg-white shadow-sm transition-transform duration-200 ${active ? 'translate-x-5' : 'translate-x-0'}`} />
   </View>
 );
 

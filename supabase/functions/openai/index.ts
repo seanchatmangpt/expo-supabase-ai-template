@@ -1,4 +1,4 @@
-/// <reference types="./types.d.ts" />
+/// <reference path="./types.d.ts" />
 
 /**
  * @fileoverview OpenAI Edge Function for Supabase

@@ -7,7 +7,6 @@
  * @version 1.0.0
  */
 
-import "react-native-url-polyfill/auto";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createClient } from "@supabase/supabase-js";
 import { Platform } from 'react-native';
@@ -26,10 +25,7 @@ const customStorage = isServer ? {
   removeItem: () => Promise.resolve(),
 } : AsyncStorage;
 
-if (isServer) {
-  // Polyfill WebSocket for Supabase Realtime during SSR
-  global.WebSocket = require('ws');
-}
+// WebSockets are natively supported in React Native and Deno, no polyfill needed.
 
 /**
  * Configured Supabase client instance

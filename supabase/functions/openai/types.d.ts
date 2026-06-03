@@ -1,18 +1,16 @@
 // Global type definitions for Deno runtime in Edge Functions
 // This helps with TypeScript intellisense in VS Code
 
-declare global {
-  namespace Deno {
-    interface Env {
-      get(key: string): string | undefined;
-    }
-
-    const env: Env;
-
-    function serve(
-      handler: (request: Request) => Response | Promise<Response>
-    ): void;
+declare namespace Deno {
+  export interface Env {
+    get(key: string): string | undefined;
   }
+
+  export const env: Env;
+
+  export function serve(
+    handler: (request: Request) => Response | Promise<Response>
+  ): void;
 }
 
 declare module "npm:openai@^4.0.0" {
@@ -39,5 +37,3 @@ declare module "npm:openai@^4.0.0" {
     };
   }
 }
-
-export {};

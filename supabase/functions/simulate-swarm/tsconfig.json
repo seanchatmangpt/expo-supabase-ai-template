@@ -1,10 +1,20 @@
 {
   "compilerOptions": {
-    "target": "es2022",
-    "module": "esnext",
-    "moduleResolution": "node",
+    "allowJs": true,
+    "lib": ["ES2022", "WebWorker"],
     "strict": true,
-    "lib": ["es2022", "dom"]
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUncheckedIndexedAccess": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "skipLibCheck": true
   },
-  "include": ["**/*.ts"]
+  "include": ["index.ts", "types.d.ts"],
+  "exclude": []
 }

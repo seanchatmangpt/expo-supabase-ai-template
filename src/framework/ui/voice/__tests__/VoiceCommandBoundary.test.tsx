@@ -4,8 +4,8 @@ import { VoiceCommandBoundary, useVoiceContext } from '../VoiceCommandBoundary';
 import { Text } from 'react-native';
 
 const TestComponent = () => {
-  const { activeIntents } = useVoiceContext();
-  return <Text testID="intent-count">{activeIntents.length}</Text>;
+  const { getActiveIntents } = useVoiceContext();
+  return <Text testID="intent-count">{getActiveIntents().length}</Text>;
 };
 
 describe('VoiceCommandBoundary', () => {

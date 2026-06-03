@@ -72,6 +72,7 @@ export function TransitionOverlay({
         {
           backgroundColor: isDark ? 'rgba(15, 23, 42, 0.85)' : 'rgba(248, 250, 252, 0.85)',
           zIndex: 9999,
+          elevation: 9999,
           justifyContent: 'center',
           alignItems: 'center',
         },

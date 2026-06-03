@@ -1,14 +1,27 @@
 /// <reference types="jest" />
 
-jest.mock('react-native/Libraries/Utilities/DevSettings', () => ({
-  reload: jest.fn(),
-  addMenuItem: jest.fn(),
-}));
+const rn = require('react-native');
+Object.defineProperty(rn, 'DevSettings', {
+  configurable: true,
+  enumerable: true,
+  get() {
+    return {
+      reload: jest.fn(),
+      addMenuItem: jest.fn(),
+    };
+  },
+});
 
 // Mock AsyncStorage
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock')
 );
+
+jest.mock('react-native/Libraries/Utilities/DevSettings', () => ({
+  reload: jest.fn(),
+  addMenuItem: jest.fn(),
+}), { virtual: true });
+
 
 // Mock database module globally to prevent native SQLite instantiation in non-db tests
 const mockDbInstance = {
