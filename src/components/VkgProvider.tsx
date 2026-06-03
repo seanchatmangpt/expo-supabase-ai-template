@@ -6,6 +6,7 @@ import { projectHookOutput } from '../lib/truex/avatar/projector';
 import { DefaultHookSupervisor } from '../lib/truex/hook-otp/supervisor';
 import { stringifyActorRef } from '../lib/truex/hook-otp/actorRef';
 import { livestreamIncidentBehavior } from '../lib/truex/packs/livestream/hooks';
+import { supabase } from '@/lib/supabase';
 
 interface VkgContextType {
   pendingReceipts: number;
@@ -155,14 +156,11 @@ export function VkgProvider({ children }: { children: ReactNode }) {
 
       // Simulate Outbox Sync to Supabase Edge function
       try {
-        const response = await fetch('http://127.0.0.1:54321/functions/v1/vkg-hooks-apply', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ delta: msg.payload }),
+        const { data: result, error } = await supabase.functions.invoke('vkg-hooks-apply', {
+          body: { delta: msg.payload },
         });
 
-        if (response.ok) {
-          const result = await response.json();
+        if (!error && result) {
           setPendingReceipts((prev) => Math.max(0, prev - 1));
           setProcessedReceipts((prev) => prev + 1);
           if (result.receipt) {
@@ -183,7 +181,7 @@ export function VkgProvider({ children }: { children: ReactNode }) {
             });
           }
         } else {
-          throw new Error('Supabase Edge offline or returned error');
+          throw error || new Error('Supabase Edge offline or returned error');
         }
       } catch (err) {
         // Local fallback

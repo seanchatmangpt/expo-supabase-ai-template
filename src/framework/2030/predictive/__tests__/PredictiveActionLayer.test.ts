@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { PredictiveActionLayer } from '../PredictiveActionLayer';
 import { ActorRegistry } from '@/src/lib/actor/registry';
 import { CommandEnvelope, ActorRef, Principal } from '@/src/lib/actor/types';

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { TokenReplayEngine, Transition } from '../petri-net';
 import { Ocel2Log } from '../ocel';
 import { ProcessDriftDetector } from '../drift';

@@ -1,31 +1,11 @@
-// @ts-nocheck
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { useColorScheme as useDeviceColorScheme, View } from 'react-native';
 import { vars } from 'nativewind';
 import { ThemeSettings, ThemeContextType } from './types';
 import { defaultLightTheme, defaultDarkTheme } from './defaults';
-// In test environments react-native-mmkv is mocked and MMKV may not be a real class.
-// We fall back to an in-memory store that satisfies the same API surface.
-let storage: {
-  getString: (k: string) => string | undefined;
-  set: (k: string, v: string) => void;
-  delete: (k: string) => void;
-};
-try {
-  const { MMKV: MMKVClass } = require('react-native-mmkv');
-  storage = new MMKVClass({ id: 'pcp-theme-storage' });
-} catch {
-  const _map = new Map<string, string>();
-  storage = {
-    getString: (k: string) => _map.get(k),
-    set: (k: string, v: string) => {
-      _map.set(k, v);
-    },
-    delete: (k: string) => {
-      _map.delete(k);
-    },
-  };
-}
+import { createIsolatedMMKVStorage } from '@/src/lib/store/mmkvStorage';
+
+const { instance: storage } = createIsolatedMMKVStorage('pcp-theme');
 
 const THEME_STORAGE_KEY = 'pcp-theme-settings';
 
@@ -68,7 +48,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const resetTheme = useCallback(() => {
     const next = deviceColorScheme === 'dark' ? defaultDarkTheme : defaultLightTheme;
     setTheme(next);
-    storage.delete(THEME_STORAGE_KEY);
+    storage.remove(THEME_STORAGE_KEY);
   }, [deviceColorScheme]);
 
   // Sync with device color scheme changes if no override is present?
