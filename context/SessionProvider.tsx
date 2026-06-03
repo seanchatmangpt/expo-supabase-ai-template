@@ -94,6 +94,12 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
       
       if (initialized) {
         setSession((prev) => {
+          // If we have injected a mock session because the backend is down, protect it from being cleared by Supabase's offline failures.
+          if (prev?.access_token === 'mock-token' && !newSession) {
+            console.log('SessionProvider ignoring null session update from Supabase to preserve mock session.');
+            return prev;
+          }
+
           if (!prev && newSession) {
             setTransitionType('signin');
             setIsTransitioning(true);

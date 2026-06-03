@@ -99,7 +99,7 @@ const StackComponent = React.forwardRef<any, any>(
 StackComponent.displayName = 'StackComponent';
 
 export const Stack = Object.assign(StackComponent, ExpoStack, {
-  Screen: ExpoStack.Screen,
+  Screen: ExpoStack?.Screen,
   Protected: StackProtected,
 }) as unknown as CustomStackType;
 
@@ -118,7 +118,7 @@ const TabsComponent = React.forwardRef<any, any>(
 TabsComponent.displayName = 'TabsComponent';
 
 export const Tabs = Object.assign(TabsComponent, ExpoTabs, {
-  Screen: ExpoTabs.Screen,
+  Screen: ExpoTabs?.Screen,
   Protected: TabsProtected,
 }) as unknown as CustomTabsType;
 

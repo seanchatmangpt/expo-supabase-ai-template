@@ -94,7 +94,6 @@ jest.mock('expo-router', () => {
         );
       });
       MockStack.Screen = MockScreen;
-      MockStack.AvatarRelativeProjection = MockScreen;
       MockStack.Protected = ({ children }: any) => children;
       return MockStack;
     })(),
@@ -102,7 +101,6 @@ jest.mock('expo-router', () => {
       const MockTabs = ({ children }: any) => children;
       const MockScreen = jest.fn();
       MockTabs.Screen = MockScreen;
-      MockTabs.AvatarRelativeProjection = MockScreen;
       return MockTabs;
     })(),
   };
