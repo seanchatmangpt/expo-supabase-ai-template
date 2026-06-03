@@ -49,7 +49,7 @@ export function AdminShell({ title, subtitle, children, scrollable = true, testI
         <OfflineBanner />
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity accessibilityRole="button"
+          <TouchableOpacity
             onPress={handleBack}
             style={styles.backButton}
             testID="admin-back-btn"
@@ -72,7 +72,7 @@ export function AdminShell({ title, subtitle, children, scrollable = true, testI
             {navigationItems.map((item) => {
               const isActive = title === item.title;
               return (
-                <TouchableOpacity accessibilityRole="button"
+                <TouchableOpacity
                   key={item.name}
                   onPress={() => router.replace(item.route as any)}
                   style={[styles.navButton, isActive && styles.navButtonActive]}

@@ -63,7 +63,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         <View style={styles.container} testID="error-boundary-fallback">
           <Text style={styles.title}>Something went wrong</Text>
           <Text style={styles.message}>{this.state.error.message}</Text>
-          <TouchableOpacity accessibilityRole="button"
+          <TouchableOpacity
             style={styles.button}
             onPress={this.resetError}
             testID="error-boundary-retry">

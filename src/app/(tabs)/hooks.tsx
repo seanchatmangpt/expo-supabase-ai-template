@@ -40,7 +40,7 @@ export default function HooksProjection() {
         </Text>
         <View className="flex-row flex-wrap gap-2">
           {rolesList.map((role) => (
-            <TouchableOpacity accessibilityRole="button"
+            <TouchableOpacity
               key={role}
               className={`py-2 px-4 rounded-full border ${
                 avatar === role
@@ -67,7 +67,7 @@ export default function HooksProjection() {
           Select Hook Scenario
         </Text>
         <View className="flex-row flex-wrap gap-2">
-          <TouchableOpacity accessibilityRole="button"
+          <TouchableOpacity
             className={`py-2 px-4 rounded-full border ${
               activeHookId === 'volunteer_shortage'
                 ? 'bg-sky-500 border-sky-400'
@@ -83,7 +83,7 @@ export default function HooksProjection() {
               Volunteer Shortage
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity accessibilityRole="button"
+          <TouchableOpacity
             className={`py-2 px-4 rounded-full border ${
               activeHookId === 'livestream_degradation'
                 ? 'bg-sky-500 border-sky-400'
@@ -174,7 +174,7 @@ export default function HooksProjection() {
           <Text className="text-rose-200/70 text-sm mb-4 leading-5">
             A hook execution failed. Hook mailbox processing is paused.
           </Text>
-          <TouchableOpacity accessibilityRole="button" 
+          <TouchableOpacity 
             className="bg-emerald-600 active:bg-emerald-700 py-3 px-4 rounded-xl flex-row justify-center items-center"
             onPress={repairLastQuarantine}>
             <Ionicons name="build" size={16} color="white" className="mr-2" />
@@ -200,7 +200,7 @@ export default function HooksProjection() {
       {/* Command Triggers */}
       <View className="mb-8">
         {activeHookId === 'volunteer_shortage' ? (
-          <TouchableOpacity accessibilityRole="button"
+          <TouchableOpacity
             className={`py-4 rounded-xl flex-row justify-center items-center shadow-sm ${
               isQuarantined ? 'bg-slate-700' : 'bg-sky-500 active:bg-sky-600'
             }`}
@@ -213,7 +213,7 @@ export default function HooksProjection() {
           </TouchableOpacity>
         ) : (
           <View className="gap-3">
-            <TouchableOpacity accessibilityRole="button"
+            <TouchableOpacity
               className={`py-4 rounded-xl flex-row justify-center items-center shadow-sm ${
                 isQuarantined ? 'bg-slate-700' : 'bg-amber-600 active:bg-amber-700'
               }`}
@@ -225,7 +225,7 @@ export default function HooksProjection() {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity accessibilityRole="button"
+            <TouchableOpacity
               className={`py-4 rounded-xl flex-row justify-center items-center shadow-sm ${
                 isQuarantined ? 'bg-slate-700' : 'bg-rose-600 active:bg-rose-700'
               }`}
@@ -237,7 +237,7 @@ export default function HooksProjection() {
               </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity accessibilityRole="button"
+            <TouchableOpacity
               className={`py-4 rounded-xl flex-row justify-center items-center shadow-sm ${
                 isQuarantined ? 'bg-slate-700' : 'bg-emerald-600 active:bg-emerald-700'
               }`}

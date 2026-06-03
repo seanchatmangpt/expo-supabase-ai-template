@@ -47,7 +47,7 @@ export const AdaptivePressable: React.FC<AdaptivePressableProps> = ({
   }, [hitSlop, manualHitSlop]);
 
   return (
-    <Pressable accessibilityLabel="Interactive element" accessibilityRole="button" {...props} hitSlop={adaptiveHitSlop} onPress={onPress} onPressIn={handlePressIn}>
+    <Pressable {...props} hitSlop={adaptiveHitSlop} onPress={onPress} onPressIn={handlePressIn}>
       {children}
     </Pressable>
   );

@@ -149,18 +149,18 @@ export const FusionDataManager: React.FC<FusionDataManagerProps> = ({
           <Text style={styles.detailsId}>{selectedEntityId}</Text>
 
           <View style={styles.buttonRow}>
-            <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" style={[styles.actionButton, styles.editButton]} onPress={handleEdit}>
+            <TouchableOpacity accessibilityRole="button" style={[styles.actionButton, styles.editButton]} onPress={handleEdit}>
               <Text style={styles.buttonText}>Edit</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity accessibilityRole="button"
+            <TouchableOpacity
               style={[styles.actionButton, styles.deleteButton]}
               onPress={handleDelete}>
               <Text style={styles.buttonText}>Delete</Text>
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" style={styles.backButton} onPress={handleCancel}>
+          <TouchableOpacity accessibilityRole="button" style={styles.backButton} onPress={handleCancel}>
             <Text style={styles.backButtonText}>Back to Discovery</Text>
           </TouchableOpacity>
         </ScrollView>

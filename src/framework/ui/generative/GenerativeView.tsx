@@ -50,7 +50,7 @@ export const GenerativeView: React.FC<GenerativeViewProps> = ({
     );
 
     return (
-      <Pressable accessibilityLabel="Interactive element" accessibilityRole="button" key={key} className={containerStyle} onPress={() => onAction?.(key, value)}>
+      <Pressable key={key} className={containerStyle} onPress={() => onAction?.(key, value)}>
         {field.label && <Text className={labelStyle}>{field.label}</Text>}
         {field.format === 'image' ? (
           <Image
@@ -95,7 +95,7 @@ export const GenerativeView: React.FC<GenerativeViewProps> = ({
           testID="iron-law-fallback">
           <Text className="text-xs font-bold text-red-500 mb-2 uppercase">Critical Actions</Text>
           {criticalActions.map((action) => (
-            <Pressable accessibilityRole="button"
+            <Pressable
               key={`fallback-${action.predicate || action.key}`}
               className="p-3 bg-red-500/10 rounded-lg mb-2"
               onPress={() =>

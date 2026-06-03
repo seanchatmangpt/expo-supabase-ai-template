@@ -371,7 +371,7 @@ export default function Account() {
                 <Text className="text-white text-3xl font-bold tracking-wider">{initials}</Text>
               </View>
             )}
-            <Pressable accessibilityRole="button"
+            <Pressable
               testID="camera-toggle"
               onPress={() => setShowPicker(!showPicker)}
               className="absolute bottom-0 right-0 bg-blue-600 p-2 rounded-full border-2 border-white shadow active:bg-blue-700"
@@ -400,7 +400,7 @@ export default function Account() {
             </Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} className="flex-row">
               {AVATAR_PRESETS.map((preset) => (
-                <Pressable accessibilityRole="button"
+                <Pressable
                   key={preset.id}
                   testID={`preset-avatar-${preset.id}`}
                   onPress={() => {
@@ -523,7 +523,7 @@ export default function Account() {
         </View>
 
         {/* Update Trigger Button */}
-        <TouchableOpacity accessibilityRole="button"
+        <TouchableOpacity
           testID="save-profile-button"
           onPress={handleUpdateProfile}
           disabled={updating || !networkOnline}
@@ -558,7 +558,7 @@ export default function Account() {
               <Text className="text-sm font-semibold text-gray-800">Simulate Offline Mode</Text>
               <Text className="text-xs text-gray-500 mt-0.5">Disconnect from synchronization drivers</Text>
             </View>
-            <Pressable accessibilityRole="button"
+            <Pressable
               testID="toggle-offline"
               onPress={() => setNetworkOnline(!networkOnline)}
               className={`w-12 h-7 rounded-full p-1 ${!networkOnline ? 'bg-yellow-500' : 'bg-gray-200'}`}
@@ -581,7 +581,7 @@ export default function Account() {
               <Text className="text-sm font-semibold text-gray-800">Mock Remote Rejections</Text>
               <Text className="text-xs text-gray-500 mt-0.5">Force sync engine to reject local events</Text>
             </View>
-            <Pressable accessibilityRole="button"
+            <Pressable
               testID="toggle-rejections"
               onPress={() => setRemoteRejectActive(!remoteRejectActive)}
               className={`w-12 h-7 rounded-full p-1 ${remoteRejectActive ? 'bg-red-500' : 'bg-gray-200'}`}
@@ -604,7 +604,7 @@ export default function Account() {
               <Text className="text-sm font-semibold text-gray-800">Dark Mode Interface</Text>
               <Text className="text-xs text-gray-500 mt-0.5">Simulate client dark mode container layouts</Text>
             </View>
-            <Pressable accessibilityRole="button"
+            <Pressable
               testID="toggle-dark-mode"
               onPress={() => handleToggleDarkMode(!darkMode)}
               className={`w-12 h-7 rounded-full p-1 ${darkMode ? 'bg-blue-600' : 'bg-gray-200'}`}
@@ -627,7 +627,7 @@ export default function Account() {
               <Text className="text-sm font-semibold text-gray-800">Save Local Transaction Logs</Text>
               <Text className="text-xs text-gray-500 mt-0.5">Persist event logs to disk caches</Text>
             </View>
-            <Pressable accessibilityRole="button"
+            <Pressable
               testID="toggle-save-logs"
               onPress={() => handleToggleSaveLogs(!saveLogs)}
               className={`w-12 h-7 rounded-full p-1 ${saveLogs ? 'bg-blue-600' : 'bg-gray-200'}`}
@@ -657,7 +657,7 @@ export default function Account() {
             </View>
           </View>
           
-          <Pressable accessibilityRole="button"
+          <Pressable
             testID="clear-mmkv-button"
             onPress={handleClearMMKV}
             className="p-4 border-b border-gray-100 flex-row items-center active:bg-gray-50"
@@ -673,7 +673,7 @@ export default function Account() {
             <Ionicons name="chevron-forward" size={16} color="#D1D5DB" />
           </Pressable>
 
-          <Pressable accessibilityRole="button"
+          <Pressable
             testID="reset-zustand-button"
             onPress={handleResetZustand}
             className="p-4 border-b border-gray-100 flex-row items-center active:bg-gray-50"
@@ -689,7 +689,7 @@ export default function Account() {
             <Ionicons name="chevron-forward" size={16} color="#D1D5DB" />
           </Pressable>
 
-          <Pressable accessibilityRole="button"
+          <Pressable
             testID="clear-async-storage-button"
             onPress={handleClearAsyncStorage}
             className="p-4 flex-row items-center active:bg-gray-50"
@@ -711,7 +711,7 @@ export default function Account() {
           Session Authority
         </Text>
         <View className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
-          <Pressable accessibilityRole="button"
+          <Pressable
             onPress={() => {
               Alert.alert('Sign Out', 'Are you sure you want to sign out?', [
                 { text: 'Cancel', style: 'cancel' },

@@ -1,7 +1,7 @@
 import { renderHook, act } from '@testing-library/react-native';
 import { useDataPortability } from '../useDataPortability';
 import { Portability } from '../portability';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import { Share } from 'react-native';
 import { DATABASE_NAME } from '@/src/lib/db/db';
 
@@ -9,6 +9,14 @@ jest.mock('expo-file-system', () => ({
   documentDirectory: 'file://doc/',
   cacheDirectory: 'file://cache/',
   EncodingType: { Base64: 'base64' },
+  readAsStringAsync: jest.fn(),
+  writeAsStringAsync: jest.fn(),
+}));
+
+jest.mock('expo-file-system/legacy', () => ({
+  documentDirectory: 'file://doc/',
+  cacheDirectory: 'file://cache/',
+  EncodingType: { Base64: 'base64', UTF8: 'utf8' },
   readAsStringAsync: jest.fn(),
   writeAsStringAsync: jest.fn(),
 }));
@@ -21,7 +29,7 @@ jest.mock('expo-file-system/build/legacy', () => ({
   writeAsStringAsync: jest.fn(),
 }), { virtual: true });
 
-jest.mock('../../../../lib/crypto/receipts', () => ({
+jest.mock('@/src/lib/crypto/receipts', () => ({
   blake3: jest.fn().mockReturnValue('mock-sig'),
   canonicalStringify: jest.fn().mockReturnValue('{}'),
 }));

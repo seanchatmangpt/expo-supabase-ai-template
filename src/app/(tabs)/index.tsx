@@ -71,7 +71,7 @@ function DashboardContent({ user }: { user: any }) {
           </View>
         </View>
 
-        <TouchableOpacity accessibilityRole="button" 
+        <TouchableOpacity 
           onPress={handleActuation}
           disabled={actuationStatus === 'processing'}
           className={`h-14 rounded-2xl items-center justify-center ${

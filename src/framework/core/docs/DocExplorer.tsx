@@ -56,7 +56,7 @@ export const DocExplorer: React.FC = () => {
         <View className="w-1/3 pr-4 border-r border-slate-200 dark:border-slate-800">
           <ScrollView>
             {filteredDocs.map((doc) => (
-              <TouchableOpacity accessibilityRole="button"
+              <TouchableOpacity
                 key={doc.id}
                 onPress={() => setSelectedDocId(doc.id)}
                 className={cn(

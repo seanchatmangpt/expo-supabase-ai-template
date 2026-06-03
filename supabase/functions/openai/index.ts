@@ -52,6 +52,8 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+
 /**
  * OpenAI client instance
  * Initialized with API key from environment variables
@@ -96,6 +98,36 @@ Deno.serve(async (req: Request): Promise<Response> => {
       );
     }
 
+    // Verify user authentication
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: "Missing Authorization header" } as ErrorResponse),
+        {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
+    
+    const authClient = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } }
+    });
+
+    const { data: { user }, error: authError } = await authClient.auth.getUser();
+    if (authError || !user) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized", details: authError?.message } as ErrorResponse),
+        {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
     // Parse and validate request body
     let requestBody: OpenAIRequest;
     try {
@@ -122,6 +154,18 @@ Deno.serve(async (req: Request): Promise<Response> => {
       return new Response(
         JSON.stringify({
           error: "Message is required and must be a non-empty string",
+        } as ErrorResponse),
+        {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    if (message.length > 4000) {
+      return new Response(
+        JSON.stringify({
+          error: "Message is too long. Please limit to 4000 characters.",
         } as ErrorResponse),
         {
           status: 400,

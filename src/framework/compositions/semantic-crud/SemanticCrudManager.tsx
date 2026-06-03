@@ -108,14 +108,14 @@ export const SemanticCrudManager: React.FC<SemanticCrudManagerProps> = ({
           </Text>
 
           <View style={styles.buttonRow}>
-            <TouchableOpacity accessibilityRole="button"
+            <TouchableOpacity
               style={[styles.actionButton, styles.editButton]}
               onPress={handleEdit}
               testID="edit-button">
               <Text style={styles.buttonText}>Edit</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity accessibilityRole="button"
+            <TouchableOpacity
               style={[styles.actionButton, styles.deleteButton]}
               onPress={handleDelete}
               testID="delete-button">
@@ -123,7 +123,7 @@ export const SemanticCrudManager: React.FC<SemanticCrudManagerProps> = ({
             </TouchableOpacity>
           </View>
 
-          <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" style={styles.backButton} onPress={handleCancel} testID="back-button">
+          <TouchableOpacity accessibilityRole="button" style={styles.backButton} onPress={handleCancel} testID="back-button">
             <Text style={styles.backButtonText}>Back to List</Text>
           </TouchableOpacity>
         </ScrollView>

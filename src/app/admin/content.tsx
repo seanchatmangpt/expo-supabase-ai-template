@@ -15,7 +15,7 @@ export default function AdminContent() {
     <AdminShell title="Content Management" subtitle="Manage announcement content feed cards">
       <ScrollView contentContainerStyle={styles.container}>
         {announcements.map((item) => (
-          <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" key={item.id} activeOpacity={0.8}>
+          <TouchableOpacity accessibilityRole="button" key={item.id} activeOpacity={0.8}>
             <AdminCard title={item.title} subtitle={item.date}>
               <View style={styles.contentBox}>
                 <FontAwesome name="bullhorn" size={14} color="#94A3B8" style={styles.icon} />

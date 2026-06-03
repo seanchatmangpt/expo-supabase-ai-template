@@ -63,7 +63,7 @@ export class AutoFixErrorBoundary extends Component<
             style={{ flex: 1, backgroundColor: '#000', padding: 20, justifyContent: 'center' }}>
             <Text style={{ color: 'red', fontSize: 24, fontWeight: 'bold' }}>FATAL ERROR</Text>
             <Text style={{ color: 'white', marginTop: 10 }}>The recovery system has crashed.</Text>
-            <TouchableOpacity accessibilityRole="button"
+            <TouchableOpacity
               onPress={this.resetError}
               style={{ marginTop: 20, padding: 15, backgroundColor: '#333' }}>
               <Text style={{ color: 'white', textAlign: 'center' }}>FORCE RELOAD</Text>
@@ -91,7 +91,7 @@ export class AutoFixErrorBoundary extends Component<
               <AutoFixer error={this.state.error} onReset={this.resetError} />
             )}
 
-            <TouchableOpacity accessibilityRole="button"
+            <TouchableOpacity
               style={styles.retryButton}
               onPress={this.resetError}
               testID="auto-fix-retry-button">

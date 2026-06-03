@@ -41,7 +41,7 @@ export function CodePayload({ data, title }: CodePayloadProps) {
 
   return (
     <View style={styles.codeContainer} testID="code-payload">
-      <TouchableOpacity accessibilityRole="button"
+      <TouchableOpacity
         style={styles.codeHeader}
         onPress={() => setCollapsed(!collapsed)}
         activeOpacity={0.7}
@@ -539,6 +539,11 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: '#F87171',
     textTransform: 'uppercase',
+  },
+  syncStatus: {
+    color: "#A7F3D0",
+    fontSize: 13,
+    marginTop: 8,
   },
   errorText: {
     fontFamily: 'SpaceMono',

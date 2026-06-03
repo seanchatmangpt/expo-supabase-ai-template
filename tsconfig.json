@@ -29,7 +29,6 @@
     "nativewind-env.d.ts"
   ],
   "exclude": [
-    "supabase",
-    "**/__tests__/*"
+    "supabase"
   ]
 }

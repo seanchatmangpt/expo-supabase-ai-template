@@ -115,7 +115,7 @@ export default function AdminIntelligence() {
       <AdminCard title="Select Process Capability" subtitle="Active wasm4pm algorithms in substrate">
         <View style={styles.capList}>
           {capabilities.map((cap) => (
-            <TouchableOpacity accessibilityRole="button"
+            <TouchableOpacity
               key={cap.id}
               activeOpacity={0.8}
               style={[
@@ -148,13 +148,13 @@ export default function AdminIntelligence() {
               selectedCap.id === 'compliance-safety-guard') && (
               <View style={styles.scenarioRow}>
                 <Text style={styles.scenarioLabel}>Scenario:</Text>
-                <TouchableOpacity accessibilityRole="button" 
+                <TouchableOpacity 
                   style={[styles.scenarioBtn, selectedFixtureType === 'truthful' && styles.scenarioBtnActive]}
                   onPress={() => setSelectedFixtureType('truthful')}
                 >
                   <Text style={[styles.scenarioBtnText, selectedFixtureType === 'truthful' && styles.scenarioBtnTextActive]}>Conforming / Stable</Text>
                 </TouchableOpacity>
-                <TouchableOpacity accessibilityRole="button" 
+                <TouchableOpacity 
                   style={[styles.scenarioBtn, selectedFixtureType === 'deviant' && styles.scenarioBtnActive]}
                   onPress={() => setSelectedFixtureType('deviant')}
                 >
@@ -250,7 +250,7 @@ export default function AdminIntelligence() {
           <Text style={styles.emptyText}>No local audit logs generated yet.</Text>
         ) : (
           replaysList.map((item) => (
-            <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" activeOpacity={0.8} key={item.receiptId} style={styles.replayItem} onPress={() => handleSelectReplay(item)}>
+            <TouchableOpacity accessibilityRole="button" activeOpacity={0.8} key={item.receiptId} style={styles.replayItem} onPress={() => handleSelectReplay(item)}>
               <View style={styles.replayMeta}>
                 <Text style={styles.replayCap}>{item.capabilityId}</Text>
                 <Text style={styles.replayTime}>{new Date(item.timestamp).toLocaleTimeString()}</Text>

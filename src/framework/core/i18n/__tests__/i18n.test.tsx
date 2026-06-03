@@ -39,7 +39,7 @@ function TestComponent() {
       <Text testID="nested">{t('nested.key')}</Text>
       <Text testID="locale">{locale}</Text>
       <Text testID="fallback">{t('onlyInEn')}</Text>
-      <Pressable accessibilityLabel="Interactive element" accessibilityRole="button" onPress={() => setLocale('es')} testID="switch-es">
+      <Pressable onPress={() => setLocale('es')} testID="switch-es">
         <Text>Switch to ES</Text>
       </Pressable>
       <Text testID="missing">{t('missing.key')}</Text>

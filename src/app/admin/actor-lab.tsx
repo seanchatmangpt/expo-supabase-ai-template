@@ -464,7 +464,7 @@ export default function ActorLab() {
           </View>
 
           <View style={styles.btnRow}>
-            <TouchableOpacity accessibilityRole="button"
+            <TouchableOpacity
               style={[styles.btnThird, simState === 'running' && styles.btnActiveGreen]}
               onPress={startSimulation}
               activeOpacity={0.7}
@@ -478,7 +478,7 @@ export default function ActorLab() {
               <Text style={[styles.btnText, simState === 'running' && styles.btnTextActive]}>START</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity accessibilityRole="button"
+            <TouchableOpacity
               style={[styles.btnThird, simState === 'paused' && styles.btnActiveYellow]}
               onPress={pauseSimulation}
               activeOpacity={0.7}
@@ -492,7 +492,7 @@ export default function ActorLab() {
               <Text style={[styles.btnText, simState === 'paused' && styles.btnTextActive]}>PAUSE</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" style={styles.btnThird} onPress={restartSimulation} activeOpacity={0.7}>
+            <TouchableOpacity accessibilityRole="button" style={styles.btnThird} onPress={restartSimulation} activeOpacity={0.7}>
               <FontAwesome name="refresh" size={14} color="#94A3B8" style={styles.btnIcon} />
               <Text style={styles.btnText}>RESTART</Text>
             </TouchableOpacity>
@@ -502,7 +502,7 @@ export default function ActorLab() {
         {/* 3. Network Simulation Controls */}
         <AdminCard title="Network Connectivity Simulation" subtitle="Toggle device simulated network connectivity">
           <View style={styles.btnRow}>
-            <TouchableOpacity accessibilityRole="button"
+            <TouchableOpacity
               style={[styles.btnHalf, networkOnline && styles.btnActiveGreen]}
               onPress={() => toggleNetwork(true)}
               testID="mock-network-on"
@@ -512,7 +512,7 @@ export default function ActorLab() {
               <Text style={[styles.btnText, networkOnline && styles.btnTextActive]}>ONLINE</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity accessibilityRole="button"
+            <TouchableOpacity
               style={[styles.btnHalf, !networkOnline && styles.btnActiveRed]}
               onPress={() => toggleNetwork(false)}
               testID="mock-network-off"
@@ -527,7 +527,7 @@ export default function ActorLab() {
         {/* 4. Authority Simulation Controls */}
         <AdminCard title="Remote Authority Mock Rejection" subtitle="Force authoritative server transaction failure">
           <View style={styles.btnRow}>
-            <TouchableOpacity accessibilityRole="button"
+            <TouchableOpacity
               style={[styles.btnHalf, remoteRejectActive && styles.btnActiveRed]}
               onPress={() => toggleRemoteRejection(true)}
               testID="mock-remote-reject-on"
@@ -542,7 +542,7 @@ export default function ActorLab() {
               <Text style={[styles.btnText, remoteRejectActive && styles.btnTextActive]}>MOCK ON</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity accessibilityRole="button"
+            <TouchableOpacity
               style={[styles.btnHalf, !remoteRejectActive && styles.btnActiveGreen]}
               onPress={() => toggleRemoteRejection(false)}
               testID="mock-remote-reject-off"
@@ -568,7 +568,7 @@ export default function ActorLab() {
             {(['guest', 'member', 'pastor', 'admin'] as const).map((role) => {
               const active = currentPrincipal.role === role;
               return (
-                <TouchableOpacity accessibilityRole="button"
+                <TouchableOpacity
                   key={role}
                   style={[styles.btnQuarter, active && styles.btnActiveBlue]}
                   onPress={() => handleRoleChange(role)}
@@ -678,7 +678,7 @@ export default function ActorLab() {
                   ERROR: 'rgba(239, 68, 68, 0.15)',
                 };
                 return (
-                  <TouchableOpacity accessibilityRole="button"
+                  <TouchableOpacity
                     key={lvl}
                     style={[
                       styles.filterBadge,
@@ -715,7 +715,7 @@ export default function ActorLab() {
                   NETWORK: 'rgba(251, 146, 60, 0.15)',
                 };
                 return (
-                  <TouchableOpacity accessibilityRole="button"
+                  <TouchableOpacity
                     key={cat}
                     style={[
                       styles.filterBadge,
@@ -764,7 +764,7 @@ export default function ActorLab() {
             </ScrollView>
           </View>
 
-          <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" style={styles.clearLogsBtn} onPress={() => setLogs([])} testID="clear-logs" activeOpacity={0.7}>
+          <TouchableOpacity accessibilityRole="button" style={styles.clearLogsBtn} onPress={() => setLogs([])} testID="clear-logs" activeOpacity={0.7}>
             <FontAwesome name="trash" size={14} color="#94A3B8" style={{ marginRight: 6 }} />
             <Text style={styles.clearLogsText}>Clear Terminal Logs</Text>
           </TouchableOpacity>

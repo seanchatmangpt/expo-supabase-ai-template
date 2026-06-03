@@ -482,7 +482,7 @@ export function AvatarRelativeProjectionMatrixView({
           <View style={matrixStyles.controlCol}>
             <Text style={matrixStyles.controlLabel}>Open Slots: {openSlots}</Text>
             <View style={matrixStyles.btnGroup}>
-              <TouchableOpacity accessibilityRole="button"
+              <TouchableOpacity
                 style={matrixStyles.smallBtn}
                 onPress={decreaseOpenSlots}
                 accessible={true}
@@ -490,7 +490,7 @@ export function AvatarRelativeProjectionMatrixView({
                 accessibilityLabel="Decrease open slots">
                 <Text style={matrixStyles.btnText}>-</Text>
               </TouchableOpacity>
-              <TouchableOpacity accessibilityRole="button"
+              <TouchableOpacity
                 style={matrixStyles.smallBtn}
                 onPress={increaseOpenSlots}
                 accessible={true}
@@ -528,7 +528,7 @@ export function AvatarRelativeProjectionMatrixView({
               <View style={[matrixStyles.sliderFill, { width: `${(openSlots / 8) * 100}%` }]} />
               <View style={matrixStyles.sliderStepsContainer}>
                 {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((val) => (
-                  <TouchableOpacity accessibilityRole="button"
+                  <TouchableOpacity
                     key={val}
                     testID={`slider-step-${val}`}
                     style={[
@@ -559,7 +559,7 @@ export function AvatarRelativeProjectionMatrixView({
         <View style={matrixStyles.candidatesSection}>
           <View style={matrixStyles.candidatesHeader}>
             <Text style={matrixStyles.controlLabel}>Candidates ({candidates.length})</Text>
-            <TouchableOpacity accessibilityRole="button"
+            <TouchableOpacity
               style={matrixStyles.addBtn}
               onPress={addCandidate}
               accessible={true}
@@ -574,7 +574,7 @@ export function AvatarRelativeProjectionMatrixView({
                 <Text style={matrixStyles.candidateText} numberOfLines={1}>
                   {cand}
                 </Text>
-                <TouchableOpacity accessibilityRole="button"
+                <TouchableOpacity
                   onPress={() => removeCandidate(idx)}
                   accessible={true}
                   accessibilityRole="button"

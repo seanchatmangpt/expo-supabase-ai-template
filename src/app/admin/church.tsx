@@ -8,7 +8,7 @@ export default function AdminChurch() {
   return (
     <AdminShell title="Church Profile" subtitle="Manage Schema.org Church metadata profile">
       <ScrollView contentContainerStyle={styles.container}>
-        <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" activeOpacity={0.8}>
+        <TouchableOpacity accessibilityRole="button" activeOpacity={0.8}>
           <AdminCard title="Identity details" subtitle="Vocabulary: https://schema.org/Church">
             <View style={styles.cardContent}>
               <View style={styles.row}>
@@ -36,7 +36,7 @@ export default function AdminChurch() {
           </AdminCard>
         </TouchableOpacity>
 
-        <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" activeOpacity={0.8}>
+        <TouchableOpacity accessibilityRole="button" activeOpacity={0.8}>
           <AdminCard title="Location details" subtitle="Vocabulary: https://schema.org/PostalAddress">
             <View style={styles.cardContent}>
               <View style={styles.row}>
@@ -71,7 +71,7 @@ export default function AdminChurch() {
           </AdminCard>
         </TouchableOpacity>
 
-        <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" activeOpacity={0.8}>
+        <TouchableOpacity accessibilityRole="button" activeOpacity={0.8}>
           <AdminCard title="Contact points" subtitle="Official channels">
             <View style={styles.cardContent}>
               <View style={styles.row}>

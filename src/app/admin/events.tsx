@@ -15,7 +15,7 @@ export default function AdminEvents() {
     <AdminShell title="Church Calendar Events" subtitle="Monitor scheduled services and outreach events">
       <ScrollView contentContainerStyle={styles.container}>
         {events.map((item) => (
-          <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" key={item.id} activeOpacity={0.8}>
+          <TouchableOpacity accessibilityRole="button" key={item.id} activeOpacity={0.8}>
             <AdminCard title={item.title} subtitle={item.time}>
               <View style={styles.locRow}>
                 <FontAwesome name="map-marker" size={14} color="#94A3B8" style={styles.icon} />

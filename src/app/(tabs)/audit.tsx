@@ -305,7 +305,7 @@ export default function AuditScreen() {
           {agents.map((agent) => {
             const isAgentHealthy = lastReport?.agentResults.find(r => r.agentId === agent.id)?.healthy ?? true;
             return (
-              <TouchableOpacity accessibilityRole="button"
+              <TouchableOpacity
                 key={agent.id}
                 style={[
                   styles.agentCard,
@@ -362,38 +362,38 @@ export default function AuditScreen() {
         {/* Controls list */}
         <Text style={styles.sectionTitle}>SIMULATOR INJECTION HARNESS</Text>
         <View style={styles.controlButtonsGrid}>
-          <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" style={[styles.btn, styles.btnBreach]} onPress={injectChatmanBreach}>
+          <TouchableOpacity accessibilityRole="button" style={[styles.btn, styles.btnBreach]} onPress={injectChatmanBreach}>
             <Ionicons name="pulse" size={18} color="white" />
             <Text style={styles.btnText}>1. Chatman Breach</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" style={[styles.btn, styles.btnBreach]} onPress={injectTransitionBreach}>
+          <TouchableOpacity accessibilityRole="button" style={[styles.btn, styles.btnBreach]} onPress={injectTransitionBreach}>
             <Ionicons name="shuffle" size={18} color="white" />
             <Text style={styles.btnText}>2. Transition Breach</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" style={[styles.btn, styles.btnBreach]} onPress={injectEntropyOverflow}>
+          <TouchableOpacity accessibilityRole="button" style={[styles.btn, styles.btnBreach]} onPress={injectEntropyOverflow}>
             <Ionicons name="flame" size={18} color="white" />
             <Text style={styles.btnText}>3. Entropy Overflow</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" style={[styles.btn, styles.btnBreach]} onPress={injectStaleCheckpoint}>
+          <TouchableOpacity accessibilityRole="button" style={[styles.btn, styles.btnBreach]} onPress={injectStaleCheckpoint}>
             <Ionicons name="time" size={18} color="white" />
             <Text style={styles.btnText}>4. Checkpoint Staleness</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" style={[styles.btn, styles.btnBreach]} onPress={injectCheckpointCorruption}>
+          <TouchableOpacity accessibilityRole="button" style={[styles.btn, styles.btnBreach]} onPress={injectCheckpointCorruption}>
             <Ionicons name="git-pull-request" size={18} color="white" />
             <Text style={styles.btnText}>5. Corrupt & Rehydrate</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" style={[styles.btn, styles.btnTick]} onPress={simulateSwarmTick}>
+          <TouchableOpacity accessibilityRole="button" style={[styles.btn, styles.btnTick]} onPress={simulateSwarmTick}>
             <Ionicons name="play" size={18} color="white" />
             <Text style={styles.btnText}>Simulate Tick</Text>
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" style={styles.btnReset} onPress={resetSwarm}>
+        <TouchableOpacity accessibilityRole="button" style={styles.btnReset} onPress={resetSwarm}>
           <Ionicons name="refresh" size={18} color="#94a3b8" />
           <Text style={styles.resetText}>RESET SIMULATION ENGINE</Text>
         </TouchableOpacity>
@@ -401,7 +401,7 @@ export default function AuditScreen() {
         {/* Live log visualizer console */}
         <View style={styles.consoleHeader}>
           <Text style={styles.sectionTitle}>LIVE ACTIVITY LEDGER</Text>
-          <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" onPress={() => setSimulationLogs([])}>
+          <TouchableOpacity accessibilityRole="button" onPress={() => setSimulationLogs([])}>
             <Text style={styles.clearText}>Clear</Text>
           </TouchableOpacity>
         </View>

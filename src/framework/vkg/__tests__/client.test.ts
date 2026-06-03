@@ -6,7 +6,7 @@ const mockAddQuads = jest.fn().mockResolvedValue(undefined);
 const mockRemoveQuads = jest.fn().mockResolvedValue(undefined);
 const mockJsonLdToQuads = jest.fn().mockReturnValue([{ subject: 'mock' }]);
 const mockQuadsToJsonLd = jest.fn().mockReturnValue([{ '@id': 'mock' }]);
-const mockGetSyncEngine = jest.fn().mockReturnValue({ isSyncEngine: true });
+const mockGetSyncEngine = jest.fn().mockReturnValue({ __isMockSyncEngine: true });
 
 jest.mock('../../../lib/vkg/client', () => {
   return {
@@ -70,9 +70,9 @@ describe('VKG Framework - Client Facade', () => {
   });
 
   it('delegates getSyncEngine() to base client', () => {
-    const res = client.getSyncEngine();
+    const res = client.getSyncEngine() as any;
     expect(mockGetSyncEngine).toHaveBeenCalled();
-    expect(res.isSyncEngine).toBe(true);
+    expect(res.__isMockSyncEngine).toBe(true);
   });
 
   it('addJsonLd() creates quads and adds them automatically', async () => {

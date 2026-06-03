@@ -15,7 +15,7 @@ export default function AdminGroups() {
     <AdminShell title="Small Groups & Ministries" subtitle="Manage campus small groups and leaders">
       <ScrollView contentContainerStyle={styles.container}>
         {groups.map((item) => (
-          <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" key={item.id} activeOpacity={0.8}>
+          <TouchableOpacity accessibilityRole="button" key={item.id} activeOpacity={0.8}>
             <AdminCard title={item.name} subtitle={item.members}>
               <View style={styles.leaderRow}>
                 <FontAwesome name="users" size={14} color="#94A3B8" style={styles.icon} />

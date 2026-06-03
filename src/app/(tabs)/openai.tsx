@@ -212,7 +212,7 @@ const CodeBlock = memo(function CodeBlock({ code, language }: { code: string; la
         <Text className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
           {language}
         </Text>
-        <TouchableOpacity accessibilityRole="button"
+        <TouchableOpacity
           onPress={copyToClipboard}
           className="flex-row items-center bg-slate-800 px-2.5 py-1 rounded"
           activeOpacity={0.7}
@@ -628,7 +628,7 @@ export default function OpenAIAvatarRelativeProjection() {
             </Text>
           </View>
         </View>
-        <TouchableOpacity accessibilityRole="button"
+        <TouchableOpacity
           onPress={clearChat}
           className="flex-row items-center px-2 py-1 rounded bg-slate-100 border border-slate-200"
           activeOpacity={0.7}
@@ -667,7 +667,7 @@ export default function OpenAIAvatarRelativeProjection() {
 
         {/* Scroll to Bottom Button */}
         {showScrollBottomBtn && (
-          <TouchableOpacity accessibilityRole="button"
+          <TouchableOpacity
             testID="scroll-bottom-button"
             onPress={scrollToBottom}
             className="absolute bottom-4 right-4 bg-indigo-600 w-10 h-10 rounded-full items-center justify-center shadow-lg border border-indigo-500"
@@ -707,7 +707,7 @@ export default function OpenAIAvatarRelativeProjection() {
             accessibilityLabel="AI Prompt Input"
             accessibilityHint="Type your question for the AI assistant"
           />
-          <TouchableOpacity accessibilityRole="button"
+          <TouchableOpacity
             testID="send-button"
             className={`rounded-xl p-2.5 items-center justify-center ${
               loading || !prompt.trim() || !networkOnline ? 'bg-slate-100' : 'bg-indigo-600 shadow-sm'

@@ -45,7 +45,7 @@ export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity accessibilityRole="button"
+          <TouchableOpacity
             testID="error-boundary-retry-button"
             onPress={retry}
             style={[styles.button, styles.retryButton]}
@@ -57,7 +57,7 @@ export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
             <Text style={styles.retryButtonText}>Retry Intake</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity accessibilityRole="button"
+          <TouchableOpacity
             testID="error-boundary-home-button"
             onPress={handleGoHome}
             style={[styles.button, styles.homeButton, isDark ? styles.homeButtonDark : styles.homeButtonLight]}

@@ -11,7 +11,7 @@ jest.mock('../AutoFixer', () => {
   return {
     AutoFixer: ({ onReset }: any) => (
       <View testID="mock-auto-fixer">
-        <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" onPress={onReset}>
+        <TouchableOpacity accessibilityRole="button" onPress={onReset}>
           <Text>Mock Fix</Text>
         </TouchableOpacity>
       </View>

@@ -1,5 +1,4 @@
 /// <reference path="./types.d.ts" />
-import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 
 const corsHeaders = {
@@ -7,17 +6,47 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-serve(async (req) => {
+Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
 
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
-    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
 
-    const { count = 1000, durationMs = 5000, mode = "realtime" } = await req.json().catch(() => ({}));
+    // Auth verification
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: "Missing Authorization header" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const authClient = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } }
+    });
+
+    const { data: { user }, error: authError } = await authClient.auth.getUser();
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: "Unauthorized", details: authError?.message }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    const body = await req.json().catch(() => ({}));
+    let count = Number(body.count) || 1000;
+    count = Math.max(1, Math.min(count, 10000)); // clamp between 1 and 10000
+
+    let durationMs = Number(body.durationMs) || 5000;
+    durationMs = Math.max(100, Math.min(durationMs, 60000)); // clamp between 100ms and 60s
+
+    const mode = String(body.mode || "realtime");
 
     // 1. Generate Synthetic Population
     const patterns = ["aggressive", "passive", "sporadic", "consistent"];
@@ -30,33 +59,28 @@ serve(async (req) => {
     const currentTime = Date.now();
 
     for (let i = 0; i < count; i++) {
-      const profile = {
-        id: `usr_${i}_${crypto.randomUUID()}`,
-        name: names[i % names.length] + `-${i}`,
-        behavioralPattern: patterns[i % patterns.length],
-        activityLevel: (i % 100) / 100,
-      };
+      const profileId = `usr_${i}_${crypto.randomUUID()}`;
+      const activityLevel = (i % 100) / 100;
+      const behavioralPattern = patterns[i % patterns.length];
 
-      const actionIndex = Math.floor(i + profile.activityLevel * 100) % actions.length;
+      const actionIndex = Math.floor(i + activityLevel * 100) % actions.length;
       
       events.push({
-        user_id: profile.id,
+        user_id: profileId,
         action: actions[actionIndex],
         timestamp: new Date(currentTime + Math.random() * durationMs).toISOString(),
         payload: {
           x: Math.floor(Math.random() * 1000),
           y: Math.floor(Math.random() * 1000),
-          pattern: profile.behavioralPattern,
-          activity_level: profile.activityLevel
+          pattern: behavioralPattern,
+          activity_level: activityLevel
         }
       });
     }
 
     if (mode === "realtime") {
-      // Emit via Supabase Realtime
       const channel = supabase.channel('swarm_activity');
       
-      // Batch events to avoid payload size limits (e.g., max 1MB per message, usually much less for Realtime)
       const batchSize = 100;
       for (let i = 0; i < events.length; i += batchSize) {
         const batch = events.slice(i, i + batchSize);
@@ -74,7 +98,6 @@ serve(async (req) => {
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     } else if (mode === "database") {
-      // Emit via direct database insertion (actor_events)
       const dbPayloads = events.map(e => ({
         id: crypto.randomUUID(),
         command_id: crypto.randomUUID(),
@@ -88,7 +111,6 @@ serve(async (req) => {
       let insertedCount = 0;
       for (let i = 0; i < dbPayloads.length; i += batchSize) {
         const batch = dbPayloads.slice(i, i + batchSize);
-        // Supabase-js syntax for insert
         const { error } = await supabase.from('actor_events').insert(batch);
         if (error) {
           console.error("Batch insert error:", error);
@@ -103,13 +125,17 @@ serve(async (req) => {
       );
     }
 
-    return new Response(JSON.stringify({ error: "Invalid mode" }), { status: 400, headers: corsHeaders });
+    return new Response(JSON.stringify({ error: "Invalid mode" }), { 
+      status: 400, 
+      headers: { ...corsHeaders, "Content-Type": "application/json" } 
+    });
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return new Response(JSON.stringify({ error: message }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
-      status: 400,
+      status: 500,
     });
   }
 });

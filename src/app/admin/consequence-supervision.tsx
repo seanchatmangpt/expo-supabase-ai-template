@@ -388,7 +388,7 @@ export default function AdminConsequenceSupervision() {
             { title: 'Projection Drift', icon: 'database', color: '#84CC16', value: '0% Drift (OK)', sub: [`Total Quads: ${totalQuads}`, 'SQLite tables: Match'] },
             { title: 'Realtime Channel', icon: 'wifi', color: '#A855F7', value: networkOnline ? 'ONLINE' : 'OFFLINE', sub: ['Supabase Broadcast', 'WebSockets: Active'], valColor: networkOnline ? '#34D399' : '#F87171' }
           ].map((item, idx) => (
-            <Pressable accessibilityRole="button"
+            <Pressable
               key={idx}
               style={({ pressed }) => [styles.diagCard, pressed && { opacity: 0.8, transform: [{ scale: 0.98 }] }]}
               onPress={() => item.route ? router.push(item.route as any) : null}
@@ -543,11 +543,11 @@ export default function AdminConsequenceSupervision() {
                     <JsonInspector data={{ actor: actorParsed, payload: payloadParsed }} title="Execution Dump Data" />
 
                     <View style={styles.itemActions}>
-                      <Pressable accessibilityLabel="Interactive element" accessibilityRole="button" style={({ pressed }) => [styles.actionBtn, styles.btnReplay, isOperating && styles.btnDisabled, pressed && { opacity: 0.8 }]} onPress={() => handleReplay(item)} disabled={isOperating}>
+                      <Pressable accessibilityRole="button" style={({ pressed }) => [styles.actionBtn, styles.btnReplay, isOperating && styles.btnDisabled, pressed && { opacity: 0.8 }]} onPress={() => handleReplay(item)} disabled={isOperating}>
                         {isOperating ? <ActivityIndicator size="small" color="#FFFFFF" /> : <><FontAwesome name="play-circle" size={14} color="#FFFFFF" style={styles.btnIcon} /><Text style={styles.btnText}>Force Replay</Text></>}
                       </Pressable>
 
-                      <Pressable accessibilityLabel="Interactive element" accessibilityRole="button" style={({ pressed }) => [styles.actionBtn, styles.btnPurge, isOperating && styles.btnDisabled, pressed && { opacity: 0.8 }]} onPress={() => handlePurge(item.id)} disabled={isOperating}>
+                      <Pressable accessibilityRole="button" style={({ pressed }) => [styles.actionBtn, styles.btnPurge, isOperating && styles.btnDisabled, pressed && { opacity: 0.8 }]} onPress={() => handlePurge(item.id)} disabled={isOperating}>
                         {isOperating ? <ActivityIndicator size="small" color="#EF4444" /> : <><FontAwesome name="trash-o" size={14} color="#EF4444" style={styles.btnIcon} /><Text style={[styles.btnText, styles.btnTextPurge]}>Purge Record</Text></>}
                       </Pressable>
                     </View>
@@ -609,7 +609,7 @@ export default function AdminConsequenceSupervision() {
             <Text style={styles.conformanceLabel}>Scenario Trace Selector:</Text>
             <View style={styles.scenarioRow}>
               {(['truthful', 'skipped', 'deviant', 'malformed'] as const).map((type) => (
-                <TouchableOpacity accessibilityRole="button"
+                <TouchableOpacity
                   key={type}
                   activeOpacity={0.8}
                   style={[
@@ -713,7 +713,7 @@ export default function AdminConsequenceSupervision() {
                 { label: 'Oscillation', value: 'oscillation' },
                 { label: 'High Load', value: 'high_load' }
               ] as const).map((btn) => (
-                <TouchableOpacity accessibilityRole="button"
+                <TouchableOpacity
                   key={btn.value}
                   activeOpacity={0.8}
                   style={styles.simulationBtn}
@@ -770,7 +770,7 @@ export default function AdminConsequenceSupervision() {
         <Text style={styles.gridHeader}>Operations Modules</Text>
         <View style={styles.gridContainer}>
           {adminModules.map((item) => (
-            <Pressable accessibilityLabel="Interactive element" accessibilityRole="button" key={item.name} style={({ pressed }) => [styles.gridItem, pressed && { backgroundColor: 'rgba(255, 255, 255, 0.1)', transform: [{ scale: 0.98 }] }]} onPress={() => router.push(item.route as any)}>
+            <Pressable accessibilityRole="button" key={item.name} style={({ pressed }) => [styles.gridItem, pressed && { backgroundColor: 'rgba(255, 255, 255, 0.1)', transform: [{ scale: 0.98 }] }]} onPress={() => router.push(item.route as any)}>
               <View style={[styles.iconBox, { backgroundColor: item.color + '25' }]}><FontAwesome name={item.icon as any} size={20} color={item.color} /></View>
               <Text style={styles.gridText}>{item.name}</Text>
             </Pressable>
