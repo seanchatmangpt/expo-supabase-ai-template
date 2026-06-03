@@ -26,7 +26,7 @@ export const FusionDevTools: React.FC = () => {
 
   return (
     <>
-      <TouchableOpacity
+      <TouchableOpacity accessibilityRole="button"
         style={styles.fab}
         onPress={() => setIsOpen(true)}
         testID="fusion-devtools-fab"
@@ -45,7 +45,7 @@ export const FusionDevTools: React.FC = () => {
               <Text style={styles.headerTitle}>Fusion DX Tools</Text>
               <Text style={styles.headerSubtitle}>Swarm Integration Layer</Text>
             </View>
-            <TouchableOpacity
+            <TouchableOpacity accessibilityRole="button"
               onPress={() => setIsOpen(false)}
               testID="close-devtools"
               style={styles.closeButton}>
@@ -54,7 +54,7 @@ export const FusionDevTools: React.FC = () => {
           </View>
 
           <View style={styles.tabs}>
-            <TouchableOpacity
+            <TouchableOpacity accessibilityRole="button"
               style={[styles.tab, activeTab === 'docs' && styles.activeTab]}
               onPress={() => setActiveTab('docs')}
               testID="tab-docs">
@@ -67,7 +67,7 @@ export const FusionDevTools: React.FC = () => {
                 Docs
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            <TouchableOpacity accessibilityRole="button"
               style={[styles.tab, activeTab === 'scaffold' && styles.activeTab]}
               onPress={() => setActiveTab('scaffold')}
               testID="tab-scaffold">
@@ -119,7 +119,7 @@ const ScaffoldView = () => {
             <Text style={styles.blueprintName}>{blueprint.name}</Text>
             <Text style={styles.blueprintDesc}>{blueprint.description}</Text>
           </View>
-          <TouchableOpacity
+          <TouchableOpacity accessibilityRole="button"
             style={[styles.scaffoldButton, scaffolding === id && styles.scaffoldButtonDisabled]}
             onPress={() => handleScaffold(id, blueprint.name)}
             disabled={scaffolding !== null}

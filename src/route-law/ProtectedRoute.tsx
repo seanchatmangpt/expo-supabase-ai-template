@@ -196,7 +196,7 @@ export const PremiumReceiptBlockingScreen: React.FC<PremiumReceiptBlockingScreen
         {/* Interactive Buttons */}
         <View className="gap-2">
           {!isChecking ? (
-            <TouchableOpacity
+            <TouchableOpacity accessibilityRole="button"
               onPress={onRetry}
               activeOpacity={0.85}
               className="w-full bg-violet-600 active:bg-violet-700 py-3 rounded-xl items-center justify-center flex-row shadow-lg shadow-violet-500/25"
@@ -208,7 +208,7 @@ export const PremiumReceiptBlockingScreen: React.FC<PremiumReceiptBlockingScreen
             </TouchableOpacity>
           ) : null}
 
-          <TouchableOpacity
+          <TouchableOpacity accessibilityRole="button"
             onPress={onRedirect}
             activeOpacity={0.85}
             className="w-full bg-slate-800 active:bg-slate-700 py-3 rounded-xl items-center justify-center border border-slate-700/60"

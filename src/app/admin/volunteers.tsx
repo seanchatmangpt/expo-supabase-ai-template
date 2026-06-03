@@ -32,7 +32,7 @@ export default function AdminVolunteers() {
             <Text style={styles.label}>Coordinator</Text>
             <Text style={styles.val}>{item.coordinator}</Text>
           </View>
-          <Pressable style={styles.actionBtn}>
+          <Pressable accessibilityLabel="Interactive element" accessibilityRole="button" style={styles.actionBtn}>
             <Text style={styles.actionBtnText}>Manage</Text>
           </Pressable>
         </View>

@@ -145,7 +145,7 @@ const Node3D: React.FC<Node3DComponentProps> = ({
 
   return (
     <Animated.View style={[styles.nodeContainer, animatedStyle]}>
-      <TouchableOpacity style={styles.nodeTouch} onPress={onPress} activeOpacity={0.7}>
+      <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" style={styles.nodeTouch} onPress={onPress} activeOpacity={0.7}>
         <Text style={styles.nodeLabel} numberOfLines={1}>
           {label}
         </Text>

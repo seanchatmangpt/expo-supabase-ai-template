@@ -80,7 +80,8 @@ export function AuthProvider<TUser = any>({
             if (isMounted) initialized = true;
           }, 100);
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error('[AuthProvider] Failed to refresh session:', error);
           if (!isMounted) return;
           setLoading(false);
           initialized = true;

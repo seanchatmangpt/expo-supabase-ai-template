@@ -82,7 +82,7 @@ export function CommandButton({
   ];
 
   return (
-    <TouchableOpacity
+    <TouchableOpacity accessibilityRole="button"
       onPress={handlePress}
       disabled={disabled || loading}
       style={buttonStyle}

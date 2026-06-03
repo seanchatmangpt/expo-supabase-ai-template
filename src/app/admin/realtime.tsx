@@ -248,7 +248,7 @@ export default function AdminRealtime() {
         title="Supabase Realtime Status" 
         subtitle="Socket and subscription states"
         headerRight={
-          <TouchableOpacity 
+          <TouchableOpacity accessibilityRole="button" 
             activeOpacity={0.7}
             className={`px-3 py-1.5 rounded-lg border flex-row items-center shadow-sm ${isConnected ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-rose-500/10 border-rose-500/30'}`}
             onPress={() => setIsConnected(!isConnected)}
@@ -301,7 +301,7 @@ export default function AdminRealtime() {
             { channel: 'actor_receipts', label: '⚡ Receipt', color: 'emerald' },
             { channel: 'rdf_quads_ld', label: '⚡ RDF Quad', color: 'cyan' }
           ].map((item) => (
-            <TouchableOpacity 
+            <TouchableOpacity accessibilityRole="button" 
               key={item.channel}
               activeOpacity={0.7}
               className={`flex-1 min-w-[45%] bg-slate-800/80 border border-slate-700 rounded-xl p-3 items-center justify-center shadow-sm border-l-4`}
@@ -322,7 +322,7 @@ export default function AdminRealtime() {
         subtitle="WebSocket packet log (latest first)"
         headerRight={
           messages.length > 0 ? (
-            <TouchableOpacity 
+            <TouchableOpacity accessibilityRole="button" 
               activeOpacity={0.6}
               className="bg-rose-500/10 px-3 py-1.5 rounded-lg border border-rose-500/20"
               onPress={clearMessages}

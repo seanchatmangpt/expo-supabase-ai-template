@@ -1,10 +1,10 @@
 import * as FileSystem from 'expo-file-system';
 import { EncodingType } from 'expo-file-system';
 
-const documentDirectory = (FileSystem as any).documentDirectory;
-const cacheDirectory = (FileSystem as any).cacheDirectory;
-const readAsStringAsync = (FileSystem as any).readAsStringAsync;
-const writeAsStringAsync = (FileSystem as any).writeAsStringAsync;
+const documentDirectory = FileSystem.documentDirectory;
+const cacheDirectory = FileSystem.cacheDirectory;
+const readAsStringAsync = FileSystem.readAsStringAsync;
+const writeAsStringAsync = FileSystem.writeAsStringAsync;
 import { Share } from 'react-native';
 import { mmkvInstance } from '@/src/lib/store/mmkvStorage';
 import { DATABASE_NAME } from '@/src/lib/db/db';

@@ -12,6 +12,7 @@ import { desc } from 'drizzle-orm';
 export default function AdminReceipts() {
   const [receiptsList, setReceiptsList] = useState<any[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const fetchReceipts = async () => {
     setRefreshing(true);
@@ -21,8 +22,9 @@ export default function AdminReceipts() {
         .from(actorReceipts)
         .orderBy(desc(actorReceipts.createdAt));
       setReceiptsList(list);
-    } catch (e) {
+    } catch (e: any) {
       console.error('Failed to load receipts:', e);
+      setErrorMsg(e.message || 'Failed to load receipts');
     } finally {
       setRefreshing(false);
     }
@@ -80,6 +82,11 @@ export default function AdminReceipts() {
 
   return (
     <AdminShell title="Receipt Audit Logs" subtitle="Historical transaction log matching BEAM event receipts" scrollable={false}>
+      {errorMsg && (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>{errorMsg}</Text>
+        </View>
+      )}
       <FlatList
         data={receiptsList}
         renderItem={renderReceiptItem}

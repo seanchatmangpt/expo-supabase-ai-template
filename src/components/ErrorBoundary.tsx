@@ -15,7 +15,7 @@ export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
   const isDark = theme === 'dark';
 
   const handleGoHome = () => {
-    router.replace('/(tabs)' as any);
+    router.replace('/(tabs)');
   };
 
   return (
@@ -45,21 +45,25 @@ export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
+          <TouchableOpacity accessibilityRole="button"
             testID="error-boundary-retry-button"
             onPress={retry}
             style={[styles.button, styles.retryButton]}
             activeOpacity={0.7}
+            accessibilityRole="button"
+            accessibilityLabel="Retry Intake"
           >
             <Ionicons name="refresh" size={16} color="#FFFFFF" style={styles.buttonIcon} />
             <Text style={styles.retryButtonText}>Retry Intake</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
+          <TouchableOpacity accessibilityRole="button"
             testID="error-boundary-home-button"
             onPress={handleGoHome}
             style={[styles.button, styles.homeButton, isDark ? styles.homeButtonDark : styles.homeButtonLight]}
             activeOpacity={0.7}
+            accessibilityRole="button"
+            accessibilityLabel="Go to Home"
           >
             <Ionicons name="home" size={16} color={isDark ? '#E2E8F0' : '#475569'} style={styles.buttonIcon} />
             <Text style={[styles.homeButtonText, isDark ? styles.homeButtonTextDark : styles.homeButtonTextLight]}>

@@ -20,7 +20,7 @@ export function JsonInspector({ data, title, testID }: JsonInspectorProps) {
 
   return (
     <View style={styles.container} testID={testID}>
-      <TouchableOpacity 
+      <TouchableOpacity accessibilityRole="button" 
         style={styles.header} 
         onPress={() => setCollapsed(!collapsed)}
         activeOpacity={0.7}

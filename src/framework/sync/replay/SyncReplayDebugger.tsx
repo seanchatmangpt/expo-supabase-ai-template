@@ -32,23 +32,23 @@ export const SyncReplayDebugger = <TJob extends SyncJobBase>({
       <View style={styles.header}>
         <Text style={styles.title}>Sync Replay Debugger</Text>
         {onClose && (
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+          <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" onPress={onClose} style={styles.closeButton}>
             <Text style={styles.closeButtonText}>Close</Text>
           </TouchableOpacity>
         )}
       </View>
 
       <View style={styles.controls}>
-        <TouchableOpacity
+        <TouchableOpacity accessibilityRole="button"
           onPress={prev}
           disabled={!canGoBack}
           style={[styles.button, !canGoBack && styles.disabled]}>
           <Text>Prev</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={isPlaying ? pause : play} style={styles.button}>
+        <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" onPress={isPlaying ? pause : play} style={styles.button}>
           <Text>{isPlaying ? 'Pause' : 'Play'}</Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        <TouchableOpacity accessibilityRole="button"
           onPress={next}
           disabled={!canGoForward}
           style={[styles.button, !canGoForward && styles.disabled]}>

@@ -42,7 +42,7 @@ export function AdminShell({
         {/* Header */}
         <View style={styles.header}>
           {onBack && (
-            <TouchableOpacity
+            <TouchableOpacity accessibilityRole="button"
               onPress={onBack}
               style={styles.backButton}
               testID={testID ? `${testID}-back-btn` : 'admin-back-btn'}
@@ -83,7 +83,7 @@ export function AdminShell({
               {navigationItems.map((item) => {
                 const isActive = activeNavigationId === item.id;
                 return (
-                  <TouchableOpacity
+                  <TouchableOpacity accessibilityRole="button"
                     key={item.id}
                     onPress={() => onNavigate && onNavigate(item)}
                     style={[styles.navButton, isActive && styles.navButtonActive]}

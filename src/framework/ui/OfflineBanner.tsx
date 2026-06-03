@@ -199,7 +199,7 @@ export function OfflineBanner() {
                 Device Offline — Using Pre-Admission Tension Queue
               </Text>
             </View>
-            <TouchableOpacity
+            <TouchableOpacity accessibilityRole="button"
               testID="reconnect-button"
               style={styles.reconnectButton}
               onPress={handleReconnect}

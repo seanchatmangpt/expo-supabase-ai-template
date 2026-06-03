@@ -15,7 +15,7 @@ export default function AdminPeople() {
     <AdminShell title="Pastoral Staff & Members" subtitle="Roster profiles of church leadership">
       <ScrollView contentContainerStyle={styles.container}>
         {staff.map((item) => (
-          <TouchableOpacity key={item.id} activeOpacity={0.8}>
+          <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" key={item.id} activeOpacity={0.8}>
             <AdminCard title={item.name} subtitle={item.role}>
               <View style={styles.emailRow}>
                 <FontAwesome name="envelope" size={14} color="#94A3B8" style={styles.icon} />

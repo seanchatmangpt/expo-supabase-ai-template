@@ -41,7 +41,7 @@ export function CodePayload({ data, title }: CodePayloadProps) {
 
   return (
     <View style={styles.codeContainer} testID="code-payload">
-      <TouchableOpacity
+      <TouchableOpacity accessibilityRole="button"
         style={styles.codeHeader}
         onPress={() => setCollapsed(!collapsed)}
         activeOpacity={0.7}
@@ -71,6 +71,7 @@ export default function AdminOutbox() {
   const [outboxList, setOutboxList] = useState<any[]>([]);
   const [quarantineList, setQuarantineList] = useState<any[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [syncing, setSyncing] = useState(false);
   const [syncStatusMsg, setSyncStatusMsg] = useState<string | null>(null);
   const networkOnline = useActorOpsStore((state) => state.networkOnline);
@@ -89,8 +90,9 @@ export default function AdminOutbox() {
         .from(actorQuarantine)
         .orderBy(desc(actorQuarantine.createdAt));
       setQuarantineList(quarantine);
-    } catch (e) {
+    } catch (e: any) {
       console.error('Failed to load queue data:', e);
+      setErrorMsg(e.message || 'Failed to load queue data');
     } finally {
       setRefreshing(false);
     }
@@ -200,6 +202,12 @@ export default function AdminOutbox() {
             style={styles.syncBtn}
           />
         </View>
+        {syncStatusMsg && (
+          <Text style={styles.syncStatus}>{syncStatusMsg}</Text>
+        )}
+        {errorMsg && (
+          <Text style={styles.errorText}>{errorMsg}</Text>
+        )}
         {!networkOnline && (
           <View testID="outbox-offline-state" style={styles.offlineContainer}>
             <FontAwesome name="exclamation-triangle" size={12} color="#D97706" style={{ marginRight: 6 }} />

@@ -504,7 +504,7 @@ export const CryptographicVerificationOverlay: React.FC<CryptographicVerificatio
           {/* Action buttons */}
           <View style={styles.actionArea}>
             {!isVerifying ? (
-              <TouchableOpacity
+              <TouchableOpacity accessibilityRole="button"
                 onPress={onRetry}
                 activeOpacity={0.82}
                 style={styles.retryButton}
@@ -515,7 +515,7 @@ export const CryptographicVerificationOverlay: React.FC<CryptographicVerificatio
               </TouchableOpacity>
             ) : null}
 
-            <TouchableOpacity
+            <TouchableOpacity accessibilityRole="button"
               onPress={onEscalate}
               activeOpacity={0.82}
               style={styles.escalateButton}

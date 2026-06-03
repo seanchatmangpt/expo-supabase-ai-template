@@ -189,7 +189,7 @@ export default function AdminSettings() {
       <AdminCard title="Engine Configurations" subtitle="Zoe Multi-tenant Boundaries & Sync Settings">
         <View className="bg-slate-800/50 rounded-xl border border-slate-700/50 overflow-hidden">
           
-          <Pressable onPress={toggleWalMode} className="flex-row justify-between items-center p-4 border-b border-slate-700/50 active:bg-slate-700/30">
+          <Pressable accessibilityLabel="Interactive element" accessibilityRole="button" onPress={toggleWalMode} className="flex-row justify-between items-center p-4 border-b border-slate-700/50 active:bg-slate-700/30">
             <View className="flex-1 pr-4">
               <Text className="text-slate-200 font-semibold text-sm">SQLite WAL Mode</Text>
               <Text className="text-slate-400 text-xs mt-1">Enable write-ahead logging database speedups</Text>
@@ -197,7 +197,7 @@ export default function AdminSettings() {
             <Switch active={walMode} colorClass="bg-blue-500" />
           </Pressable>
 
-          <Pressable onPress={() => setNetworkOnline(!networkOnline)} className="flex-row justify-between items-center p-4 border-b border-slate-700/50 active:bg-slate-700/30">
+          <Pressable accessibilityLabel="Interactive element" accessibilityRole="button" onPress={() => setNetworkOnline(!networkOnline)} className="flex-row justify-between items-center p-4 border-b border-slate-700/50 active:bg-slate-700/30">
             <View className="flex-1 pr-4">
               <Text className="text-slate-200 font-semibold text-sm">Network Simulator</Text>
               <Text className="text-slate-400 text-xs mt-1">Simulate offline state for testing synchronization outbox</Text>
@@ -205,7 +205,7 @@ export default function AdminSettings() {
             <Switch active={networkOnline} colorClass="bg-emerald-500" />
           </Pressable>
 
-          <Pressable onPress={() => setRemoteRejectActive(!remoteRejectActive)} className="flex-row justify-between items-center p-4 border-b border-slate-700/50 active:bg-slate-700/30">
+          <Pressable accessibilityLabel="Interactive element" accessibilityRole="button" onPress={() => setRemoteRejectActive(!remoteRejectActive)} className="flex-row justify-between items-center p-4 border-b border-slate-700/50 active:bg-slate-700/30">
             <View className="flex-1 pr-4">
               <Text className="text-slate-200 font-semibold text-sm">Remote Rejections</Text>
               <Text className="text-slate-400 text-xs mt-1">Simulate conflicts by rejecting incoming server actions</Text>
@@ -213,7 +213,7 @@ export default function AdminSettings() {
             <Switch active={remoteRejectActive} colorClass="bg-rose-500" />
           </Pressable>
 
-          <Pressable onPress={toggleVerboseLogs} className="flex-row justify-between items-center p-4 border-b border-slate-700/50 active:bg-slate-700/30">
+          <Pressable accessibilityLabel="Interactive element" accessibilityRole="button" onPress={toggleVerboseLogs} className="flex-row justify-between items-center p-4 border-b border-slate-700/50 active:bg-slate-700/30">
             <View className="flex-1 pr-4">
               <Text className="text-slate-200 font-semibold text-sm">Verbose Sync Logging</Text>
               <Text className="text-slate-400 text-xs mt-1">Output sync logs to serial terminal</Text>
@@ -221,7 +221,7 @@ export default function AdminSettings() {
             <Switch active={verboseLogs} colorClass="bg-purple-500" />
           </Pressable>
 
-          <Pressable onPress={toggleSupervisionRestart} className="flex-row justify-between items-center p-4 active:bg-slate-700/30">
+          <Pressable accessibilityLabel="Interactive element" accessibilityRole="button" onPress={toggleSupervisionRestart} className="flex-row justify-between items-center p-4 active:bg-slate-700/30">
             <View className="flex-1 pr-4">
               <Text className="text-slate-200 font-semibold text-sm">Supervision Auto-Restart</Text>
               <Text className="text-slate-400 text-xs mt-1">Restart syncing threads on driver crash events</Text>
@@ -285,7 +285,7 @@ export default function AdminSettings() {
             {/* Selector Buttons */}
             <View className="flex-row space-x-1.5 pt-1">
               {[0, 25, 50, 75, 100].map((rate) => (
-                <TouchableOpacity
+                <TouchableOpacity accessibilityRole="button"
                   key={rate}
                   activeOpacity={0.7}
                   onPress={() => setPacketDropRate(rate)}
@@ -329,7 +329,7 @@ export default function AdminSettings() {
 
             {/* CDC Simulation controls */}
             <View className="flex-row space-x-2">
-              <TouchableOpacity
+              <TouchableOpacity accessibilityRole="button"
                 activeOpacity={0.7}
                 onPress={() => setCdcEventsCount(cdcEventsCount + 1)}
                 className="flex-1 bg-slate-800/80 active:bg-slate-700/80 border border-slate-700 rounded-lg py-2 items-center justify-center flex-row space-x-1.5"
@@ -339,7 +339,7 @@ export default function AdminSettings() {
                 <Text className="text-slate-200 text-xs font-bold">Simulate CDC Event</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity
+              <TouchableOpacity accessibilityRole="button"
                 activeOpacity={0.7}
                 onPress={() => setCdcEventsCount(0)}
                 className="bg-slate-800/80 active:bg-slate-700/80 border border-slate-700 rounded-lg px-3 py-2 items-center justify-center"
@@ -367,7 +367,7 @@ export default function AdminSettings() {
         </View>
 
         <View className="space-y-3">
-          <TouchableOpacity
+          <TouchableOpacity accessibilityRole="button"
             activeOpacity={0.7}
             onPress={handleSeedSandboxData}
             className="w-full bg-slate-800/80 active:bg-slate-700/80 border border-slate-700 rounded-xl py-3.5 px-4 flex-row items-center justify-between"
@@ -381,7 +381,7 @@ export default function AdminSettings() {
             <Ionicons name="chevron-forward" size={16} color="#64748B" />
           </TouchableOpacity>
 
-          <TouchableOpacity
+          <TouchableOpacity accessibilityRole="button"
             activeOpacity={0.7}
             onPress={handleResetZustand}
             className="w-full bg-slate-800/80 active:bg-slate-700/80 border border-slate-700 rounded-xl py-3.5 px-4 flex-row items-center justify-between"
@@ -395,7 +395,7 @@ export default function AdminSettings() {
             <Ionicons name="chevron-forward" size={16} color="#64748B" />
           </TouchableOpacity>
 
-          <TouchableOpacity
+          <TouchableOpacity accessibilityRole="button"
             activeOpacity={0.7}
             onPress={handleClearAsyncStorage}
             className="w-full bg-slate-800/80 active:bg-slate-700/80 border border-slate-700 rounded-xl py-3.5 px-4 flex-row items-center justify-between"
@@ -409,7 +409,7 @@ export default function AdminSettings() {
             <Ionicons name="chevron-forward" size={16} color="#64748B" />
           </TouchableOpacity>
 
-          <TouchableOpacity
+          <TouchableOpacity accessibilityRole="button"
             activeOpacity={0.7}
             onPress={handleClearMMKV}
             className="w-full bg-rose-500/10 active:bg-rose-500/20 border border-rose-500/30 rounded-xl py-3.5 px-4 flex-row items-center justify-between"

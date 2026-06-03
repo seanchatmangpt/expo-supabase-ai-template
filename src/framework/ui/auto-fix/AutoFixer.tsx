@@ -52,7 +52,7 @@ export const AutoFixer: React.FC<AutoFixerProps> = ({ error, onReset }) => {
 
       <ScrollView className="max-h-64">
         {analysis.suggestions.map((suggestion) => (
-          <TouchableOpacity
+          <TouchableOpacity accessibilityRole="button"
             key={suggestion.id}
             onPress={() => handleFix(suggestion)}
             className={`mb-3 p-3 rounded-lg border ${

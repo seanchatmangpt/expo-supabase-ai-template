@@ -12,7 +12,12 @@ export default function ModalAvatarRelativeProjection() {
       <View className="bg-white border-b border-gray-200 pt-16 pb-4 px-6">
         <View className="flex-row items-center justify-between">
           <Text className="text-2xl font-bold text-gray-900">App Information</Text>
-          <TouchableOpacity className="bg-gray-100 rounded-full p-2" onPress={() => router.back()}>
+          <TouchableOpacity accessibilityRole="button" 
+            className="bg-gray-100 rounded-full p-2" 
+            onPress={() => router.back()}
+            accessibilityRole="button"
+            accessibilityLabel="Close Modal"
+          >
             <AntDesign name="close" size={20} color="#6B7280" />
           </TouchableOpacity>
         </View>

@@ -50,7 +50,7 @@ export function AutoFixer({ type, testID }: AutoFixerProps) {
           </Text>
         </View>
       ) : (
-        <TouchableOpacity
+        <TouchableOpacity accessibilityRole="button"
           style={styles.button}
           onPress={handleFix}
           disabled={fixing}

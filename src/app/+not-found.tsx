@@ -34,7 +34,11 @@ export default function NotFoundAvatarRelativeProjection() {
 
         {/* Action Button */}
         <Link href="/" asChild>
-          <TouchableOpacity className="bg-blue-600 rounded-lg py-4 px-8 w-full max-w-sm active:bg-blue-700">
+          <TouchableOpacity accessibilityRole="button" 
+            className="bg-blue-600 rounded-lg py-4 px-8 w-full max-w-sm active:bg-blue-700"
+            accessibilityRole="button"
+            accessibilityLabel="Return to Consequence Supervision"
+          >
             <Text className="text-white font-semibold text-center">🏠 Return to Consequence Supervision</Text>
           </TouchableOpacity>
         </Link>

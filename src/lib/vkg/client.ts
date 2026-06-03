@@ -99,12 +99,8 @@ export class VirtualKnowledgeGraphClient {
       conditions.push(eq(quads.graphTermType, graph.termType));
     }
 
-    let query = db.select().from(quads);
-    if (conditions.length > 0) {
-      query = query.where(and(...conditions)) as any;
-    }
-
-    const records = await query;
+    const baseQuery = db.select().from(quads);
+    const records = await (conditions.length > 0 ? baseQuery.where(and(...conditions)) : baseQuery);
     return records.map((record) => {
       // Reconstruct Terms
       const s = record.subjectTermType === 'NamedNode' 

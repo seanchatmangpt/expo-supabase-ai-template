@@ -43,7 +43,7 @@ export const SemanticListView: React.FC<SemanticListViewProps> = ({
           onChangeText={search}
           testID="search-input"
         />
-        <TouchableOpacity style={styles.createButton} onPress={onCreate} testID="create-button">
+        <TouchableOpacity accessibilityLabel="Interactive element" accessibilityRole="button" style={styles.createButton} onPress={onCreate} testID="create-button">
           <Text style={styles.createButtonText}>+</Text>
         </TouchableOpacity>
       </View>
@@ -58,7 +58,7 @@ export const SemanticListView: React.FC<SemanticListViewProps> = ({
         data={results}
         keyExtractor={(item, index) => `${item.subject}-${index}`}
         renderItem={({ item }: { item: SearchResult }) => (
-          <TouchableOpacity
+          <TouchableOpacity accessibilityRole="button"
             style={styles.item}
             onPress={() => onSelect(item.subject)}
             testID={`item-${item.subject}`}>

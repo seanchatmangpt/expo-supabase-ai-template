@@ -348,7 +348,7 @@ export default function Auth() {
 
             {/* SSO Buttons */}
             <View className="mb-6">
-              <TouchableOpacity
+              <TouchableOpacity accessibilityRole="button"
                 className="flex-row items-center justify-center bg-white border border-slate-200 rounded-2xl py-3.5 mb-3"
                 onPress={() => signInWithProvider('google')}
                 disabled={loading}
@@ -357,7 +357,7 @@ export default function Auth() {
                 <Text className="ml-3 font-semibold text-slate-700 text-base">Continue with Google</Text>
               </TouchableOpacity>
               
-              <TouchableOpacity
+              <TouchableOpacity accessibilityRole="button"
                 className="flex-row items-center justify-center bg-black border border-black rounded-2xl py-3.5"
                 onPress={() => signInWithProvider('apple')}
                 disabled={loading}
@@ -409,7 +409,7 @@ export default function Auth() {
                   </Text>
                 </View>
                 <View style={{ width: 8 }} />
-                <TouchableOpacity
+                <TouchableOpacity accessibilityRole="button"
                   testID="close-banner-button"
                   onPress={() => setBanner(null)}
                   className="p-0.5"
@@ -458,7 +458,7 @@ export default function Auth() {
                   accessibilityHint="Enter your email address"
                 />
                 {email.length > 0 && (
-                  <TouchableOpacity
+                  <TouchableOpacity accessibilityRole="button"
                     testID="clear-email-button"
                     onPress={() => setEmail('')}
                     accessible={true}
@@ -502,7 +502,7 @@ export default function Auth() {
                   accessibilityHint="Enter your password"
                 />
                 {password.length > 0 && (
-                  <TouchableOpacity
+                  <TouchableOpacity accessibilityRole="button"
                     testID="password-visibility-toggle"
                     onPress={() => setShowPassword(!showPassword)}
                     className="p-1"
@@ -645,7 +645,7 @@ export default function Auth() {
             </AnimatedPressable>
 
             {/* Toggle Auth Mode */}
-            <TouchableOpacity
+            <TouchableOpacity accessibilityRole="button"
               className="py-2"
               onPress={toggleAuthMode}
               disabled={loading}

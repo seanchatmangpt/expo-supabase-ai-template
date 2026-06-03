@@ -37,10 +37,10 @@ export default function AdminPrayer() {
           <Text style={styles.reqText}>"{item.request}"</Text>
         </View>
         <View style={styles.actions}>
-          <Pressable style={styles.actionBtn}>
+          <Pressable accessibilityLabel="Interactive element" accessibilityRole="button" style={styles.actionBtn}>
             <Text style={styles.actionBtnText}>Praying</Text>
           </Pressable>
-          <Pressable style={[styles.actionBtn, styles.actionBtnOutline]}>
+          <Pressable accessibilityLabel="Interactive element" accessibilityRole="button" style={[styles.actionBtn, styles.actionBtnOutline]}>
             <Text style={styles.actionBtnOutlineText}>Change Visibility</Text>
           </Pressable>
         </View>
