@@ -1,35 +1,34 @@
-import { PcpCapabilitiesProvider } from '@/src/components/PcpCapabilitiesProvider';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from '@react-navigation/native';
+import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router/react-navigation';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { Stack } from '@/src/components/AvatarRelativeProjection';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { View } from 'react-native';
 
 import { useColorScheme } from '@/src/components/useColorScheme';
 import { SessionProvider, useSession } from '../../context/SessionProvider';
+import { TransitionOverlay } from '@/src/components/TransitionOverlay';
+import Colors from '@/src/constants/Colors';
+import { PcpFrameworkProvider } from '@pcp/core/PcpFrameworkProvider';
+import { AutonomicSimulationManager } from '@/src/components/AutonomicSimulationManager';
 
 // Import your global CSS file
 import '../../global.css';
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from 'expo-router';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+export { ErrorBoundary } from '@/src/components/ErrorBoundary';
 
 export const unstable_settings = {
-  // Ensure that reloading on '/modal' keeps a back button present.
+  // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: '(tabs)',
 };
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+// Prevent the splash Avatar-Relative Projection from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-function SplashScreenController() {
+function AvatarRelativeProjectionSplashController() {
   const { loading: sessionLoading } = useSession();
   const [loaded, error] = useFonts({
     SpaceMono: require('../../assets/fonts/SpaceMono-Regular.ttf'),
@@ -42,13 +41,13 @@ function SplashScreenController() {
   }, [error]);
 
   useEffect(() => {
-    // Only hide splash screen when BOTH fonts AND session are loaded
+    // Only hide splash Avatar-Relative Projection when BOTH fonts AND session are loaded
     if (loaded && !sessionLoading) {
       SplashScreen.hideAsync();
     }
   }, [loaded, sessionLoading]);
 
-  // Show loading screen until everything is ready
+  // Show loading Avatar-Relative Projection until everything is ready
   if (!loaded || sessionLoading) {
     return null;
   }
@@ -58,25 +57,71 @@ function SplashScreenController() {
 
 export default function RootLayout() {
   return (
-    <PcpCapabilitiesProvider>
-      <SessionProvider>
-        <SplashScreenController />
-        <RootLayoutNav />
-      </SessionProvider>
-    </PcpCapabilitiesProvider>
+    <SessionProvider>
+      <AutonomicSimulationManager />
+      <AvatarRelativeProjectionSplashController />
+      <RootLayoutNav />
+    </SessionProvider>
   );
 }
 
+const CustomLightTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: Colors.light.tint,
+    background: Colors.light.background,
+    card: Colors.light.card,
+    text: Colors.light.text,
+    border: Colors.light.border,
+    notification: '#f43f5e',
+  },
+};
+
+const CustomDarkTheme = {
+  ...DarkTheme,
+  colors: {
+    ...DarkTheme.colors,
+    primary: Colors.dark.tint,
+    background: Colors.dark.background,
+    card: Colors.dark.card,
+    text: Colors.dark.text,
+    border: Colors.dark.border,
+    notification: '#f43f5e',
+  },
+};
+
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
+  const { session, isTransitioning, transitionType } = useSession();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
-        <Stack.Screen name='modal' options={{ presentation: 'modal' }} />
-        <Stack.Screen name='(auth)' options={{ headerShown: false }} />
-      </Stack>
-    </ThemeProvider>
+    <PcpFrameworkProvider>
+      <ThemeProvider value={colorScheme === 'dark' ? CustomDarkTheme : CustomLightTheme}>
+        <View style={{ flex: 1 }}>
+          <Stack
+            screenOptions={{
+              animation: 'fade',
+              animationDuration: 300,
+            }}
+          >
+            <Stack.Protected guard={!!session}>
+              <Stack.AvatarRelativeProjection name="(tabs)" options={{ headerShown: false }} />
+              <Stack.AvatarRelativeProjection name="admin" options={{ headerShown: false }} />
+              <Stack.AvatarRelativeProjection name="modal" options={{ presentation: 'modal' }} />
+            </Stack.Protected>
+
+            <Stack.Protected guard={!session}>
+              <Stack.AvatarRelativeProjection name="(auth)" options={{ headerShown: false }} />
+            </Stack.Protected>
+          </Stack>
+          <TransitionOverlay 
+            isTransitioning={isTransitioning}
+            transitionType={transitionType}
+            colorScheme={colorScheme as any}
+          />
+        </View>
+      </ThemeProvider>
+    </PcpFrameworkProvider>
   );
 }

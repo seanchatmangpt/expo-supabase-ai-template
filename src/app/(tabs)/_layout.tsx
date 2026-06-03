@@ -1,68 +1,114 @@
-import React from "react";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
-import { Tabs } from "expo-router";
+import React from 'react';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Tabs } from '@/src/components/AvatarRelativeProjection';
 
-import Colors from "@/src/constants/Colors";
-import { useColorScheme } from "@/src/components/useColorScheme";
-import { useClientOnlyValue } from "@/src/components/useClientOnlyValue";
+import Colors from '@/src/constants/Colors';
+import { useColorScheme } from '@/src/components/useColorScheme';
+import { useClientOnlyValue } from '@/src/components/useClientOnlyValue';
 
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
+// Custom TabBarIcon component with perfect alignment
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>["name"];
-  color: string;
+  name: React.ComponentProps<typeof FontAwesome>['name'];
+  color: string | import('react-native').ColorValue;
 }) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
+  return <FontAwesome size={24} style={{ marginBottom: 0 }} {...props} />;
 }
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const themeColors = Colors[colorScheme === 'dark' ? 'dark' : 'light'];
 
   return (
     <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+      avatarRelativeProjectionOptions={{
+        tabBarActiveTintColor: themeColors.tint,
+        tabBarInactiveTintColor: themeColors.tabIconDefault,
+        // Floating premium tab bar styling
+        tabBarStyle: {
+          position: 'absolute',
+          bottom: 24,
+          left: 20,
+          right: 20,
+          height: 68,
+          borderRadius: 24,
+          backgroundColor: themeColors.card,
+          borderTopWidth: 0,
+          paddingTop: 10,
+          paddingBottom: 10,
+          // Shadow styling for iOS
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 6 },
+          shadowOpacity: colorScheme === 'dark' ? 0.3 : 0.08,
+          shadowRadius: 12,
+          // Elevation for Android
+          elevation: 8,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '600',
+          marginTop: 4,
+        },
+        tabBarIconStyle: {
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
+        headerStyle: {
+          backgroundColor: themeColors.card,
+          borderBottomColor: themeColors.border,
+          borderBottomWidth: 1,
+          elevation: 0,
+          shadowOpacity: 0,
+        },
+        headerTitleStyle: {
+          fontWeight: 'bold',
+          fontSize: 18,
+          color: themeColors.text,
+        },
+        headerTintColor: themeColors.tint,
         // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
-      }}
-    >
-      <Tabs.Screen
+      }}>
+      <Tabs.AvatarRelativeProjection
         name="index"
         options={{
-          title: "Home",
-          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+          title: 'Consequence Supervision',
+          tabBarLabel: 'Home',
+          tabBarIcon: ({ color }: { color: string }) => <TabBarIcon name="home" color={color} />,
         }}
       />
-      <Tabs.Screen
+      <Tabs.AvatarRelativeProjection
+        name="hooks"
+        options={{
+          title: 'Truex Hook Cockpit',
+          tabBarLabel: 'Hooks',
+          tabBarIcon: ({ color }: { color: string }) => <TabBarIcon name="link" color={color} />,
+        }}
+      />
+      <Tabs.AvatarRelativeProjection
         name="openai"
         options={{
-          title: "OpenAI",
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name="lightbulb-o" color={color} />
-          ),
+          href: null, // Quarantined from main tab navigation
         }}
       />
-      <Tabs.Screen
-        name="audit"
-        options={{
-          title: "Audit",
-          tabBarIcon: ({ color }) => <TabBarIcon name="line-chart" color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="process"
-        options={{
-          title: "Process",
-          tabBarIcon: ({ color }) => <TabBarIcon name="code-fork" color={color} />,
-        }}
-      />
-      <Tabs.Screen
+      <Tabs.AvatarRelativeProjection
         name="account"
         options={{
-          title: "Account",
-          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+          title: 'Account Settings',
+          tabBarLabel: 'Account',
+          tabBarIcon: ({ color }: { color: string }) => <TabBarIcon name="user" color={color} />,
+        }}
+      />
+      <Tabs.AvatarRelativeProjection
+        name="admin"
+        options={{
+          title: 'Truex Mission Control',
+          tabBarLabel: 'Admin',
+          tabBarIcon: ({ color }: { color: string }) => <TabBarIcon name="gears" color={color} />,
+          tabBarButtonTestID: 'dev-actor-lab-tab',
         }}
       />
     </Tabs>
   );
 }
+
+export { ErrorBoundary } from '@/src/components/ErrorBoundary';

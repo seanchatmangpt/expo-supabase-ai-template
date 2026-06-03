@@ -1,169 +1,139 @@
-import { GlassCard } from '@pcp/ui/glassmorphism/GlassCard';
-import { GlassButton } from '@pcp/ui/glassmorphism/GlassButton';
-import { HolographicGlassCard } from '@pcp/2030/ui-holographic/HolographicGlassCard';
+import React, { useState } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { useSession } from '@/context/SessionProvider';
 import { Ionicons } from '@expo/vector-icons';
-import { useMembrane } from '@pcp/core';
-/**
- * @fileoverview Home Screen Component
- * The main dashboard screen that welcomes users and provides navigation to key app features.
- * Displays user information, quick action cards, and feature overview.
- *
- * @author Your Name
- * @version 1.0.0
- */
-
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
-import { useSession } from "@/context/SessionProvider";
-import { Link } from "expo-router";
+import { PostCyberpunkProvider } from '@pcp/v30/post-cyberpunk/core/PostCyberpunkProvider';
+import { useLawEngine } from '@pcp/v30/post-cyberpunk/law-engine';
+import { useAgiCourt } from '@pcp/v30/post-cyberpunk/agi-court';
+import { GlassCard } from '@pcp/ui/glassmorphism/GlassCard';
+import { HolographicGlassCard } from '@pcp/2030/ui-holographic/HolographicGlassCard';
 
 /**
- * Home screen component - main dashboard of the application
- * Shows welcome message, user info, and navigation cards to key features
- *
- * @component
- * @returns {JSX.Element} The home screen with welcome message and feature cards
- *
- * @example
- * // Used as the main tab in Expo Router
- * <HomeScreen />
+ * ZOEapp Dashboard (Post-Cyberpunk Edition)
+ * An Expo/Supabase application surface powered by the PCP Framework.
  */
-export default function HomeScreen() {
-  const { session, loading } = useSession(); const membrane = useMembrane(); const membraneMode = membrane.getConfig().mode;
+export default function PcpDashboard() {
+  const { session, loading } = useSession();
 
-  // Show loading state while session is being determined
   if (loading) {
     return (
-      <View className="flex-1 bg-gray-50 justify-center items-center">
-        <Text className="text-gray-600 text-lg">Loading...</Text>
+      <View className="flex-1 bg-slate-950 justify-center items-center">
+        <ActivityIndicator size="large" color="#8B5CF6" />
       </View>
     );
   }
 
-  // Extract user information from session
-  const userEmail = session?.user?.email;
-  const userName = userEmail?.split("@")[0] || "User";
+  return (
+    <PostCyberpunkProvider systemSecret="zoe-secret" laws={[]}>
+      <DashboardContent user={session?.user} />
+    </PostCyberpunkProvider>
+  );
+}
+
+function DashboardContent({ user }: { user: any }) {
+  const { submitClaim } = useLawEngine({ 
+    laws: [], 
+    boundary: { execute: async () => ({ id: 'r1', artifactId: 'a1', executionTime: Date.now(), status: 'SUCCESS' }) }
+  });
+  const [actuationStatus, setStatus] = useState<'idle' | 'processing' | 'success'>('idle');
+
+  const handleActuation = async () => {
+    setStatus('processing');
+    // Simulate a Blue River Dam lifecycle transition
+    await submitClaim({
+      id: `act_${Date.now()}`,
+      description: 'Actuating ministry context via Post-Cyberpunk law',
+      requiredEvidence: ['ZKP_AUTH', 'HARDWARE_ATTESTATION']
+    } as any);
+    setStatus('success');
+    setTimeout(() => setStatus('idle'), 2000);
+  };
 
   return (
-    <ScrollView className="flex-1 bg-gray-50">
-      {/* Welcome Header */}
-      <View className="bg-white border-b border-gray-200">
-        <View className="px-6 py-8">
-          <Text className="text-2xl font-bold text-gray-900 mb-2">
-            {membraneMode.toUpperCase()} | Welcome back, {userName}! 👋
-          </Text>
-          <Text className="text-gray-600">
-            What would you like to do today?
-          </Text>
-        </View>
+    <ScrollView className="flex-1 bg-slate-950 px-6 py-12">
+      <View className="mb-10">
+        <Text className="text-4xl font-black text-white tracking-tighter mb-2">
+          PCP DASHBOARD
+        </Text>
+        <Text className="text-slate-400 text-lg font-medium">
+          Post-Cyberpunk Operating Substrate
+        </Text>
       </View>
 
-      {/* Quick Actions */}
-      <View className="px-4 mt-6">
-        <Text className="text-lg font-semibold text-gray-900 mb-4 px-2">
-          Quick Actions
-        </Text>
-
-        <View className="space-y-3">
-          {/* AI Assistant Card */}
-          <Link href="/(tabs)/openai" asChild>
-            <TouchableOpacity className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm active:bg-gray-50">
-              <View className="flex-row items-center">
-                <View className="bg-blue-100 rounded-full p-3 mr-4">
-                  <Text className="text-2xl">🤖</Text>
-                </View>
-                <View className="flex-1">
-                  <Text className="text-lg font-semibold text-gray-900 mb-1">
-                    AI Assistant
-                  </Text>
-                  <Text className="text-gray-600 text-sm">
-                    Ask questions, get help, and explore AI capabilities
-                  </Text>
-                </View>
-                <Text className="text-gray-400 text-xl">›</Text>
-              </View>
-            </TouchableOpacity>
-          </Link>
-
-          {/* Account Settings Card */}
-          <Link href="/(tabs)/account" asChild>
-            <TouchableOpacity className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm active:bg-gray-50">
-              <View className="flex-row items-center">
-                <View className="bg-green-100 rounded-full p-3 mr-4">
-                  <Text className="text-2xl">👤</Text>
-                </View>
-                <View className="flex-1">
-                  <Text className="text-lg font-semibold text-gray-900 mb-1">
-                    Account Settings
-                  </Text>
-                  <Text className="text-gray-600 text-sm">
-                    Manage your profile and preferences
-                  </Text>
-                </View>
-                <Text className="text-gray-400 text-xl">›</Text>
-              </View>
-            </TouchableOpacity>
-          </Link>
-        </View>
-      </View>
-
-      {/* Features Overview */}
-      <View className="px-4 mt-8">
-        <Text className="text-lg font-semibold text-gray-900 mb-4 px-2">
-          App Features
-        </Text>
-
-        <View className="bg-white rounded-xl border border-gray-100 shadow-sm">
-          <View className="p-6">
-            <Text className="text-base font-medium text-gray-900 mb-4">
-              This app includes:
-            </Text>
-
-            <View className="space-y-3">
-              <View className="flex-row items-center">
-                <Text className="text-green-500 mr-3">✓</Text>
-                <Text className="text-gray-700 flex-1">
-                  Secure authentication with Supabase
-                </Text>
-              </View>
-              <View className="flex-row items-center">
-                <Text className="text-green-500 mr-3">✓</Text>
-                <Text className="text-gray-700 flex-1">
-                  AI assistant powered by OpenAI
-                </Text>
-              </View>
-              <View className="flex-row items-center">
-                <Text className="text-green-500 mr-3">✓</Text>
-                <Text className="text-gray-700 flex-1">
-                  Profile management and settings
-                </Text>
-              </View>
-              <View className="flex-row items-center">
-                <Text className="text-green-500 mr-3">✓</Text>
-                <Text className="text-gray-700 flex-1">
-                  Modern React Native with Expo Router
-                </Text>
-              </View>
-              <View className="flex-row items-center">
-                <Text className="text-green-500 mr-3">✓</Text>
-                <Text className="text-gray-700 flex-1">
-                  Professional UI with NativeWind
-                </Text>
-              </View>
-            </View>
+      <HolographicGlassCard className="p-6 mb-8">
+        <View className="flex-row items-center mb-4">
+          <View className="bg-violet-500/20 p-3 rounded-2xl mr-4">
+            <Ionicons name="shield-checkmark" size={24} color="#A78BFA" />
+          </View>
+          <View>
+            <Text className="text-white text-xl font-bold">Reality Actuator</Text>
+            <Text className="text-slate-400 text-sm">Blue River Dam v30.1.2</Text>
           </View>
         </View>
+
+        <TouchableOpacity 
+          onPress={handleActuation}
+          disabled={actuationStatus === 'processing'}
+          className={`h-14 rounded-2xl items-center justify-center ${
+            actuationStatus === 'processing' ? 'bg-slate-800' : 'bg-violet-600'
+          }`}
+        >
+          {actuationStatus === 'processing' ? (
+            <ActivityIndicator color="white" />
+          ) : (
+            <Text className="text-white font-bold text-base">
+              {actuationStatus === 'success' ? 'REALITY MANUFACTURED' : 'ACTUATE LAW'}
+            </Text>
+          )}
+        </TouchableOpacity>
+      </HolographicGlassCard>
+
+      <View className="flex-row space-x-4 mb-8">
+        <View className="flex-1">
+          <GlassCard intensity="low" className="p-5 h-32 justify-between">
+            <Ionicons name="people" size={20} color="#94A3B8" />
+            <View>
+              <Text className="text-slate-500 text-xs font-bold uppercase">Community</Text>
+              <Text className="text-white text-xl font-black">ACTIVE</Text>
+            </View>
+          </GlassCard>
+        </View>
+        <View className="flex-1">
+          <GlassCard intensity="low" className="p-5 h-32 justify-between">
+            <Ionicons name="radio" size={20} color="#94A3B8" />
+            <View>
+              <Text className="text-slate-500 text-xs font-bold uppercase">Livestream</Text>
+              <Text className="text-emerald-400 text-xl font-black">LIVE</Text>
+            </View>
+          </GlassCard>
+        </View>
       </View>
 
-      {/* User Info */}
-      <View className="px-4 mt-6 mb-8">
-        <View className="bg-blue-50 rounded-xl border border-blue-200 p-4">
-          <Text className="text-blue-800 font-medium mb-1">
-            Current Session
-          </Text>
-          <Text className="text-blue-600 text-sm">
-            Logged in as: {userEmail}
-          </Text>
+      <View className="bg-slate-900/50 border border-slate-800 rounded-3xl p-6 mb-12">
+        <Text className="text-slate-300 font-bold mb-4 uppercase tracking-widest text-xs">
+          Internal Court (AGI Court)
+        </Text>
+        <View className="space-y-3">
+          {[
+            { label: 'Witness Lattice', status: 'ADMITTED' },
+            { label: 'ZKP Boundary', status: 'VERIFIED' },
+            { label: 'Causal Window', status: 'GATED' },
+          ].map((item, i) => (
+            <View key={i} className="flex-row justify-between items-center py-2 border-b border-slate-800/50">
+              <Text className="text-slate-400 font-medium">{item.label}</Text>
+              <Text className="text-violet-400 font-mono text-xs font-bold">{item.status}</Text>
+            </View>
+          ))}
         </View>
+      </View>
+
+      <View className="items-center opacity-30">
+        <Text className="text-slate-500 font-mono text-[10px]">
+          SESSION_ID: {user?.id?.slice(0, 12)}...
+        </Text>
+        <Text className="text-slate-500 font-mono text-[10px]">
+          PCP_FOUNDRY_V30_OMEGA
+        </Text>
       </View>
     </ScrollView>
   );

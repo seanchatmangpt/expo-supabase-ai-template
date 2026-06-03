@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { AppSwarmManager, AgentInfo, AgentStatus } from '@pcp/v30/autonomous-swarm/AppSwarmManager';
 import { AutonomicQAEngine, QACycleReport, QAViolation } from '@pcp/auto/AutonomicQAEngine';
 import { TelemetryManager } from '@pcp/membrane/managers/telemetry';
+import { LieDetector } from '@pcp/auto/LieDetector';
 
 export default function AuditScreen() {
   // Swarm and engine instance refs
@@ -61,6 +62,14 @@ export default function AuditScreen() {
       }
     });
 
+    // Start Lie Detector to aggressively enforce truth
+    const detector = new LieDetector(sManager, qEngine);
+    detector.start(3000);
+    addLog('LIE DETECTOR ACTIVATED. Continuously scanning for deviations from Autonomic Invariants...', 'success');
+
+    return () => {
+      detector.stop();
+    };
   }, []);
 
   const addLog = (message: string, type: 'info' | 'success' | 'warning' | 'error' | 'heal') => {
