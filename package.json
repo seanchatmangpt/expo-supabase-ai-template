@@ -61,7 +61,8 @@
     "react-native-css-interop": "^0.2.4",
     "react-test-renderer": "^19.2.3",
     "supabase": "^2.104.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "ws": "^8.21.0"
   },
   "overrides": {
     "lightningcss": "1.30.1"

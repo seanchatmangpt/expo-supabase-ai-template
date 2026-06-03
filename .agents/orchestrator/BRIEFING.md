@@ -1,19 +1,19 @@
-# BRIEFING — 2026-06-02T16:38:09-07:00
+# BRIEFING — 2026-06-02T17:30:00-07:00
 
 ## Mission
-Execute the project described in ORIGINAL_REQUEST.md to comprehensively bulletproof the Expo application across unit, E2E, and security boundaries, ensuring >90% code coverage on advanced capabilities.
+Perform a full-stack sweep on /Users/sac/expo-supabase-ai-template to find and fix all TypeScript, ESLint, runtime, and UX issues.
 
 ## 🔒 My Identity
 - Archetype: self
 - Roles: orchestrator, user_liaison, human_reporter, successor
 - Working directory: /Users/sac/expo-supabase-ai-template/.agents/orchestrator
 - Original parent: main agent
-- Original parent conversation ID: 082ae6d9-d3d6-4bec-b0cc-68e4ca0a7513
+- Original parent conversation ID: 3076e40f-f875-4572-9d42-ec43e0dc8fcf
 
 ## 🔒 My Workflow
 - **Pattern**: Project
-- **Scope document**: /Users/sac/expo-supabase-ai-template/.agents/orchestrator/plan.md
-1. **Decompose**: Decompose the project into milestones: unit testing (R1), E2E & visual validation (R2), and security & hardening (R3).
+- **Scope document**: /Users/sac/expo-supabase-ai-template/PROJECT.md
+1. **Decompose**: Decompose the project into milestones: diagnostics, compile & lint resolution, component & UX integrity, and final verification.
 2. **Dispatch & Execute**:
    - **Delegate (sub-orchestrator)**: For large milestones, spawn sub-orchestrators/workers to parallelize and isolate work.
 3. **On failure** (in this order):
@@ -25,12 +25,13 @@ Execute the project described in ORIGINAL_REQUEST.md to comprehensively bulletpr
    - Escalate: report to parent (sub-orchestrators only, last resort)
 4. **Succession**: At 16 sub-agent spawns, write handoff.md, spawn successor.
 - **Work items**:
-  1. Initialize Project plan and progress tracking [in-progress]
-  2. R1: Comprehensive Unit Testing for advanced capabilities and components [pending]
-  3. R2: E2E and Visual Validation with Detox [pending]
-  4. R3: Security Audit, Fuzzing, and Error Boundaries [pending]
+  1. Initialize Project plan and progress tracking [done]
+  2. M1: Diagnostic Scan & Verification [pending]
+  3. M2: Compile & Lint Resolution [pending]
+  4. M3: UX & Component Integrity [pending]
+  5. M4: Final Verification & Test Execution [pending]
 - **Current phase**: 1
-- **Current focus**: Initialize plan.md and progress.md
+- **Current focus**: Run diagnostic scan
 
 ## 🔒 Key Constraints
 - Never write, modify, or create source code files directly.
@@ -40,30 +41,33 @@ Execute the project described in ORIGINAL_REQUEST.md to comprehensively bulletpr
 - Zero tolerance for hardcoded test results, facade implementations, or fabricated verification outputs.
 
 ## Current Parent
-- Conversation ID: 082ae6d9-d3d6-4bec-b0cc-68e4ca0a7513
+- Conversation ID: 3076e40f-f875-4572-9d42-ec43e0dc8fcf
 - Updated: not yet
 
 ## Key Decisions Made
-- Sibling folder `pcp/src/capabilities/` identified as the target folder for the advanced capability modules.
-- Plan to delegate tasks using a structured Project/Sub-orchestrator pattern to specialized subagents.
+- Transitioned project scope to the new ORIGINAL_REQUEST.md requirements focusing on full-stack diagnostic sweep and compile-time/runtime/UX resolution.
 
 ## Team Roster
 | Agent | Type | Work Item | Status | Conv ID |
 |-------|------|-----------|--------|---------|
-| explorer_m1 | teamwork_preview_explorer | M1: Exploration & Setup | completed | 427faa82-89de-4f5d-a07b-098707a158dc |
-| worker_setup | teamwork_preview_worker | M1.2: Environment Setup | in-progress | 3d392b09-aec3-4240-9758-39c43e250714 |
+| explorer_1 | teamwork_preview_explorer | M1: TypeScript Diagnostics | in-progress | 6e9eb0ae-34e9-42a6-881b-fd54d9440660 |
+| explorer_2 | teamwork_preview_explorer | M1: ESLint Diagnostics | in-progress | dcead676-3603-4f52-8246-d647216e565e |
+| explorer_3 | teamwork_preview_explorer | M1: Jest/UX Diagnostics | in-progress | 9835a2ca-0279-4002-805a-0276c8b8057f |
 
 ## Succession Status
 - Succession required: no
-- Spawn count: 2 / 16
-- Pending subagents: 3d392b09-aec3-4240-9758-39c43e250714
+- Spawn count: 3 / 16
+- Pending subagents: 6e9eb0ae-34e9-42a6-881b-fd54d9440660, dcead676-3603-4f52-8246-d647216e565e, 9835a2ca-0279-4002-805a-0276c8b8057f
 - Predecessor: none
 - Successor: not yet spawned
 
 ## Active Timers
-- Heartbeat cron: eb667118-634e-4d4a-bc07-77ca09b833c1/task-47
-- Safety timer: none
+- Heartbeat cron: 1ef45b7e-9fac-41ca-89bf-0dd1735d6c8d/task-65
+- Safety timer: 1ef45b7e-9fac-41ca-89bf-0dd1735d6c8d/task-75
+- On succession: kill all timers before spawning successor
+- On context truncation: run `manage_task(Action="list")` — re-create if missing
 
 ## Artifact Index
-- /Users/sac/expo-supabase-ai-template/.agents/orchestrator/ORIGINAL_REQUEST.md — Original User Request
+- /Users/sac/expo-supabase-ai-template/.agents/ORIGINAL_REQUEST.md — Original User Request
+- /Users/sac/expo-supabase-ai-template/PROJECT.md — Global Project Plan
 - /Users/sac/expo-supabase-ai-template/.agents/orchestrator/BRIEFING.md — Persistent memory state

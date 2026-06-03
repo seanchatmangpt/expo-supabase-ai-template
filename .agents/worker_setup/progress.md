@@ -1,6 +1,6 @@
 # Progress Heartbeat
 
-Last visited: 2026-06-03T17:21:00-07:00
+Last visited: 2026-06-03T17:25:40-07:00
 
 - [x] Log original request.
 - [x] Initialize briefing.
@@ -12,5 +12,5 @@ Last visited: 2026-06-03T17:21:00-07:00
   - [x] Typecheck expo-supabase-ai-template.
   - [x] Jest tests expo-supabase-ai-template.
   - [x] Typecheck pcp.
-  - [/] Jest tests pcp.
+  - [/] Jest tests pcp (running --runInBand with max-old-space-size=8192).
 - [ ] Document Task 6 (handoff.md & message to Orchestrator).

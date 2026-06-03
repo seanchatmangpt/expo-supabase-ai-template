@@ -12,6 +12,8 @@ config.watchFolders = [
   path.resolve(__dirname, '../pcp')
 ];
 
+config.resolver.assetExts.push('wasm');
+
 // Ensure resolver looks in the correct places
 config.resolver.nodeModulesPaths = [
   path.resolve(__dirname, 'node_modules'),

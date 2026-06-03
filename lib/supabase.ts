@@ -10,12 +10,26 @@
 import "react-native-url-polyfill/auto";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createClient } from "@supabase/supabase-js";
+import { Platform } from 'react-native';
 
 /** Supabase project URL from environment variables */
 const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL || "";
 
 /** Supabase anonymous key from environment variables */
 const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || "";
+
+const isServer = typeof window === 'undefined';
+
+const customStorage = isServer ? {
+  getItem: () => Promise.resolve(null),
+  setItem: () => Promise.resolve(),
+  removeItem: () => Promise.resolve(),
+} : AsyncStorage;
+
+if (isServer) {
+  // Polyfill WebSocket for Supabase Realtime during SSR
+  global.WebSocket = require('ws');
+}
 
 /**
  * Configured Supabase client instance
@@ -35,9 +49,9 @@ const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || "";
  */
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    storage: AsyncStorage,
-    autoRefreshToken: true,
-    persistSession: true,
+    storage: customStorage as any,
+    autoRefreshToken: !isServer,
+    persistSession: !isServer,
     detectSessionInUrl: false,
   },
 });
