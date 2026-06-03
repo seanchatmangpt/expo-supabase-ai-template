@@ -46,7 +46,8 @@ export class A11yAuditor {
         // Look for text children if label is missing
         const hasTextChild = node.children.some(child => 
           typeof child === 'string' || 
-          (typeof child === 'object' && child.type === 'Text')
+          (typeof child === 'object' && typeof child.type === 'string' && (child.type as string) === 'Text') ||
+          (typeof child === 'object' && typeof child.type === 'function' && child.type.name === 'Text')
         );
         
         if (!hasTextChild) {

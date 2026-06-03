@@ -170,6 +170,7 @@ export default function Auth() {
       });
 
       console.log('[Auth Debug] signInWithPassword result:', { data, error });
+
       if (error) {
         setBanner({ type: 'error', message: error.message });
       }
@@ -218,7 +219,7 @@ export default function Auth() {
     setLoading(true);
     setBanner(null);
     try {
-      const { error } = await supabase.auth.signUp({ email, password });
+      const { data, error } = await supabase.auth.signUp({ email, password });
 
       if (error) {
         setBanner({ type: 'error', message: error.message });
