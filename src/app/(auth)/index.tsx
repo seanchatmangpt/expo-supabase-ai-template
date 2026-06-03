@@ -274,7 +274,7 @@ export default function Auth() {
           throw error;
         }
       } catch (e: any) {
-        console.warn(`[Auth Debug] Network/DB failed during dev admin sign in, injecting mock session:`, e.message);
+        console.log(`[Auth Debug] Network/DB failed during dev admin sign in, injecting mock session. Reason:`, e.message);
         // Force a mock session so the simulator is functional without the backend
         setSession({
           access_token: 'mock-token',
