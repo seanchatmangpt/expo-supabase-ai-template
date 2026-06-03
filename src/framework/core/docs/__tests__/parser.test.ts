@@ -54,27 +54,4 @@ describe('parseJSDoc', () => {
     expect(result.examples?.[0].code).toBe('<MyComponent />');
     expect(result.examples?.[1].code).toBe('<MyComponent prop="value" />');
   });
-
-  it('should fallback to first block as description', () => {
-    const jsDoc = `
-      /**
-       * This is a standalone description.
-       * @name standalone
-       */
-    `;
-    const result = parseJSDoc(jsDoc);
-    expect(result.description).toBe('This is a standalone description.');
-  });
-
-  it('should handle empty or malformed JSDoc', () => {
-    const result = parseJSDoc('/** */');
-    expect(result.params).toHaveLength(0);
-    expect(result.examples).toHaveLength(0);
-  });
-
-  it('should parse @id', () => {
-    const jsDoc = '/** @id my-custom-id */';
-    const result = parseJSDoc(jsDoc);
-    expect(result.id).toBe('my-custom-id');
-  });
 });

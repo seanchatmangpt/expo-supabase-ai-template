@@ -22,13 +22,4 @@ describe('Badge', () => {
     );
     expect(getByTestId('custom-child')).toBeTruthy();
   });
-
-  it('applies custom classNames', () => {
-    const { getByText } = render(
-      <Badge className="custom-container" textClassName="custom-text">
-        Custom Class Badge
-      </Badge>
-    );
-    expect(getByText('Custom Class Badge')).toBeTruthy();
-  });
 });

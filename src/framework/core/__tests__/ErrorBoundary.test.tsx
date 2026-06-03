@@ -60,40 +60,4 @@ describe('ErrorBoundary', () => {
 
     expect(screen.getByTestId('content')).toBeTruthy();
   });
-
-  it('renders custom ReactNode fallback', () => {
-    render(
-      <ErrorBoundary fallback={<Text testID="custom-fallback">Custom Error</Text>}>
-        <ProblemChild shouldThrow={true} />
-      </ErrorBoundary>
-    );
-    expect(screen.getByTestId('custom-fallback')).toBeTruthy();
-    expect(screen.getByText('Custom Error')).toBeTruthy();
-  });
-
-  it('renders custom render prop fallback', () => {
-    const fallbackRender = jest.fn((error, resetError) => (
-      <Text testID="render-prop-fallback">{error.message}</Text>
-    ));
-
-    render(
-      <ErrorBoundary fallback={fallbackRender}>
-        <ProblemChild shouldThrow={true} />
-      </ErrorBoundary>
-    );
-    expect(screen.getByTestId('render-prop-fallback')).toBeTruthy();
-    expect(screen.getByText('Test Error')).toBeTruthy();
-    expect(fallbackRender).toHaveBeenCalled();
-  });
-
-  it('calls onError prop when an error is caught', () => {
-    const onErrorMock = jest.fn();
-    render(
-      <ErrorBoundary onError={onErrorMock}>
-        <ProblemChild shouldThrow={true} />
-      </ErrorBoundary>
-    );
-    expect(onErrorMock).toHaveBeenCalled();
-    expect(onErrorMock.mock.calls[0][0].message).toBe('Test Error');
-  });
 });

@@ -94,9 +94,25 @@ const CustomDarkTheme = {
   },
 };
 
+import { useRouter, useSegments } from 'expo-router';
+
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
-  const { session, isTransitioning, transitionType } = useSession();
+  const { session, loading, isTransitioning, transitionType } = useSession();
+  const segments = useSegments();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (loading) return;
+    const inAuthGroup = segments[0] === '(auth)';
+    
+    // Explicit redirects for rock-solid authentication flow
+    if (!session && !inAuthGroup) {
+      router.replace('/(auth)');
+    } else if (session && inAuthGroup) {
+      router.replace('/(tabs)');
+    }
+  }, [session, loading, segments]);
 
   return (
     <PcpFrameworkProvider>
@@ -108,15 +124,10 @@ function RootLayoutNav() {
               animationDuration: 300,
             }}
           >
-            <Stack.Protected guard={!!session}>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="admin" options={{ headerShown: false }} />
-              <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-            </Stack.Protected>
-
-            <Stack.Protected guard={!session}>
-              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-            </Stack.Protected>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="admin" options={{ headerShown: false }} />
+            <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
           </Stack>
           <TransitionOverlay 
             isTransitioning={isTransitioning}
@@ -128,3 +139,4 @@ function RootLayoutNav() {
     </PcpFrameworkProvider>
   );
 }
+

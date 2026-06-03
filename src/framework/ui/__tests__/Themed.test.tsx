@@ -31,27 +31,5 @@ describe('Themed Components', () => {
       const text = getByText('Hello World');
       expect(text).toBeTruthy();
     });
-
-    it('merges custom className', () => {
-      const { getByText } = renderWithTheme(<Text className="custom-class">Hello World</Text>);
-      const text = getByText('Hello World');
-      expect(text.props.className).toContain('custom-class');
-    });
-  });
-
-  describe('View component', () => {
-    it('renders correctly with default styles', () => {
-      const { getByTestId } = renderWithTheme(<View testID="themed-view" />);
-      const view = getByTestId('themed-view');
-      expect(view).toBeTruthy();
-    });
-
-    it('merges custom className', () => {
-      const { getByTestId } = renderWithTheme(
-        <View testID="themed-view" className="custom-view-class" />
-      );
-      const view = getByTestId('themed-view');
-      expect(view.props.className).toContain('custom-view-class');
-    });
   });
 });

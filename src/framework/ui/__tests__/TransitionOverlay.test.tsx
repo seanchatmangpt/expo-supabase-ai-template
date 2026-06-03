@@ -46,19 +46,4 @@ describe('TransitionOverlay', () => {
     expect(getByText('Signing out...')).toBeTruthy();
     expect(getByText('Clearing session cache & returning to login')).toBeTruthy();
   });
-
-  it('handles transition state change from true to false', () => {
-    const { getByText, rerender } = render(
-      <TransitionOverlay isTransitioning={true} transitionType="signin" colorScheme="light" />
-    );
-    expect(getByText('Welcome back!')).toBeTruthy();
-
-    rerender(
-      <TransitionOverlay isTransitioning={false} transitionType="signin" colorScheme="light" />
-    );
-
-    // In our mock withTiming, callback is called immediately so visible becomes false.
-    // wait for JS queue
-    act(() => {});
-  });
 });

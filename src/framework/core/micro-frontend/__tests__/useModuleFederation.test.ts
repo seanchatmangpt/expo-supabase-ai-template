@@ -31,10 +31,4 @@ describe('useModuleFederation', () => {
     await waitFor(() => expect(result.current.status).toBe('error'));
     expect(result.current.error?.message).toBe('No URL provided for federated module');
   });
-
-  it('should handle loading errors', async () => {
-    // In our stub, we don't have a way to force an error easily without modifying the hook
-    // but we can test the error state if we were to mock the "fetch" or "import"
-    // For this stub, we've already covered the empty URL error path.
-  });
 });

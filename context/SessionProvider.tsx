@@ -26,6 +26,8 @@ interface SessionContextType {
   transitionType: 'signin' | 'signout' | null;
   /** Setter for transitioning state */
   setIsTransitioning: (val: boolean) => void;
+  /** Expose setSession for local development bypasses */
+  setSession: (session: Session | null) => void;
 }
 
 /**
@@ -38,6 +40,7 @@ const SessionContext = createContext<SessionContextType>({
   isTransitioning: false,
   transitionType: null,
   setIsTransitioning: () => {},
+  setSession: () => {},
 });
 
 /**
@@ -129,6 +132,7 @@ export const SessionProvider = ({ children }: { children: React.ReactNode }) => 
         isTransitioning,
         transitionType,
         setIsTransitioning,
+        setSession,
       }}
     >
       {children}

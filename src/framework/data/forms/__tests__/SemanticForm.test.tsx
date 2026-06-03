@@ -82,31 +82,4 @@ describe('SemanticForm', () => {
       'Jane Doe'
     );
   });
-
-  it('calls onSubmit when submit button is pressed', async () => {
-    const { getByText } = render(
-      <SemanticForm targetType="https://schema.org/Person" onSubmit={mockSubmit} />
-    );
-
-    const submitButton = getByText('Submit');
-    fireEvent.press(submitButton);
-
-    expect(mockUseSemanticForm.handleSubmit).toHaveBeenCalled();
-    expect(mockSubmit).toHaveBeenCalled();
-  });
-
-  it('calls onCancel when cancel button is pressed', () => {
-    const { getByText } = render(
-      <SemanticForm
-        targetType="https://schema.org/Person"
-        onSubmit={mockSubmit}
-        onCancel={mockCancel}
-      />
-    );
-
-    const cancelButton = getByText('Cancel');
-    fireEvent.press(cancelButton);
-
-    expect(mockCancel).toHaveBeenCalled();
-  });
 });

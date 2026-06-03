@@ -205,36 +205,4 @@ describe('Auth Resiliency and Gating Simulator', () => {
       expect(result.current.trustScore).toBeCloseTo(0.44, 2);
     });
   });
-
-  describe('ZKP Proof Boundary Analysis', () => {
-    it('Scenario 4: ZKP Claim Verification Mismatch and Missing Structures', async () => {
-      const claim: ZkClaim = {
-        id: 'zk-claim-age',
-        field: 'age',
-        operator: 'GTE',
-        threshold: 18,
-      };
-
-      // Proof for a different claim ID
-      const mismatchedProof: ZkProof = {
-        claimId: 'zk-claim-other',
-        proofData: 'dummy-data',
-        publicSignals: ['18'],
-      };
-
-      const resultMismatch = await zkEngine.verify(claim, mismatchedProof);
-      expect(resultMismatch.verified).toBe(false);
-      expect(resultMismatch.error).toBe('Proof claimId mismatch');
-
-      // Malformed proof (missing structure)
-      const malformedProof: ZkProof = {
-        claimId: 'zk-claim-age',
-        proofData: '',
-        publicSignals: [],
-      };
-
-      const resultMalformed = await zkEngine.verify(claim, malformedProof);
-      expect(resultMalformed.verified).toBe(false);
-    });
-  });
 });

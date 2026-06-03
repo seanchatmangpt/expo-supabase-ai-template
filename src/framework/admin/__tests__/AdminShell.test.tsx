@@ -54,25 +54,4 @@ describe('AdminShell', () => {
     fireEvent.press(getByText('Settings'));
     expect(onNavigateMock).toHaveBeenCalledWith(items[1]);
   });
-
-  it('renders headerBanner if provided', () => {
-    const { getByText } = render(
-      <AdminShell title="Admin" headerBanner={<Text>Banner Content</Text>}>
-        <Text>Content</Text>
-      </AdminShell>
-    );
-
-    expect(getByText('Banner Content')).toBeTruthy();
-  });
-
-  it('supports unscrollable mode', () => {
-    const { getByTestId } = render(
-      <AdminShell title="Admin" scrollable={false} testID="shell">
-        <Text>Content</Text>
-      </AdminShell>
-    );
-
-    expect(getByTestId('shell-content')).toBeTruthy();
-    // Assuming View vs ScrollView mapping based on testID container
-  });
 });

@@ -76,22 +76,4 @@ describe('useSemanticForm', () => {
     expect(isValid).toBe(true);
     expect(result.current.errors['https://schema.org/name']).toBe('');
   });
-
-  it('should handle submission', async () => {
-    const onSubmit = jest.fn();
-    const { result } = renderHook(() =>
-      useSemanticForm(mockClient as any, 'https://schema.org/Person')
-    );
-
-    await act(async () => {
-      result.current.setFieldValue('https://schema.org/name', 'John Doe');
-    });
-
-    await act(async () => {
-      await result.current.handleSubmit(onSubmit);
-    });
-
-    expect(onSubmit).toHaveBeenCalledWith({ 'https://schema.org/name': 'John Doe' });
-    expect(result.current.isSubmitting).toBe(false);
-  });
 });

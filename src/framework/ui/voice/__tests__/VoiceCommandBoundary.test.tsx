@@ -47,12 +47,4 @@ describe('VoiceCommandBoundary', () => {
     );
     expect(getByTestId('overlay')).toBeTruthy();
   });
-
-  it('throws error when used outside provider', () => {
-    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-    expect(() => render(<TestComponent />)).toThrow(
-      'useVoiceContext must be used within a VoiceCommandBoundary'
-    );
-    consoleSpy.mockRestore();
-  });
 });

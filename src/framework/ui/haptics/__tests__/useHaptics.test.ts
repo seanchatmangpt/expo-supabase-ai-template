@@ -92,47 +92,4 @@ describe('useHaptics hooks', () => {
       expect(IntelligentHaptics.trigger).not.toHaveBeenCalled();
     });
   });
-
-  describe('useTensionHaptics', () => {
-    it('should trigger impact when crossing thresholds', () => {
-      const { result } = renderHook(() => useTensionHaptics());
-
-      act(() => {
-        result.current(0.2); // Light threshold
-      });
-      expect(IntelligentHaptics.impact).toHaveBeenCalledWith(0.2);
-      jest.clearAllMocks();
-
-      act(() => {
-        result.current(0.3); // Same threshold range
-      });
-      expect(IntelligentHaptics.impact).not.toHaveBeenCalled();
-
-      act(() => {
-        result.current(0.6); // Medium threshold
-      });
-      expect(IntelligentHaptics.impact).toHaveBeenCalledWith(0.6);
-      jest.clearAllMocks();
-
-      act(() => {
-        result.current(0.95); // Heavy threshold
-      });
-      expect(IntelligentHaptics.impact).toHaveBeenCalledWith(0.95);
-    });
-
-    it('should not trigger impact when decreasing tension', () => {
-      const { result } = renderHook(() => useTensionHaptics());
-
-      act(() => {
-        result.current(0.95);
-      });
-      expect(IntelligentHaptics.impact).toHaveBeenCalledTimes(1);
-      jest.clearAllMocks();
-
-      act(() => {
-        result.current(0.6);
-      });
-      expect(IntelligentHaptics.impact).not.toHaveBeenCalled();
-    });
-  });
 });

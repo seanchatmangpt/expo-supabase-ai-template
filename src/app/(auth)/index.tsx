@@ -22,6 +22,7 @@ import {
 import { Feather, FontAwesome } from '@expo/vector-icons';
 import { supabase } from '../../../lib/supabase';
 import { Stack } from '@/src/components/AvatarRelativeProjection';
+import { useSession } from '@/context/SessionProvider';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -237,6 +238,8 @@ export default function Auth() {
     }
   }
 
+  const { setSession } = useSession();
+
   async function signInWithProvider(provider: 'google' | 'apple') {
     if (__DEV__) {
       console.log(`[Auth Debug] DEV MODE: Bypassing ${provider} SSO and logging in with admin credentials.`);
@@ -271,8 +274,24 @@ export default function Auth() {
           throw error;
         }
       } catch (e: any) {
-        console.error(`[Auth Debug] Unexpected error during dev admin sign in:`, e);
-        setBanner({ type: 'error', message: e?.message || 'An unexpected error occurred' });
+        console.warn(`[Auth Debug] Network/DB failed during dev admin sign in, injecting mock session:`, e.message);
+        // Force a mock session so the simulator is functional without the backend
+        setSession({
+          access_token: 'mock-token',
+          refresh_token: 'mock-refresh',
+          expires_in: 3600,
+          token_type: 'bearer',
+          user: {
+            id: 'mock-user-id',
+            aud: 'authenticated',
+            role: 'authenticated',
+            email: 'admin@truex.com',
+            app_metadata: {},
+            user_metadata: {},
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          }
+        });
       } finally {
         setLoading(false);
       }

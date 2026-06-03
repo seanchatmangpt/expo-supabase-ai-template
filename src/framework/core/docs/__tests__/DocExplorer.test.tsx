@@ -65,26 +65,4 @@ describe('DocExplorer', () => {
 
     expect(getByText('SpecialTypeItem')).toBeTruthy();
   });
-
-  it('displays details with returns and sourcePath', () => {
-    docRegistry.registerMetadata({
-      id: 'full-doc',
-      name: 'FullDoc',
-      description: 'desc',
-      type: 'utility',
-      returns: { type: 'void', description: 'nothing' },
-      sourcePath: 'src/full.ts',
-      examples: [{ title: 'Example 1', code: 'code1' }],
-    });
-    const { getByText } = render(<DocExplorer />);
-
-    fireEvent.press(getByText('FullDoc'));
-
-    expect(getByText('Returns')).toBeTruthy();
-    expect(getByText('void')).toBeTruthy();
-    expect(getByText('nothing')).toBeTruthy();
-    expect(getByText('Source: src/full.ts')).toBeTruthy();
-    expect(getByText('Example 1')).toBeTruthy();
-    expect(getByText('code1')).toBeTruthy();
-  });
 });

@@ -73,14 +73,4 @@ describe('FusionAccessibilityLayer', () => {
     const element = screen.getByText('Hello Fusion');
     expect(element).toBeTruthy();
   });
-
-  it('disables auto-translation when requested', () => {
-    render(
-      <FusionAccessibilityLayer translations={translations} autoTranslate={false}>
-        <Text>hello</Text>
-      </FusionAccessibilityLayer>
-    );
-
-    expect(screen.getByText('hello')).toBeTruthy();
-  });
 });

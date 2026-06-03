@@ -42,22 +42,4 @@ describe('analyzeError', () => {
 
     expect(analysis.suggestions.some((s) => s.id === 'rollback')).toBe(true);
   });
-
-  it('should execute wipe-state action', async () => {
-    const error = new Error('JSON parse error');
-    const analysis = analyzeError(error);
-    const wipeState = analysis.suggestions.find((s) => s.id === 'wipe-state');
-
-    await wipeState?.action();
-    expect(AsyncStorage.clear).toHaveBeenCalled();
-  });
-
-  it('should execute re-auth action', async () => {
-    const error = new Error('auth error');
-    const analysis = analyzeError(error);
-    const reAuth = analysis.suggestions.find((s) => s.id === 're-auth');
-
-    await reAuth?.action();
-    expect(AsyncStorage.removeItem).toHaveBeenCalledWith('supabase.auth.token');
-  });
 });

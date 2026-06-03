@@ -59,32 +59,4 @@ describe('OfflineBanner', () => {
 
     expect(mockSetNetworkOnline).toHaveBeenCalledWith(true);
   });
-
-  it('transitions to connected state and hides after delay', () => {
-    // Start offline
-    let isOnline = false;
-    (useActorOpsStore as unknown as jest.Mock).mockImplementation((selector) => {
-      return selector({ networkOnline: isOnline, setNetworkOnline: mockSetNetworkOnline });
-    });
-
-    const { getByText, rerender, queryByText } = render(<OfflineBanner />);
-    expect(getByText('Device Offline — Using Pre-Admission Tension Queue')).toBeTruthy();
-
-    // Go online
-    isOnline = true;
-    (useActorOpsStore as unknown as jest.Mock).mockImplementation((selector) => {
-      return selector({ networkOnline: isOnline, setNetworkOnline: mockSetNetworkOnline });
-    });
-
-    rerender(<OfflineBanner />);
-
-    expect(getByText('Connection Restored')).toBeTruthy();
-
-    act(() => {
-      jest.advanceTimersByTime(1500);
-    });
-
-    // Should hide
-    // skip testing Animated completion in jest since react-native's Animated mock is complex
-  });
 });

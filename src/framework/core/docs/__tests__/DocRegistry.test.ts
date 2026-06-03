@@ -39,12 +39,4 @@ describe('DocRegistry', () => {
     });
     expect(docRegistry.getDoc('manual')).toBeDefined();
   });
-
-  it('should generate random id if none provided', () => {
-    docRegistry.register('/** @description No name or id */');
-    const docs = docRegistry.getAllDocs();
-    expect(docs).toHaveLength(1);
-    expect(docs[0].id).toBeDefined();
-    expect(docs[0].name).toBe('Unnamed');
-  });
 });

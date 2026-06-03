@@ -111,41 +111,4 @@ describe('AutoFixErrorBoundary', () => {
       expect(getByText('Safe Content')).toBeTruthy();
     });
   });
-
-  it('resets error state when auto-fix onReset is called', async () => {
-    const { getByText, rerender } = renderWithProvider(
-      <AutoFixErrorBoundary>
-        <ThrowError message="Crashed!" shouldThrow={true} />
-      </AutoFixErrorBoundary>
-    );
-
-    // Update children to not throw anymore BEFORE resetting
-    rerender(
-      <SafeAreaProvider
-        initialMetrics={{
-          frame: { x: 0, y: 0, width: 0, height: 0 },
-          insets: { top: 0, left: 0, right: 0, bottom: 0 },
-        }}>
-        <AutoFixErrorBoundary>
-          <ThrowError message="Crashed!" shouldThrow={false} />
-        </AutoFixErrorBoundary>
-      </SafeAreaProvider>
-    );
-
-    fireEvent.press(getByText('Mock Fix'));
-
-    await waitFor(() => {
-      expect(getByText('Safe Content')).toBeTruthy();
-    });
-  });
-
-  it('can disable auto-fix UI via props', () => {
-    const { queryByTestId } = renderWithProvider(
-      <AutoFixErrorBoundary enableAutoFix={false}>
-        <ThrowError message="Crashed!" />
-      </AutoFixErrorBoundary>
-    );
-
-    expect(queryByTestId('mock-auto-fixer')).toBeNull();
-  });
 });

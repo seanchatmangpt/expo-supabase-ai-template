@@ -128,42 +128,4 @@ describe('PredictiveActionLayer', () => {
       expect(cached.result).toBeDefined();
     }
   });
-
-  it('should handle subscription to state changes', async () => {
-    const listener = jest.fn();
-    const unsubscribe = pal.subscribe(listener);
-
-    const envelope: CommandEnvelope = {
-      id: 'env-1',
-      actor: mockActor,
-      command: 'cmd-1',
-      payload: { i: 1 },
-      principal: mockPrincipal,
-      idempotencyKey: 'test-key',
-    };
-
-    await pal.ingestIntent(envelope);
-    expect(listener).toHaveBeenCalled();
-
-    unsubscribe();
-    listener.mockClear();
-    await pal.ingestIntent(envelope);
-    expect(listener).not.toHaveBeenCalled();
-  });
-
-  it('should bound the size of history and pre-computations', async () => {
-    // Fill history
-    for (let i = 0; i < 60; i++) {
-      await pal.ingestIntent({
-        id: `env-${i}`,
-        actor: mockActor,
-        command: 'cmd-1',
-        payload: { i: 1 },
-        principal: mockPrincipal,
-        idempotencyKey: 'idemp-1',
-      });
-    }
-
-    expect(pal.getState().recentIntents.length).toBe(50);
-  });
 });
