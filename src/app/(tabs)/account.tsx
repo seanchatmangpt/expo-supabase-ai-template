@@ -353,7 +353,7 @@ export default function Account() {
     <View style={{ flex: 1 }}>
       <OfflineBanner />
       <ScrollView className="flex-1 bg-gray-50" contentContainerStyle={{ paddingBottom: 110 }}>
-      <Tabs.AvatarRelativeProjection options={{ title: 'Account Settings' }} />
+      <Tabs.Screen options={{ title: 'Account Settings' }} />
 
       {/* Header and Avatar Projection Card */}
       <View className="bg-white border-b border-gray-200 pb-6 pt-4">

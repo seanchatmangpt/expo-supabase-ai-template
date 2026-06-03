@@ -109,13 +109,13 @@ function RootLayoutNav() {
             }}
           >
             <Stack.Protected guard={!!session}>
-              <Stack.AvatarRelativeProjection name="(tabs)" options={{ headerShown: false }} />
-              <Stack.AvatarRelativeProjection name="admin" options={{ headerShown: false }} />
-              <Stack.AvatarRelativeProjection name="modal" options={{ presentation: 'modal' }} />
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="admin" options={{ headerShown: false }} />
+              <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
             </Stack.Protected>
 
             <Stack.Protected guard={!session}>
-              <Stack.AvatarRelativeProjection name="(auth)" options={{ headerShown: false }} />
+              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
             </Stack.Protected>
           </Stack>
           <TransitionOverlay 

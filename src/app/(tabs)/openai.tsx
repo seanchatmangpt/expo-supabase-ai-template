@@ -614,7 +614,7 @@ export default function OpenAIAvatarRelativeProjection() {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
       className="flex-1 bg-slate-50"
     >
-      <Tabs.AvatarRelativeProjection options={{ title: 'AI Assistant' }} />
+      <Tabs.Screen options={{ title: 'AI Assistant' }} />
       <OfflineBanner />
 
       {/* Header Info */}

@@ -68,7 +68,7 @@ export default function TabLayout() {
         // Disable the static render of the header on web
         headerShown: useClientOnlyValue(false, true),
       }}>
-      <Tabs.AvatarRelativeProjection
+      <Tabs.Screen
         name="index"
         options={{
           title: 'Consequence Supervision',
@@ -76,7 +76,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }: { color: string }) => <TabBarIcon name="home" color={color} />,
         }}
       />
-      <Tabs.AvatarRelativeProjection
+      <Tabs.Screen
         name="hooks"
         options={{
           title: 'Truex Hook Cockpit',
@@ -84,25 +84,25 @@ export default function TabLayout() {
           tabBarIcon: ({ color }: { color: string }) => <TabBarIcon name="link" color={color} />,
         }}
       />
-      <Tabs.AvatarRelativeProjection
+      <Tabs.Screen
         name="openai"
         options={{
           href: null, // Quarantined from main tab navigation
         }}
       />
-      <Tabs.AvatarRelativeProjection
+      <Tabs.Screen
         name="audit"
         options={{
           href: null, // Quarantined from main tab navigation
         }}
       />
-      <Tabs.AvatarRelativeProjection
+      <Tabs.Screen
         name="process"
         options={{
           href: null, // Quarantined from main tab navigation
         }}
       />
-      <Tabs.AvatarRelativeProjection
+      <Tabs.Screen
         name="account"
         options={{
           title: 'Account Settings',
@@ -110,7 +110,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }: { color: string }) => <TabBarIcon name="user" color={color} />,
         }}
       />
-      <Tabs.AvatarRelativeProjection
+      <Tabs.Screen
         name="admin"
         options={{
           title: 'Truex Mission Control',

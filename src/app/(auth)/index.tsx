@@ -313,7 +313,7 @@ export default function Auth() {
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
       >
-        <Stack.AvatarRelativeProjection options={{ title: 'Welcome' }} />
+        <Stack.Screen options={{ title: 'Welcome' }} />
 
         {/* Outer view container to structure spacing professionally */}
         <View className="flex-1 justify-center px-6 py-12">
