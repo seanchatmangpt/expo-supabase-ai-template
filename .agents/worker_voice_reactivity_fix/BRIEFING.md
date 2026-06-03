@@ -17,7 +17,7 @@ Restore voice command registration reactivity in VoiceCommandBoundary.tsx and ty
 
 ## Current Parent
 - Conversation ID: 1ef45b7e-9fac-41ca-89bf-0dd1735d6c8d
-- Updated: not yet
+- Updated: 2026-06-02T18:08:20-07:00
 
 ## Task Summary
 - **What to build**: Expose activeIntents state in VoiceCommandBoundary context and VoiceContextValue interface in types.ts.
@@ -31,17 +31,20 @@ Restore voice command registration reactivity in VoiceCommandBoundary.tsx and ty
 - **Code layout**: src/framework/ui/voice/
 
 ## Key Decisions Made
-- Will replace useRef with React useState for activeIntents.
+- Replaced useRef with React useState for activeIntents to restore registration reactivity.
+- Updated VoiceContextValue interface in types.ts to include the new activeIntents array.
 
 ## Change Tracker
-- **Files modified**: None
-- **Build status**: Not yet run
+- **Files modified**:
+  - `src/framework/ui/voice/VoiceCommandBoundary.tsx` - Replaced useRef with useState, updated callbacks, and exposed activeIntents in context value.
+  - `src/framework/ui/voice/types.ts` - Added activeIntents to VoiceContextValue interface.
+- **Build status**: PASS
 - **Pending issues**: None
 
 ## Quality Status
-- **Build/test result**: Not yet run
-- **Lint status**: Not yet run
-- **Tests added/modified**: None
+- **Build/test result**: PASS (182 suites passed, 1454 tests passed)
+- **Lint status**: PASS (0 eslint errors/warnings, 0 typescript errors)
+- **Tests added/modified**: Checked that VoiceCommandBoundary and InclusiveUI tests pass successfully.
 
 ## Loaded Skills
 - None

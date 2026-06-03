@@ -64,18 +64,18 @@ Perform a full-stack sweep on /Users/sac/expo-supabase-ai-template to find and f
 | worker_final | teamwork_preview_worker | M4.2: Parallel Final Bugfixes | completed | f7bb9a30-7089-4fde-985c-26c82f2bb1ca |
 | worker_supabase_ws_fix | teamwork_preview_worker | M4.3: Metro ws Fix | completed | 5c7b3c04-a910-419d-93b8-ae0c54a8225f |
 | worker_transform_gpu_fix | teamwork_preview_worker | M4.4: Transform GPU Fix | completed | b9d20273-1d4b-41a6-8f64-d3873bd56607 |
-| worker_voice_reactivity_fix | teamwork_preview_worker | M4.5: Voice Reactivity Fix | in-progress | 9afcffcf-8564-44d9-ba24-87642dd0da14 |
+| worker_voice_reactivity_fix | teamwork_preview_worker | M4.5: Voice Reactivity Fix | completed | 9afcffcf-8564-44d9-ba24-87642dd0da14 |
 
 ## Succession Status
 - Succession required: no
 - Spawn count: 15 / 16
-- Pending subagents: 9afcffcf-8564-44d9-ba24-87642dd0da14
+- Pending subagents: none
 - Predecessor: none
 - Successor: not yet spawned
 
 ## Active Timers
 - Heartbeat cron: none
-- Safety timer: 1ef45b7e-9fac-41ca-89bf-0dd1735d6c8d/task-379
+- Safety timer: none
 - On succession: kill all timers before spawning successor
 - On context truncation: run `manage_task(Action="list")` — re-create if missing
 

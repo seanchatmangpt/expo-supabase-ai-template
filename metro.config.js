@@ -1,6 +1,6 @@
 // Learn more https://docs.expo.io/guides/customizing-metro
 const { getDefaultConfig } = require('expo/metro-config');
-const { withNativewind } = require('nativewind/metro');
+const { withNativeWind } = require('nativewind/metro');
 const path = require('path');
 
 /** @type {import('expo/metro-config').MetroConfig} */
@@ -25,4 +25,4 @@ config.resolver.blockList = [
   /.*\/wasm4pm-compat\/node_modules\/.*/,
 ];
 
-module.exports = withNativewind(config, { input: './global.css' });
+module.exports = withNativeWind(config, { input: './global.css' });
