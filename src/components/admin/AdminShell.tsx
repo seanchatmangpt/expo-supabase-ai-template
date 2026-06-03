@@ -26,10 +26,21 @@ export function AdminShell({ title, subtitle, children, scrollable = true, testI
   const ContentContainer = scrollable ? ScrollView : View;
 
   const navigationItems = [
-    { name: 'Consequence Supervision', route: '/admin/consequence-supervision' },
-    { name: 'Actor Lab', route: '/admin/actor-lab' },
-    { name: 'Sermons', route: '/admin/sermons' },
-    { name: 'Process Intel', route: '/admin/intelligence' },
+    { name: 'Actor Lab', route: '/admin/actor-lab', title: 'Developer Actor Lab' },
+    { name: 'ActorOps Console', route: '/admin/consequence-supervision', title: 'ActorOps Console' },
+    { name: 'Process Intel', route: '/admin/intelligence', title: 'Process Intelligence' },
+    { name: 'Outbox & Sync', route: '/admin/outbox', title: 'Outbox & Sync Manager' },
+    { name: 'Receipt Audit', route: '/admin/receipts', title: 'Receipt Audit Logs' },
+    { name: 'Realtime Channels', route: '/admin/realtime', title: 'Realtime Channels' },
+    { name: 'Sermons Directory', route: '/admin/sermons', title: 'Sermons Directory' },
+    { name: 'System Settings', route: '/admin/settings', title: 'System Settings' },
+    { name: 'Church Profile', route: '/admin/church', title: 'Church Profile' },
+    { name: 'Content Management', route: '/admin/content', title: 'Content Management' },
+    { name: 'Calendar Events', route: '/admin/events', title: 'Church Calendar Events' },
+    { name: 'Small Groups', route: '/admin/groups', title: 'Small Groups & Ministries' },
+    { name: 'Pastoral Staff', route: '/admin/people', title: 'Pastoral Staff & Members' },
+    { name: 'Prayer Requests', route: '/admin/prayer', title: 'Community Prayer Requests' },
+    { name: 'Volunteers', route: '/admin/volunteers', title: 'Volunteer Assignments' },
   ];
 
   return (
@@ -59,11 +70,7 @@ export function AdminShell({ title, subtitle, children, scrollable = true, testI
         <View style={styles.navRow}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.navScroll}>
             {navigationItems.map((item) => {
-              const isActive = title === item.name || 
-                (item.name === 'Consequence Supervision' && title === 'Developer Consequence Supervision') ||
-                (item.name === 'Process Intel' && title === 'Process Intelligence') ||
-                (item.name === 'Actor Lab' && title === 'Developer Actor Lab') ||
-                (item.name === 'Sermons' && title === 'Sermons Directory');
+              const isActive = title === item.title;
               return (
                 <TouchableOpacity
                   key={item.name}

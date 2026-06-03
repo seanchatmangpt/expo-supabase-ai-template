@@ -23,7 +23,7 @@ import {
   Clipboard,
 } from 'react-native';
 import { supabase } from '@/lib/supabase';
-import { Stack } from '@/src/components/AvatarRelativeProjection';
+import { Tabs } from '@/src/components/AvatarRelativeProjection';
 import { useSession } from '@/context/SessionProvider';
 import { Ionicons } from '@expo/vector-icons';
 import { useActorOpsStore } from '@/src/lib/actor/actorOps';
@@ -614,7 +614,7 @@ export default function OpenAIAvatarRelativeProjection() {
       keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
       className="flex-1 bg-slate-50"
     >
-      <Stack.AvatarRelativeProjection options={{ title: 'AI Assistant' }} />
+      <Tabs.AvatarRelativeProjection options={{ title: 'AI Assistant' }} />
       <OfflineBanner />
 
       {/* Header Info */}

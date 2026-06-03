@@ -9,6 +9,8 @@ CREATE TABLE IF NOT EXISTS public.actor_commands (
     principal TEXT NOT NULL,
     payload TEXT NOT NULL,
     idempotency_key TEXT,
+    causation_id TEXT,
+    correlation_id TEXT,
     status TEXT NOT NULL,
     created_at BIGINT NOT NULL
 );
@@ -17,9 +19,8 @@ CREATE TABLE IF NOT EXISTS public.actor_events (
     id TEXT PRIMARY KEY,
     command_id TEXT NOT NULL,
     actor_ref TEXT NOT NULL,
-    event TEXT NOT NULL,
+    type TEXT NOT NULL,
     payload TEXT NOT NULL,
-    status TEXT DEFAULT 'simulated',
     created_at BIGINT NOT NULL DEFAULT extract(epoch from now()) * 1000
 );
 
@@ -28,7 +29,9 @@ CREATE TABLE IF NOT EXISTS public.actor_receipts (
     command_id TEXT NOT NULL,
     actor_ref TEXT NOT NULL,
     status TEXT NOT NULL,
+    delta_hash TEXT,
     event_ids TEXT NOT NULL,
+    error TEXT,
     created_at BIGINT NOT NULL
 );
 
@@ -64,11 +67,15 @@ CREATE TABLE IF NOT EXISTS public.sync_queue (
 
 CREATE TABLE IF NOT EXISTS public.sync_admission_receipts (
     id TEXT PRIMARY KEY,
+    job_id BIGINT,
     job_type TEXT NOT NULL,
+    entity_id TEXT,
     payload_hash TEXT NOT NULL,
+    previous_receipt_hash TEXT NOT NULL,
     receipt_hash TEXT NOT NULL,
-    public_key TEXT NOT NULL,
-    signature TEXT NOT NULL,
+    admitted_at TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'pre_insert',
+    error TEXT,
     created_at BIGINT NOT NULL
 );
 
@@ -78,6 +85,7 @@ CREATE TABLE IF NOT EXISTS public.sync_job_quarantine (
     payload TEXT NOT NULL,
     entity_id TEXT,
     rejection_reason TEXT NOT NULL,
+    verdict TEXT NOT NULL,
     created_at BIGINT NOT NULL
 );
 

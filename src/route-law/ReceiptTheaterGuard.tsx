@@ -126,7 +126,6 @@ export function emitRouteAdmissionSpan(
   }
 
   if (__DEV__) {
-    // eslint-disable-next-line no-console
     console.log('[OTel] route.admission.verified', JSON.stringify(span, null, 2));
   }
 

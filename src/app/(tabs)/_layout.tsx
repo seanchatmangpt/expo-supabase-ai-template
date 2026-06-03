@@ -91,6 +91,18 @@ export default function TabLayout() {
         }}
       />
       <Tabs.AvatarRelativeProjection
+        name="audit"
+        options={{
+          href: null, // Quarantined from main tab navigation
+        }}
+      />
+      <Tabs.AvatarRelativeProjection
+        name="process"
+        options={{
+          href: null, // Quarantined from main tab navigation
+        }}
+      />
+      <Tabs.AvatarRelativeProjection
         name="account"
         options={{
           title: 'Account Settings',

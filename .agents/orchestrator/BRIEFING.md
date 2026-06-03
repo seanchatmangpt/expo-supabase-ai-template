@@ -50,20 +50,27 @@ Perform a full-stack sweep on /Users/sac/expo-supabase-ai-template to find and f
 ## Team Roster
 | Agent | Type | Work Item | Status | Conv ID |
 |-------|------|-----------|--------|---------|
-| explorer_1 | teamwork_preview_explorer | M1: TypeScript Diagnostics | in-progress | 6e9eb0ae-34e9-42a6-881b-fd54d9440660 |
-| explorer_2 | teamwork_preview_explorer | M1: ESLint Diagnostics | in-progress | dcead676-3603-4f52-8246-d647216e565e |
-| explorer_3 | teamwork_preview_explorer | M1: Jest/UX Diagnostics | in-progress | 9835a2ca-0279-4002-805a-0276c8b8057f |
+| explorer_1 | teamwork_preview_explorer | M1: TypeScript Diagnostics | completed | 6e9eb0ae-34e9-42a6-881b-fd54d9440660 |
+| explorer_2 | teamwork_preview_explorer | M1: ESLint Diagnostics | completed | dcead676-3603-4f52-8246-d647216e565e |
+| explorer_3 | teamwork_preview_explorer | M1: Jest/UX Diagnostics | completed | 9835a2ca-0279-4002-805a-0276c8b8057f |
+| worker_sweep | teamwork_preview_worker | M2 & M3: Full-Stack Sweep | completed | 54318f08-a6ec-4462-af7e-fe4a7ad2952c |
+| reviewer_1 | teamwork_preview_reviewer | M4: Final Review 1 | in-progress | 8b3ad060-0fce-48ea-8238-08395a214672 |
+| reviewer_2 | teamwork_preview_reviewer | M4: Final Review 2 | in-progress | f13d6312-2fdc-44f3-a5e9-0d0aa89bd71d |
+| challenger_1 | teamwork_preview_challenger | M4: Correctness Check 1 | in-progress | 62e60b31-cb3f-49f5-8357-872c8ac6af4b |
+| challenger_2 | teamwork_preview_challenger | M4: Correctness Check 2 | in-progress | 28694d17-63ca-438e-8b10-b50e452b1e63 |
+| auditor | teamwork_preview_auditor | M4: Forensic Verification | in-progress | 4e04be5d-772f-45e2-ab64-bd5b21b30c0e |
+| auditor_2 | teamwork_preview_auditor | M4: Parallel Verification | in-progress | b5a08856-a47e-446c-9716-b560288c320e |
 
 ## Succession Status
 - Succession required: no
-- Spawn count: 3 / 16
-- Pending subagents: 6e9eb0ae-34e9-42a6-881b-fd54d9440660, dcead676-3603-4f52-8246-d647216e565e, 9835a2ca-0279-4002-805a-0276c8b8057f
+- Spawn count: 10 / 16
+- Pending subagents: 8b3ad060-0fce-48ea-8238-08395a214672, f13d6312-2fdc-44f3-a5e9-0d0aa89bd71d, 62e60b31-cb3f-49f5-8357-872c8ac6af4b, 28694d17-63ca-438e-8b10-b50e452b1e63, 4e04be5d-772f-45e2-ab64-bd5b21b30c0e, b5a08856-a47e-446c-9716-b560288c320e
 - Predecessor: none
 - Successor: not yet spawned
 
 ## Active Timers
 - Heartbeat cron: 1ef45b7e-9fac-41ca-89bf-0dd1735d6c8d/task-65
-- Safety timer: 1ef45b7e-9fac-41ca-89bf-0dd1735d6c8d/task-75
+- Safety timer: 1ef45b7e-9fac-41ca-89bf-0dd1735d6c8d/task-188
 - On succession: kill all timers before spawning successor
 - On context truncation: run `manage_task(Action="list")` — re-create if missing
 

@@ -1,0 +1,703 @@
+
+/Users/sac/expo-supabase-ai-template/lib/supabase.ts
+  13:10  warning  'Platform' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/app/(auth)/index.tsx
+  245:15  warning  'data' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  284:15  warning  'data' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/app/(tabs)/account.tsx
+  119:9  warning  'handleUsernameBlur' is assigned a value but never used. Allowed unused vars must match /^_/u                      @typescript-eslint/no-unused-vars
+  129:9  warning  'handleAvatarBlur' is assigned a value but never used. Allowed unused vars must match /^_/u                        @typescript-eslint/no-unused-vars
+  196:6  warning  React Hook useEffect has a missing dependency: 'session'. Either include it or remove the dependency array         react-hooks/exhaustive-deps
+  246:6  warning  React Hook useCallback has a missing dependency: 'session.user'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/sac/expo-supabase-ai-template/src/app/(tabs)/audit.tsx
+  2:64  warning  'Dimensions' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  5:44  warning  'QAViolation' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/app/(tabs)/index.tsx
+  7:10  warning  'useAgiCourt' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/app/(tabs)/openai.tsx
+  510:6  warning  React Hook useEffect has a missing dependency: 'session'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/sac/expo-supabase-ai-template/src/app/_layout.tsx
+   6:21  warning  'useState' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+  19:10  warning  'GestureHandlerRootView' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/app/admin/actor-lab.tsx
+  122:5  warning  'setNetworkOnline' is assigned a value but never used. Allowed unused vars must match /^_/u                      @typescript-eslint/no-unused-vars
+  123:5  warning  'setRemoteRejectActive' is assigned a value but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+  210:6  warning  React Hook useEffect has a missing dependency: 'refreshState'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  347:6  warning  React Hook useEffect has a missing dependency: 'refreshState'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/sac/expo-supabase-ai-template/src/app/admin/consequence-supervision.tsx
+    1:38   warning  'useRef' is defined but never used. Allowed unused vars must match /^_/u                                                                  @typescript-eslint/no-unused-vars
+  144:6    warning  React Hook useEffect has missing dependencies: 'actualTraces' and 'declaredWorkflow'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  243:6    warning  React Hook useEffect has a missing dependency: 'fadeAnim'. Either include it or remove the dependency array                               react-hooks/exhaustive-deps
+  304:6    warning  React Hook useEffect has a missing dependency: 'refreshCounts'. Either include it or remove the dependency array                          react-hooks/exhaustive-deps
+  522:115  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u                                                              @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/app/admin/intelligence.tsx
+   2:34  warning  'ScrollView' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  40:14  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/app/admin/outbox.tsx
+   38:12  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+  126:14  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+  158:14  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/app/admin/realtime.tsx
+    2:22  warning  'StyleSheet' is defined but never used. Allowed unused vars must match /^_/u                                                            @typescript-eslint/no-unused-vars
+   42:6   warning  React Hook React.useEffect has missing dependencies: 'opacityAnim' and 'slideAnim'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  180:6   warning  React Hook React.useEffect has a missing dependency: 'pulseAnim'. Either include it or remove the dependency array                      react-hooks/exhaustive-deps
+
+/Users/sac/expo-supabase-ai-template/src/app/admin/settings.tsx
+  2:58  warning  'ScrollView' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/components/AutonomicSimulationManager.tsx
+  5:10  warning  'seed' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/components/VkgProvider.tsx
+   72:10  warning  'actorState' is assigned a value but never used. Allowed unused vars must match /^_/u                                                                                                                                                                    @typescript-eslint/no-unused-vars
+  102:6   warning  React Hook useEffect has missing dependencies: 'activeHookId' and 'avatar'. Either include them or remove the dependency array. You can also replace multiple useState variables with useReducer if 'setProjection' needs the current value of 'avatar'  react-hooks/exhaustive-deps
+  188:16  warning  'err' is defined but never used. Allowed unused caught errors must match /^_/u                                                                                                                                                                           @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/components/admin/ActorRefView.tsx
+  19:12  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/components/admin/JsonInspector.tsx
+  17:12  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/components/admin/QuadDeltaPreview.tsx
+  20:12  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/2030/adversarial/SybilMeshAdapter.ts
+  25:19  warning  'message' is defined but never used. Allowed unused args must match /^_/u   @typescript-eslint/no-unused-vars
+  30:16  warning  'peerId' is defined but never used. Allowed unused args must match /^_/u    @typescript-eslint/no-unused-vars
+  30:32  warning  'message' is defined but never used. Allowed unused args must match /^_/u   @typescript-eslint/no-unused-vars
+  41:15  warning  'callback' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  44:14  warning  'callback' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/2030/adversarial/__tests__/adversarial.test.ts
+  1:10  warning  'renderHook' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  1:22  warning  'act' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/2030/genex/GenExEngine.ts
+  58:14  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/2030/genex/GenExProvider.tsx
+   1:76  warning  'useEffect' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  36:3   warning  'options' is defined but never used. Allowed unused args must match /^_/u    @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/2030/genex/types.ts
+  5:10  warning  'BehavioralMetrics' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/2030/i18n-semantic/SemanticLayout.test.tsx
+  9:10  warning  'View' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/2030/optimization/SelfOptimizingUXEngine.ts
+  5:3  warning  'OptimizationLevel' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/2030/optimization/__tests__/SelfOptimizingUXEngine.test.ts
+  1:23  warning  'SelfOptimizingUXEngine' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/2030/predictive/MembraneSandbox.ts
+  4:10  warning  'ActorSupervisor' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/2030/predictive/PredictiveActionLayer.ts
+  38:14  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/2030/predictive/__tests__/PredictiveActionLayer.test.ts
+  22:29  warning  'payload' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  28:29  warning  'payload' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/2030/predictive/types.ts
+  1:27  warning  'Receipt' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/2030/process-mining/__tests__/conformance.test.ts
+  18:3  warning  'ReplayMarking' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/2030/process-mining/__tests__/petri-net.test.ts
+  4:3  warning  'W_MINUS' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  5:3  warning  'W_PLUS' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/2030/qa-autonomous/TestGenerator.ts
+  1:25  warning  'TestResult' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/2030/sync-extreme/ExtremeFusionSyncEngine.ts
+  52:32  warning  'T' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/2030/sync-extreme/__tests__/ExtremeFusionSyncEngine.test.ts
+  2:10  warning  'SyncExtremeMode' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/2030/sync-extreme/adapters/QuantumSyncAdapter.ts
+  13:47  warning  'payload' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/2030/ui-holographic/__tests__/Holographic.test.tsx
+  1:8   warning  'React' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  3:10  warning  'View' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/admin/collaboration/__tests__/usePresence.test.ts
+   1:22  warning  'act' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+  17:13  warning  'result' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/admin/collaboration/useCollaborationEvents.ts
+  1:21  warning  'useRef' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+  2:10  warning  'CollaborationEvent' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/admin/collaboration/usePresence.ts
+   1:31  warning  'useRef' is defined but never used. Allowed unused vars must match /^_/u                                                                  @typescript-eslint/no-unused-vars
+   1:39  warning  'useCallback' is defined but never used. Allowed unused vars must match /^_/u                                                             @typescript-eslint/no-unused-vars
+   2:45  warning  'CollaborationUser' is defined but never used. Allowed unused vars must match /^_/u                                                       @typescript-eslint/no-unused-vars
+  14:17  warning  'setError' is assigned a value but never used. Allowed unused vars must match /^_/u                                                       @typescript-eslint/no-unused-vars
+  35:6   warning  React Hook useEffect has a missing dependency: 'user'. Either include it or remove the dependency array                                   react-hooks/exhaustive-deps
+  35:27  warning  React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked  react-hooks/exhaustive-deps
+
+/Users/sac/expo-supabase-ai-template/src/framework/admin/components/JsonInspector.tsx
+  23:12  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/admin/components/QuadDeltaPreview.tsx
+  27:12  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/admin/hooks/usePerformanceMonitor.ts
+  1:20  warning  'useEffect' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/admin/metrics/useAppVitals.ts
+  102:16  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/admin/telemetry-3d/hooks.ts
+  1:29  warning  'useEffect' is defined but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  2:68  warning  'MembraneEdge' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/ai/on-device/__tests__/LocalInferenceEngine.test.ts
+  28:8  warning  'VerificationResult' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/ai/on-device/__tests__/PredictiveActionLayer.test.ts
+  25:8  warning  'PredictedAction' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/ai/on-device/__tests__/useLocalInference.test.ts
+   85:16  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u                @typescript-eslint/no-unused-vars
+  119:9   warning  'resolveFirst' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  130:9   warning  'firstCallResult' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  189:16  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u                @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/auth/AuthProvider.tsx
+  110:6  warning  React Hook useEffect has a missing dependency: 'setSession'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/sac/expo-supabase-ai-template/src/framework/auth/__tests__/guards.test.ts
+  1:22  warning  'DEFAULT_IDENTITY_HIERARCHY' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/auth/__tests__/identityGatingSimulator.test.tsx
+  1:8  warning  'React' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/auth/identity/IdentityManager.ts
+   5:3  warning  'User' is defined but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+  12:3  warning  'UserId' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/auth/mfa/__tests__/mfa.test.tsx
+   2:27  warning  'waitFor' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+   5:10  warning  'MfaStrategy' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+  39:9   warning  'verifyPromise' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/auth/mfa/useMfaVerification.ts
+  2:34  warning  'MfaVerificationResult' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/auto/__tests__/AutonomicQAEngine.test.ts
+  21:3  warning  'QACycleReport' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  22:3  warning  'QAViolation' is defined but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+  23:3  warning  'RepairOutcome' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/auto/__tests__/autoResiliencySimulator.test.ts
+   1:10  warning  'useLWWMap' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+  87:13  warning  'originalLength' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/auto/__tests__/useAutonomicQA.test.ts
+  144:20  warning  'r2' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/auto/i18n/a11y/AutoInclusiveWrapper.tsx
+  10:10  warning  'View' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/auto/state/orchestrator/AutoSyncState.ts
+   1:10  warning  'useState' is defined but never used. Allowed unused vars must match /^_/u                                       @typescript-eslint/no-unused-vars
+  56:16  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u                                     @typescript-eslint/no-unused-vars
+  76:6   warning  React Hook useMemo has an unnecessary dependency: 'crdtState'. Either exclude it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/sac/expo-supabase-ai-template/src/framework/auto/useAutonomicQA.ts
+  125:14  warning  'err' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/compositions/auth-ui/components/UnifiedAuthScreen.tsx
+  2:10  warning  'View' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/compositions/inclusive-ui/VoiceAccessibleText.tsx
+  75:6  warning  React Hook useMemo has a missing dependency: 'extraVoiceCommands'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/sac/expo-supabase-ai-template/src/framework/compositions/inclusive-ui/__tests__/InclusiveUI.test.tsx
+  123:28  warning  'label' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/compositions/inclusive-ui/useInclusiveInteraction.ts
+  67:6  warning  React Hook useMemo has a missing dependency: 'options.voiceCommands'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/sac/expo-supabase-ai-template/src/framework/compositions/intelligent-search/useIntelligentSearch.ts
+  1:31  warning  'useCallback' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/compositions/mission-control/__tests__/MissionControl.test.tsx
+  50:13  warning  'getByTestId' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/compositions/semantic-crud/SemanticCrudManager.tsx
+  70:14  warning  'error' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/compositions/semantic-crud/types.ts
+  1:10  warning  'GenerativeSchema' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/compositions/spatial-dashboards/GlassSpatialContainer.tsx
+  2:21  warning  'StyleProp' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  2:32  warning  'ViewStyle' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/compositions/spatial-dashboards/__tests__/GlassSpatialContainer.test.tsx
+  3:10  warning  'View' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/core/__tests__/ErrorBoundary.test.tsx
+  75:44  warning  'resetError' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/core/__tests__/PcpFrameworkProvider.test.tsx
+  15:13  warning  'getByText' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/core/docs/parser.ts
+  1:23  warning  'DocParam' is defined but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+  1:33  warning  'DocExample' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/core/i18n/I18nProvider.tsx
+    1:64  warning  'ReactNode' is defined but never used. Allowed unused vars must match /^_/u                                             @typescript-eslint/no-unused-vars
+   14:10  warning  'getPluralRules' is defined but never used. Allowed unused vars must match /^_/u                                        @typescript-eslint/no-unused-vars
+  122:5   warning  React Hook useCallback has an unnecessary dependency: 'translations'. Either exclude it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/sac/expo-supabase-ai-template/src/framework/core/micro-frontend/useModuleFederation.tsx
+  39:34  warning  'props' is defined but never used. Allowed unused args must match /^_/u                                         @typescript-eslint/no-unused-vars
+  64:6   warning  React Hook useEffect has a missing dependency: 'config.name'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/sac/expo-supabase-ai-template/src/framework/data/__tests__/useSemanticNode.test.ts
+  4:10  warning  'DataFactory' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/data/export/__tests__/export.test.ts
+  3:10  warning  'Portability' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/data/export/portability.ts
+  27:14  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+  53:14  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/data/fetching/__tests__/useOptimisticMutation.test.ts
+   61:16  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+  107:16  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/data/fetching/__tests__/useSuspenseQuery.test.ts
+   53:14  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+   59:14  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+   80:14  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+   83:14  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+  107:14  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+  110:14  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/data/forms/__tests__/SemanticForm.test.tsx
+   2:29  warning  'waitFor' is defined but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+  70:13  warning  'getByLabelText' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/data/forms/__tests__/utils.test.ts
+   17:66  warning  'g' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  104:66  warning  'g' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/data/forms/types.ts
+  1:10  warning  'Term' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/data/forms/useSemanticForm.ts
+  4:10  warning  'SemanticFormSchema' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/data/neuro-symbolic/useNeuroSymbolicQuery.ts
+  87:6  warning  React Hook useCallback has missing dependencies: 'query.neuro', 'query.symbolic.graph', 'query.symbolic.object', 'query.symbolic.predicate', and 'query.symbolic.subject'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/sac/expo-supabase-ai-template/src/framework/data/predictive/usePredictivePrefetch.ts
+  11:3   warning  'options' is assigned a value but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  30:16  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u        @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/data/vkg/__tests__/usePaginatedSemanticNode.test.ts
+  51:53  warning  'pred' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  51:64  warning  'obj' is defined but never used. Allowed unused args must match /^_/u   @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/dx/ab-testing/ExperimentProvider.tsx
+  1:44  warning  'useEffect' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/fusion/admin/FusionAdminConsole.tsx
+  2:46  warning  'TouchableOpacity' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/fusion/data/FusionDataManager.tsx
+    1:27  warning  'useEffect' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+    1:38  warning  'useCallback' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+   33:23  warning  'setSearchQuery' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+   56:11  warning  'results' is assigned a value but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+   57:5   warning  'loading' is assigned a value but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+  103:14  warning  'err' is defined but never used. Allowed unused caught errors must match /^_/u             @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/fusion/dx/__tests__/FusionDevTools.test.tsx
+  1:8   warning  'React' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  3:10  warning  'View' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/fusion/i18n/__tests__/FusionAccessibilityLayer.test.tsx
+  2:26  warning  'act' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+  5:10  warning  'useVoiceIntent' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/fusion/xr/FusionSpatialScene.tsx
+  101:11  warning  'width' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/fusion/xr/__tests__/FusionSpatialScene.test.tsx
+  3:10  warning  'View' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/membrane/MembraneHardeningLayer.ts
+  17:3  warning  'generateBlake3ReceiptHash' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/membrane/__tests__/MembraneHardeningLayer.test.ts
+  28:3   warning  'Claimed' is defined but never used. Allowed unused vars must match /^_/u                  @typescript-eslint/no-unused-vars
+  29:3   warning  'Witnessed' is defined but never used. Allowed unused vars must match /^_/u                @typescript-eslint/no-unused-vars
+  30:3   warning  'MembraneIntegrityReport' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  40:10  warning  'auditConfig' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/membrane/__tests__/membrane.test.ts
+  181:13  warning  'sym' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  205:23  warning  'e' is defined but never used. Allowed unused args must match /^_/u             @typescript-eslint/no-unused-vars
+  278:16  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u    @typescript-eslint/no-unused-vars
+  283:16  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u    @typescript-eslint/no-unused-vars
+  288:16  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u    @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/membrane/governance/manager.ts
+    5:3   warning  'VerificationStatus' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  108:49  warning  'reason' is defined but never used. Allowed unused args must match /^_/u              @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/membrane/self-healing/__tests__/self-healing.test.ts
+  160:11  warning  'res' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/supervision/__tests__/resiliency.test.ts
+  159:43  warning  'msg' is defined but never used. Allowed unused args must match /^_/u          @typescript-eslint/no-unused-vars
+  159:48  warning  'reason' is defined but never used. Allowed unused args must match /^_/u       @typescript-eslint/no-unused-vars
+  196:11  warning  'p1' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/supervision/__tests__/supervision.test.ts
+  284:53  warning  'load' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/sync/__tests__/engine.test.ts
+    2:43  warning  'SyncEngineConfig' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+   60:29  warning  'supportedJobTypes' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  159:30  warning  'job' is defined but never used. Allowed unused args must match /^_/u                @typescript-eslint/no-unused-vars
+  169:13  warning  'job' is assigned a value but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  359:13  warning  'start' is assigned a value but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/sync/__tests__/resiliency_simulator.test.ts
+   3:10  warning  'PNCounter' is defined but never used. Allowed unused vars must match /^_/u               @typescript-eslint/no-unused-vars
+   5:10  warning  'FrameworkOutboxManager' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  62:29  warning  'supportedJobTypes' is defined but never used. Allowed unused args must match /^_/u       @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/sync/__tests__/systems_architect_simulator.test.ts
+    2:10  warning  'LWWRegister' is defined but never used. Allowed unused vars must match /^_/u         @typescript-eslint/no-unused-vars
+    3:10  warning  'LWWMap' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+  158:29  warning  'supportedJobTypes' is defined but never used. Allowed unused args must match /^_/u   @typescript-eslint/no-unused-vars
+  412:11  warning  'jobUpdate' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  418:11  warning  'jobCreate' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/sync/compression/__tests__/usePayloadCompression.test.ts
+  6:9  warning  'smallPayload' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/sync/compression/strategies.ts
+  80:12  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+  92:12  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/sync/compression/usePayloadCompression.ts
+  52:16  warning  'error' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/sync/crdt/hooks.ts
+  14:61  warning  React Hook useMemo has a missing dependency: 'factory'. Either include it or remove the dependency array. If 'factory' changes too often, find the parent component that defines it and wrap that definition in useCallback  react-hooks/exhaustive-deps
+  20:5   warning  React Hook useMemo has an unnecessary dependency: 'tick'. Either exclude it or remove the dependency array                                                                                                                   react-hooks/exhaustive-deps
+  81:3   warning  'initialValue' is assigned a value but never used. Allowed unused args must match /^_/u                                                                                                                                      @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/sync/crdt/map.ts
+  1:29  warning  'LWWRegisterState' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/sync/engine.ts
+   5:3   warning  'ConflictContext' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  44:26  warning  'job' is defined but never used. Allowed unused args must match /^_/u              @typescript-eslint/no-unused-vars
+  45:26  warning  'job' is defined but never used. Allowed unused args must match /^_/u              @typescript-eslint/no-unused-vars
+  45:37  warning  'error' is defined but never used. Allowed unused args must match /^_/u            @typescript-eslint/no-unused-vars
+  46:30  warning  'job' is defined but never used. Allowed unused args must match /^_/u              @typescript-eslint/no-unused-vars
+  46:41  warning  'error' is defined but never used. Allowed unused args must match /^_/u            @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/ui/Button.tsx
+  2:33  warning  'StyleSheet' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  2:45  warning  'StyleProp' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  2:56  warning  'ViewStyle' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  2:67  warning  'TextStyle' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/ui/OfflineBanner.tsx
+   73:6  warning  React Hook React.useEffect has missing dependencies: 'heightAnim', 'opacityAnim', and 'successScaleAnim'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  102:6  warning  React Hook React.useEffect has a missing dependency: 'pulseAnim'. Either include it or remove the dependency array                                            react-hooks/exhaustive-deps
+  125:6  warning  React Hook React.useEffect has a missing dependency: 'rotateAnim'. Either include it or remove the dependency array                                           react-hooks/exhaustive-deps
+
+/Users/sac/expo-supabase-ai-template/src/framework/ui/Themed.tsx
+  10:10  warning  'cn' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+  21:9   warning  'theme' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/ui/TransitionOverlay.tsx
+  47:6  warning  React Hook useEffect has missing dependencies: 'opacity' and 'scale'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/sac/expo-supabase-ai-template/src/framework/ui/__tests__/AvatarRelativeProjection.test.tsx
+  16:22  warning  'props' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  17:7   warning  'ref' is defined but never used. Allowed unused args must match /^_/u    @typescript-eslint/no-unused-vars
+  22:22  warning  'props' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  23:7   warning  'ref' is defined but never used. Allowed unused args must match /^_/u    @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/ui/__tests__/Button.test.tsx
+  3:29  warning  'screen' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/ui/__tests__/OfflineBanner.test.tsx
+  70:34  warning  'queryByText' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/ui/a11y/__tests__/useFocusTrap.test.tsx
+  1:29  warning  'findNodeHandle' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/ui/a11y/hooks/useFocusTrap.ts
+   2:45  warning  'Platform' is defined but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+  27:18  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/ui/animations/__tests__/Stagger.test.tsx
+  5:10  warning  'FadeIn' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/ui/auto-fix/__tests__/AutoFixErrorBoundary.test.tsx
+  4:16  warning  'View' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/ui/generative/GenerativeView.tsx
+  21:9  warning  'theme' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/ui/generative/__tests__/GenerativeView.test.tsx
+  78:24  warning  'getByRole' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/ui/gestures/__tests__/PinchToZoom.test.tsx
+  10:5  warning  'panEndCallback' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/ui/gestures/__tests__/SwipeToDismiss.test.tsx
+  2:10  warning  'View' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/ui/glassmorphism/GlassButton.tsx
+  2:27  warning  'StyleSheet' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/ui/haptics/IntelligentHaptics.ts
+  1:21  warning  'Platform' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/ui/particles/ConfettiCannon.tsx
+  37:3  warning  'shape' is assigned a value but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/ui/particles/ParticleEmitter.tsx
+  9:3  warning  'useDerivedValue' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/ui/theme/ThemeContext.tsx
+  2:45  warning  'useEffect' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/ui/theme/__tests__/Theme.test.tsx
+  2:10  warning  'render' is defined but never used. Allowed unused vars must match /^_/u            @typescript-eslint/no-unused-vars
+  3:10  warning  'Text' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+  3:16  warning  'View' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+  7:29  warning  'defaultDarkTheme' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/ui/voice/VoiceCommandBoundary.tsx
+  1:76  warning  'useEffect' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/v30/adversarial-defense/ChaosInjector.ts
+  64:26  warning  'packet' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/v30/adversarial-defense/__tests__/chaos.test.ts
+  151:13  warning  'result' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  163:13  warning  'result' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  175:13  warning  'result' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/v30/livestream/AalstDashboard.tsx
+  9:12  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/v30/post-cyberpunk/adversarial-mutator/__tests__/mutator.test.ts
+  93:13  warning  'payload' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/v30/post-cyberpunk/core/__tests__/core.test.tsx
+    3:26  warning  'act' is defined but never used. Allowed unused vars must match /^_/u                 @typescript-eslint/no-unused-vars
+    3:31  warning  'waitFor' is defined but never used. Allowed unused vars must match /^_/u             @typescript-eslint/no-unused-vars
+   14:3   warning  'TypedArtifact' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  120:42  warning  'lawEngine' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/v30/post-cyberpunk/law-engine/engine.ts
+  5:3  warning  'TypedArtifact' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/v30/post-cyberpunk/mesh-dao/__tests__/mesh-dao.test.ts
+  2:51  warning  'Vote' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/v30/post-cyberpunk/neuro-symbolic-fuzzer/__tests__/fuzzer.test.tsx
+  3:24  warning  'Text' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/v30/post-cyberpunk/neuro-symbolic-fuzzer/useSemanticFuzzer.tsx
+  101:18  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/v30/post-cyberpunk/ontological-shift/useOntologicalDrift.ts
+  23:10  warning  'mappings' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/v30/post-cyberpunk/reality-receipts/__tests__/reality-receipts.test.ts
+  1:55  warning  'RealityReceipt' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/v30/post-cyberpunk/reality-receipts/index.ts
+   2:16  warning  'algo' is defined but never used. Allowed unused args must match /^_/u        @typescript-eslint/no-unused-vars
+   2:71  warning  'e' is defined but never used. Allowed unused args must match /^_/u           @typescript-eslint/no-unused-vars
+   3:87  warning  'e' is defined but never used. Allowed unused args must match /^_/u           @typescript-eslint/no-unused-vars
+  69:14  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+  87:14  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/v30/quantum-crypto/PolymorphicEngine.ts
+  10:25  warning  'a' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  10:31  warning  'b' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  10:37  warning  'c' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  13:20  warning  'y' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  13:26  warning  'z' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  14:13  warning  'x' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  18:27  warning  'a' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  18:33  warning  'b' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  18:39  warning  'c' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  21:20  warning  'y' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  21:26  warning  'z' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  22:13  warning  'x' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  23:18  warning  'x' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/vkg/__tests__/client.test.ts
+  1:27  warning  'VirtualKnowledgeGraphClient' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/vkg/__tests__/engine.test.ts
+  1:27  warning  'VkgHookEngine' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/vkg/__tests__/resiliency.test.ts
+  5:10  warning  'VKGClientFacade' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/vkg/inference/__tests__/engine.test.ts
+  70:11  warning  'ancestorOf' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/vkg/react.tsx
+  54:11  warning  'subjStr' is assigned a value but never used. Allowed unused vars must match /^_/u                                                        @typescript-eslint/no-unused-vars
+  55:11  warning  'predStr' is assigned a value but never used. Allowed unused vars must match /^_/u                                                        @typescript-eslint/no-unused-vars
+  75:6   warning  React Hook useEffect has missing dependencies: 'predicate' and 'subject'. Either include them or remove the dependency array              react-hooks/exhaustive-deps
+  77:5   warning  React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked  react-hooks/exhaustive-deps
+  78:5   warning  React Hook useEffect has a complex expression in the dependency array. Extract it to a separate variable so it can be statically checked  react-hooks/exhaustive-deps
+
+/Users/sac/expo-supabase-ai-template/src/framework/vkg/semantic/__tests__/builder.test.ts
+   1:10  warning  'SemanticQueryBuilder' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+  74:41  warning  'o' is defined but never used. Allowed unused args must match /^_/u                     @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/vkg/semantic/__tests__/hooks.test.tsx
+  1:8  warning  'React' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/vkg/semantic/builder.ts
+  2:29  warning  'Quad' is defined but never used. Allowed unused vars must match /^_/u              @typescript-eslint/no-unused-vars
+  3:59  warning  'SemanticProperty' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/framework/vkg/semantic/hooks.ts
+   1:31  warning  'useMemo' is defined but never used. Allowed unused vars must match /^_/u                                                                                                                                                            @typescript-eslint/no-unused-vars
+  48:6   warning  React Hook useEffect has a missing dependency: 'buildQuery'. Either include it or remove the dependency array. If 'buildQuery' changes too often, find the parent component that defines it and wrap that definition in useCallback  react-hooks/exhaustive-deps
+  48:15  warning  React Hook useEffect has a spread element in its dependency array. This means we can't statically verify whether you've passed the correct dependencies                                                                              react-hooks/exhaustive-deps
+
+/Users/sac/expo-supabase-ai-template/src/lib/actor/dispatcher.ts
+   20:3   warning  'Principal' is defined but never used. Allowed unused vars must match /^_/u       @typescript-eslint/no-unused-vars
+  354:14  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u      @typescript-eslint/no-unused-vars
+  389:14  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u      @typescript-eslint/no-unused-vars
+  483:14  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u      @typescript-eslint/no-unused-vars
+  533:20  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u      @typescript-eslint/no-unused-vars
+  591:20  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u      @typescript-eslint/no-unused-vars
+  599:16  warning  'error' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+  643:14  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u      @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/lib/db/schema.ts
+  1:38  warning  'primaryKey' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/lib/sync/TrueXSyncReplicationEngine.ts
+  16:38  warning  'sha256' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/lib/truex/contracts/authority.ts
+  3:34  warning  'receipt' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/lib/truex/hook-otp/runtime.ts
+    1:90  warning  'HookReceipt' is defined but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  129:9   warning  'error' is assigned a value but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/lib/truex/supervision/floodSupervisor.ts
+  13:25  warning  'msg' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/lib/v2030/intelligence/receipts.ts
+   4:10  warning  'generateReceiptHash' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+   5:10  warning  'IntelligenceRunner' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  23:13  warning  'data' is assigned a value but never used. Allowed unused vars must match /^_/u        @typescript-eslint/no-unused-vars
+  51:18  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u           @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/lib/v2030/intelligence/registry.ts
+  1:34  warning  'InputContract' is defined but never used. Allowed unused vars must match /^_/u   @typescript-eslint/no-unused-vars
+  1:49  warning  'OutputContract' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/lib/v2030/intelligence/runner.ts
+   15:12  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+  122:16  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+  147:16  warning  'e' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/lib/vkg/client.ts
+  10:16  warning  'NamedNode' is defined but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  10:27  warning  'BlankNode' is defined but never used. Allowed unused vars must match /^_/u     @typescript-eslint/no-unused-vars
+  10:47  warning  'DefaultGraph' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/lib/vkg/event.ts
+  9:10  warning  'DataFactory' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/lib/vkg/hooks/engine.ts
+  1:19  warning  'HookMode' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/lib/vkg/supervisors/index.ts
+  7:10  warning  'VkgHook' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/lib/vkg/sync/outbox.ts
+  2:19  warning  'HookReceipt' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/pcp/auth/AuthProvider.tsx
+  110:6  warning  React Hook useEffect has a missing dependency: 'setSession'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/sac/expo-supabase-ai-template/src/pcp/auth/identity/IdentityManager.ts
+   5:3  warning  'User' is defined but never used. Allowed unused vars must match /^_/u    @typescript-eslint/no-unused-vars
+  12:3  warning  'UserId' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/pcp/auth/mfa/useMfaVerification.ts
+  2:34  warning  'MfaVerificationResult' is defined but never used. Allowed unused vars must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/pcp/crypto/PolymorphicEngine.ts
+  10:25  warning  'a' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  10:31  warning  'b' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  10:37  warning  'c' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  13:20  warning  'y' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  13:26  warning  'z' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  14:13  warning  'x' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  18:27  warning  'a' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  18:33  warning  'b' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  18:39  warning  'c' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  21:20  warning  'y' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  21:26  warning  'z' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  22:13  warning  'x' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+  23:18  warning  'x' is defined but never used. Allowed unused args must match /^_/u  @typescript-eslint/no-unused-vars
+
+/Users/sac/expo-supabase-ai-template/src/route-law/ProtectedRoute.tsx
+  289:6  warning  React Hook React.useEffect has missing dependencies: 'opacity' and 'scale'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+/Users/sac/expo-supabase-ai-template/src/route-law/ReceiptTheaterGuard.tsx
+  129:5   warning  Unused eslint-disable directive (no problems were reported from 'no-console')
+  179:12  warning  'parseErr' is defined but never used. Allowed unused caught errors must match /^_/u                                                                         @typescript-eslint/no-unused-vars
+  278:6   warning  React Hook React.useEffect has missing dependencies: 'innerRotation', 'pulseOpacity', and 'pulseScale'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  318:6   warning  React Hook React.useEffect has missing dependencies: 'appear' and 'shakeX'. Either include them or remove the dependency array                              react-hooks/exhaustive-deps
+  376:8   warning  React Hook React.useEffect has missing dependencies: 'cardAppear' and 'cardScale'. Either include them or remove the dependency array                       react-hooks/exhaustive-deps
+
+/Users/sac/expo-supabase-ai-template/src/route-law/guards.ts
+  166:12  warning  'mmkvErr' is defined but never used. Allowed unused caught errors must match /^_/u  @typescript-eslint/no-unused-vars
+
+✖ 349 problems (0 errors, 349 warnings)
+  0 errors and 1 warning potentially fixable with the `--fix` option.
+

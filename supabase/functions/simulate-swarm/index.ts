@@ -78,9 +78,9 @@ serve(async (req) => {
         id: crypto.randomUUID(),
         command_id: crypto.randomUUID(),
         actor_ref: e.user_id,
-        event: e.action,
-        payload: e.payload,
-        status: 'simulated'
+        type: e.action,
+        payload: JSON.stringify(e.payload),
+        created_at: Date.now()
       }));
 
       const batchSize = 500;

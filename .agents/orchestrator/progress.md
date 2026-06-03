@@ -6,7 +6,7 @@ Current iteration: 1 / 32
 
 ## Checklist
 - [x] Initialize Plan and PROJECT.md
-- [ ] M1: Diagnostics Scan (TypeScript, ESLint, Unit tests)
-- [ ] M2: Compile & Lint Resolution
-- [ ] M3: UX & Component Integrity Resolution
-- [ ] M4: Final Verification and Handoff
+- [x] M1: Diagnostics Scan (TypeScript, ESLint, Unit tests)
+- [x] M2: Compile & Lint Resolution
+- [x] M3: UX & Component Integrity Resolution
+- [/] M4: Final Verification and Handoff

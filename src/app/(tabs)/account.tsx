@@ -20,7 +20,7 @@ import {
   Pressable,
   ActivityIndicator,
 } from 'react-native';
-import { Stack } from '@/src/components/AvatarRelativeProjection';
+import { Tabs } from '@/src/components/AvatarRelativeProjection';
 import { useSession } from '@/context/SessionProvider';
 import { mmkvInstance } from '@/src/lib/store/mmkvStorage';
 import { useActorOpsStore } from '@/src/lib/actor/actorOps';
@@ -353,7 +353,7 @@ export default function Account() {
     <View style={{ flex: 1 }}>
       <OfflineBanner />
       <ScrollView className="flex-1 bg-gray-50" contentContainerStyle={{ paddingBottom: 110 }}>
-      <Stack.AvatarRelativeProjection options={{ title: 'Account Settings' }} />
+      <Tabs.AvatarRelativeProjection options={{ title: 'Account Settings' }} />
 
       {/* Header and Avatar Projection Card */}
       <View className="bg-white border-b border-gray-200 pb-6 pt-4">

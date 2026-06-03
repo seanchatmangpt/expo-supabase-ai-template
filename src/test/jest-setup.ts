@@ -1,5 +1,10 @@
 /// <reference types="jest" />
 
+jest.mock('react-native/Libraries/Utilities/DevSettings', () => ({
+  reload: jest.fn(),
+  addMenuItem: jest.fn(),
+}));
+
 // Mock AsyncStorage
 jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock')
