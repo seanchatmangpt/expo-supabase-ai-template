@@ -70,11 +70,12 @@ export class SybilMeshAdapter implements MeshNetworkAdapter {
         peerId: spoofedPeerId,
       };
 
-      const message: MeshMessage = {
+      const message: any = {
         type: 'sync_state',
         senderId: spoofedPeerId,
         payload: { id: targetCrdtId, state: maliciousState },
         timestamp: maliciouslyOldTimestamp,
+        proof: {} as any,
       };
 
       this.messageListeners.forEach((cb) => cb(message));
@@ -85,11 +86,12 @@ export class SybilMeshAdapter implements MeshNetworkAdapter {
    * ADV_IMPL: Sends malformed JSON structures to break parsing loops.
    */
   public triggerMalformedFlood(targetCrdtId: string) {
-    const message: MeshMessage = {
+    const message: any = {
       type: 'sync_state',
       senderId: 'hacker_node',
       payload: { id: targetCrdtId, state: null as any }, // Corrupted state object
       timestamp: Date.now(),
+      proof: {} as any,
     };
     this.messageListeners.forEach((cb) => cb(message));
   }

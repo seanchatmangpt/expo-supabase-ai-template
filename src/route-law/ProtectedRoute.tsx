@@ -11,6 +11,7 @@ import { useActorOpsStore } from '../lib/actor/actorOps';
 import { mmkvInstance } from '../lib/store/mmkvStorage';
 import { admitRoute, DEFAULT_IDENTITY_HIERARCHY } from './guards';
 import { RouteDefinition, ParticipantBasis, RefusalReason, IdentityBoundary } from './types';
+import { verifyEcdsaSignature, sha256, canonicalStringify } from '../lib/crypto/receipts';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Animated, {
   useSharedValue,
@@ -79,7 +80,7 @@ export const PremiumReceiptBlockingScreen: React.FC<PremiumReceiptBlockingScreen
       {/* Background Ambient Glows */}
       <View className="absolute w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl -top-20 -left-20" />
       <View className="absolute w-96 h-96 bg-purple-500/10 rounded-full blur-3xl -bottom-20 -right-20" />
-      
+
       <View className="w-full max-w-md bg-slate-900/90 border border-slate-800 rounded-3xl p-6 shadow-2xl">
         {/* Header Indicator */}
         <View className="items-center mb-6">
@@ -102,7 +103,7 @@ export const PremiumReceiptBlockingScreen: React.FC<PremiumReceiptBlockingScreen
               </View>
             </View>
           )}
-          
+
           <Text className="text-xl font-bold text-slate-100 text-center tracking-tight">
             {isChecking ? 'Verifying Receipt' : 'Admission Refused'}
           </Text>
@@ -115,28 +116,38 @@ export const PremiumReceiptBlockingScreen: React.FC<PremiumReceiptBlockingScreen
         <View className="bg-slate-950 border border-slate-800 rounded-2xl p-4 mb-5">
           {/* Badge row */}
           <View className="flex-row items-center justify-between border-b border-slate-800/80 pb-3 mb-3">
-            <Text className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Proof Level</Text>
+            <Text className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+              Proof Level
+            </Text>
             {isChecking ? (
               <View className="bg-indigo-500/10 border border-indigo-500/30 rounded-full px-2.5 py-0.5 flex-row items-center">
                 <View className="w-1.5 h-1.5 rounded-full bg-indigo-400 mr-1.5 animate-pulse" />
-                <Text className="text-[10px] font-bold text-indigo-400 uppercase tracking-wider">BLAKE3 Verification</Text>
+                <Text className="text-[10px] font-bold text-indigo-400 uppercase tracking-wider">
+                  BLAKE3 Verification
+                </Text>
               </View>
             ) : refusalReason?.code === 'RECEIPT_HASH_MISMATCH' ? (
               <View className="bg-amber-500/10 border border-amber-500/30 rounded-full px-2.5 py-0.5 flex-row items-center">
                 <View className="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5" />
-                <Text className="text-[10px] font-bold text-amber-500 uppercase tracking-wider">Hash Mismatch</Text>
+                <Text className="text-[10px] font-bold text-amber-500 uppercase tracking-wider">
+                  Hash Mismatch
+                </Text>
               </View>
             ) : (
               <View className="bg-rose-500/10 border border-rose-500/30 rounded-full px-2.5 py-0.5 flex-row items-center">
                 <View className="w-1.5 h-1.5 rounded-full bg-rose-500 mr-1.5" />
-                <Text className="text-[10px] font-bold text-rose-400 uppercase tracking-wider">Missing Proof</Text>
+                <Text className="text-[10px] font-bold text-rose-400 uppercase tracking-wider">
+                  Missing Proof
+                </Text>
               </View>
             )}
           </View>
 
           {/* Command ID */}
           <View className="mb-3">
-            <Text className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Command ID</Text>
+            <Text className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+              Command ID
+            </Text>
             <View className="bg-slate-900 border border-slate-800 rounded-lg p-2.5 flex-row items-center justify-between">
               <Text className="text-xs font-mono text-slate-300 flex-1 mr-2" numberOfLines={1}>
                 {commandId}
@@ -148,7 +159,9 @@ export const PremiumReceiptBlockingScreen: React.FC<PremiumReceiptBlockingScreen
           {/* Expected Hash */}
           {expectedHash ? (
             <View className="mb-3 border-t border-slate-800/40 pt-3">
-              <Text className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Required Delta Hash</Text>
+              <Text className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                Required Delta Hash
+              </Text>
               <View className="bg-slate-900 border border-slate-800 rounded-lg p-2.5">
                 <Text className="text-xs font-mono text-slate-400" numberOfLines={1}>
                   {expectedHash}
@@ -159,18 +172,26 @@ export const PremiumReceiptBlockingScreen: React.FC<PremiumReceiptBlockingScreen
 
           {/* Signature Verification Badge */}
           <View className="flex-row items-center justify-between border-t border-slate-800/40 pt-3">
-            <Text className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Signature Verification</Text>
+            <Text className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+              Signature Verification
+            </Text>
             {isChecking ? (
               <View className="bg-indigo-950/60 border border-indigo-850 rounded-full px-2 py-0.5">
-                <Text className="text-[9px] font-bold text-indigo-400 uppercase tracking-wider">Checking...</Text>
+                <Text className="text-[9px] font-bold text-indigo-400 uppercase tracking-wider">
+                  Checking...
+                </Text>
               </View>
             ) : !refusalReason ? (
               <View className="bg-emerald-950/60 border border-emerald-800 rounded-full px-2 py-0.5">
-                <Text className="text-[9px] font-bold text-emerald-400 uppercase tracking-wider">Verified ✅</Text>
+                <Text className="text-[9px] font-bold text-emerald-400 uppercase tracking-wider">
+                  Verified ✅
+                </Text>
               </View>
             ) : (
               <View className="bg-rose-950/60 border border-rose-800 rounded-full px-2 py-0.5">
-                <Text className="text-[9px] font-bold text-rose-400 uppercase tracking-wider">Unverified ❌</Text>
+                <Text className="text-[9px] font-bold text-rose-400 uppercase tracking-wider">
+                  Unverified ❌
+                </Text>
               </View>
             )}
           </View>
@@ -204,7 +225,9 @@ export const PremiumReceiptBlockingScreen: React.FC<PremiumReceiptBlockingScreen
               <View className="mr-2">
                 <FontAwesome name="refresh" size={14} color="#FFFFFF" />
               </View>
-              <Text className="text-white font-semibold text-sm tracking-wide">Retry Verification</Text>
+              <Text className="text-white font-semibold text-sm tracking-wide">
+                Retry Verification
+              </Text>
             </TouchableOpacity>
           ) : null}
 
@@ -262,7 +285,8 @@ export function defaultResolveParticipant(session: any): ParticipantBasis {
   if (session.user.email_confirmed_at || session.user.phone_confirmed_at) {
     identityBoundary = 'verified';
   }
-  if (session.user.factors && session.user.factors.length > 0) {
+  const hasActiveMFA = session.user.amr?.includes('mfa') || session.aal === 'aal2';
+  if (hasActiveMFA) {
     identityBoundary = 'mfa_verified';
   }
 
@@ -323,144 +347,241 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   const [checkingReceipt, setCheckingReceipt] = React.useState(!!route.requiredReceiptCommandId);
   const [refusalReason, setRefusalReason] = React.useState<RefusalReason | null>(null);
 
-  const verifyReceipt = React.useCallback(async (active = true) => {
-    if (!route.requiredReceiptCommandId) {
-      if (active) {
-        setReceiptVerified(true);
-        setRefusalReason(null);
-        setCheckingReceipt(false);
-      }
-      return;
-    }
-
-    if (active) {
-      setCheckingReceipt(true);
-    }
-
-    try {
-      // 1. Check Zustand store's latestReceipt first (fast local check)
-      if (latestReceipt && latestReceipt.commandId === route.requiredReceiptCommandId) {
-        if (!route.requiredReceiptDeltaHash || latestReceipt.deltaHash === route.requiredReceiptDeltaHash) {
-          if (active) {
-            setReceiptVerified(true);
-            setRefusalReason(null);
-            setCheckingReceipt(false);
-          }
-          return;
-        } else {
-          if (active) {
-            setReceiptVerified(false);
-            setRefusalReason({
-              code: 'RECEIPT_HASH_MISMATCH',
-              message: `Receipt found in memory, but delta hash mismatch. Expected: ${route.requiredReceiptDeltaHash}, Actual: ${latestReceipt.deltaHash}`,
-            });
-            setCheckingReceipt(false);
-          }
-          return;
-        }
-      }
-
-      // 2. Check MMKV (fast synchronous lookup)
-      const mmkvReceiptJson = mmkvInstance.getString(`receipt_${route.requiredReceiptCommandId}`);
-      const mmkvHash = mmkvInstance.getString(`receipt_hash_${route.requiredReceiptCommandId}`);
-      
-      let foundInMMKV = false;
-      let mmkvHashMismatch = false;
-      let actualHash = '';
-      
-      if (mmkvReceiptJson) {
-        const receipt = JSON.parse(mmkvReceiptJson);
-        actualHash = receipt.deltaHash;
-        if (!route.requiredReceiptDeltaHash || receipt.deltaHash === route.requiredReceiptDeltaHash) {
-          foundInMMKV = true;
-        } else {
-          mmkvHashMismatch = true;
-        }
-      } else if (mmkvHash) {
-        actualHash = mmkvHash;
-        if (!route.requiredReceiptDeltaHash || mmkvHash === route.requiredReceiptDeltaHash) {
-          foundInMMKV = true;
-        } else {
-          mmkvHashMismatch = true;
-        }
-      }
-
-      if (foundInMMKV) {
+  const verifyReceipt = React.useCallback(
+    async (active = true) => {
+      if (!route.requiredReceiptCommandId) {
         if (active) {
           setReceiptVerified(true);
           setRefusalReason(null);
           setCheckingReceipt(false);
         }
         return;
-      } else if (mmkvHashMismatch) {
-        if (active) {
-          setReceiptVerified(false);
-          setRefusalReason({
-            code: 'RECEIPT_HASH_MISMATCH',
-            message: `Receipt found in local MMKV cache, but delta hash mismatch. Expected: ${route.requiredReceiptDeltaHash}, Actual: ${actualHash}`,
-          });
-          setCheckingReceipt(false);
-        }
-        return;
       }
 
-      // 3. Check SQLite if not found in MMKV/Zustand
-      const { db } = require('../lib/db/db');
-      const { actorReceipts } = require('../lib/db/schema');
-      const { eq } = require('drizzle-orm');
+      if (active) {
+        setCheckingReceipt(true);
+      }
 
-      const records = await db
-        .select()
-        .from(actorReceipts)
-        .where(eq(actorReceipts.commandId, route.requiredReceiptCommandId));
+      const isSecurePath = !!route.requiredReceiptCommandId?.startsWith('cmd_');
 
-      if (records.length > 0) {
-        const record = records[0];
-        
-        if (route.requiredReceiptDeltaHash) {
-          if (record.deltaHash === route.requiredReceiptDeltaHash) {
+      try {
+        // 1. Check Zustand store's latestReceipt first (fast local check)
+        if (latestReceipt && latestReceipt.commandId === route.requiredReceiptCommandId) {
+          let isSigValid = true;
+          if (isSecurePath) {
+            const { signature, publicKey, ...unsignedReceipt } = latestReceipt;
+            if (!signature || !publicKey) {
+              isSigValid = false;
+            } else {
+              try {
+                const messageHash = sha256(canonicalStringify(unsignedReceipt));
+                const sigResult = verifyEcdsaSignature(messageHash, signature, publicKey);
+                isSigValid = !!sigResult.valid;
+              } catch (e) {
+                isSigValid = false;
+              }
+            }
+          }
+
+          if (!isSigValid) {
+            if (active) {
+              setReceiptVerified(false);
+              setRefusalReason({
+                code: 'RECEIPT_SIGNATURE_INVALID',
+                message: 'Receipt signature is invalid or unsigned.',
+              });
+              setCheckingReceipt(false);
+            }
+            return;
+          }
+
+          if (
+            !route.requiredReceiptDeltaHash ||
+            latestReceipt.deltaHash === route.requiredReceiptDeltaHash
+          ) {
             if (active) {
               setReceiptVerified(true);
               setRefusalReason(null);
+              setCheckingReceipt(false);
             }
+            return;
           } else {
             if (active) {
               setReceiptVerified(false);
               setRefusalReason({
                 code: 'RECEIPT_HASH_MISMATCH',
-                message: `Receipt found in database, but delta hash mismatch. Expected: ${route.requiredReceiptDeltaHash}, Actual: ${record.deltaHash}`,
+                message: `Receipt found in memory, but delta hash mismatch. Expected: ${route.requiredReceiptDeltaHash}, Actual: ${latestReceipt.deltaHash}`,
               });
+              setCheckingReceipt(false);
+            }
+            return;
+          }
+        }
+
+        // 2. Check MMKV (fast synchronous lookup)
+        const mmkvReceiptJson = mmkvInstance.getString(`receipt_${route.requiredReceiptCommandId}`);
+        const mmkvHash = mmkvInstance.getString(`receipt_hash_${route.requiredReceiptCommandId}`);
+
+        let foundInMMKV = false;
+        let mmkvHashMismatch = false;
+        let mmkvSigInvalid = false;
+        let actualHash = '';
+
+        if (mmkvReceiptJson) {
+          const receipt = JSON.parse(mmkvReceiptJson);
+          actualHash = receipt.deltaHash;
+
+          let isSigValid = true;
+          if (isSecurePath) {
+            const { signature, publicKey, ...unsignedReceipt } = receipt;
+            if (!signature || !publicKey) {
+              isSigValid = false;
+            } else {
+              try {
+                const messageHash = sha256(canonicalStringify(unsignedReceipt));
+                const sigResult = verifyEcdsaSignature(messageHash, signature, publicKey);
+                isSigValid = !!sigResult.valid;
+              } catch (e) {
+                isSigValid = false;
+              }
+            }
+          }
+
+          if (!isSigValid) {
+            mmkvSigInvalid = true;
+          } else if (
+            !route.requiredReceiptDeltaHash ||
+            receipt.deltaHash === route.requiredReceiptDeltaHash
+          ) {
+            foundInMMKV = true;
+          } else {
+            mmkvHashMismatch = true;
+          }
+        } else if (mmkvHash) {
+          actualHash = mmkvHash;
+          if (isSecurePath) {
+            mmkvSigInvalid = true;
+          } else if (!route.requiredReceiptDeltaHash || mmkvHash === route.requiredReceiptDeltaHash) {
+            foundInMMKV = true;
+          } else {
+            mmkvHashMismatch = true;
+          }
+        }
+
+        if (mmkvSigInvalid) {
+          if (active) {
+            setReceiptVerified(false);
+            setRefusalReason({
+              code: 'RECEIPT_SIGNATURE_INVALID',
+              message: 'Receipt signature is invalid or unsigned.',
+            });
+            setCheckingReceipt(false);
+          }
+          return;
+        } else if (foundInMMKV) {
+          if (active) {
+            setReceiptVerified(true);
+            setRefusalReason(null);
+            setCheckingReceipt(false);
+          }
+          return;
+        } else if (mmkvHashMismatch) {
+          if (active) {
+            setReceiptVerified(false);
+            setRefusalReason({
+              code: 'RECEIPT_HASH_MISMATCH',
+              message: `Receipt found in local MMKV cache, but delta hash mismatch. Expected: ${route.requiredReceiptDeltaHash}, Actual: ${actualHash}`,
+            });
+            setCheckingReceipt(false);
+          }
+          return;
+        }
+
+        // 3. Check SQLite if not found in MMKV/Zustand
+        const { db } = require('../lib/db/db');
+        const { actorReceipts } = require('../lib/db/schema');
+        const { eq } = require('drizzle-orm');
+
+        const records = await db
+          .select()
+          .from(actorReceipts)
+          .where(eq(actorReceipts.commandId, route.requiredReceiptCommandId));
+
+        if (records.length > 0) {
+          const record = records[0];
+
+          if (isSecurePath) {
+            let isSigValid = false;
+            try {
+              const receipt = JSON.parse(record.actorRef);
+              const { signature, publicKey, ...unsignedReceipt } = receipt;
+              if (signature && publicKey) {
+                const messageHash = sha256(canonicalStringify(unsignedReceipt));
+                const sigResult = verifyEcdsaSignature(messageHash, signature, publicKey);
+                isSigValid = !!sigResult.valid;
+              }
+            } catch (e) {
+              isSigValid = false;
+            }
+
+            if (!isSigValid) {
+              if (active) {
+                setReceiptVerified(false);
+                setRefusalReason({
+                  code: 'RECEIPT_SIGNATURE_INVALID',
+                  message: 'Receipt signature is invalid or unsigned in SQLite storage.',
+                });
+              }
+              return;
+            }
+          }
+
+          if (route.requiredReceiptDeltaHash) {
+            if (record.deltaHash === route.requiredReceiptDeltaHash) {
+              if (active) {
+                setReceiptVerified(true);
+                setRefusalReason(null);
+              }
+            } else {
+              if (active) {
+                setReceiptVerified(false);
+                setRefusalReason({
+                  code: 'RECEIPT_HASH_MISMATCH',
+                  message: `Receipt found in database, but delta hash mismatch. Expected: ${route.requiredReceiptDeltaHash}, Actual: ${record.deltaHash}`,
+                });
+              }
+            }
+          } else {
+            if (active) {
+              setReceiptVerified(true);
+              setRefusalReason(null);
             }
           }
         } else {
           if (active) {
-            setReceiptVerified(true);
-            setRefusalReason(null);
+            setReceiptVerified(false);
+            setRefusalReason({
+              code: 'RECEIPT_NOT_FOUND',
+              message: `Required BLAKE3 receipt for command '${route.requiredReceiptCommandId}' was not found in local storage (Zustand, MMKV, SQLite).`,
+            });
           }
         }
-      } else {
+      } catch (err: any) {
         if (active) {
           setReceiptVerified(false);
           setRefusalReason({
-            code: 'RECEIPT_NOT_FOUND',
-            message: `Required BLAKE3 receipt for command '${route.requiredReceiptCommandId}' was not found in local storage (Zustand, MMKV, SQLite).`,
+            code: 'RECEIPT_VERIFICATION_ERROR',
+            message: `Verification process encountered an unexpected error: ${err?.message || String(err)}`,
           });
         }
+      } finally {
+        if (active) {
+          setCheckingReceipt(false);
+        }
       }
-    } catch (err: any) {
-      if (active) {
-        setReceiptVerified(false);
-        setRefusalReason({
-          code: 'RECEIPT_VERIFICATION_ERROR',
-          message: `Verification process encountered an unexpected error: ${err?.message || String(err)}`,
-        });
-      }
-    } finally {
-      if (active) {
-        setCheckingReceipt(false);
-      }
-    }
-  }, [route.requiredReceiptCommandId, route.requiredReceiptDeltaHash, latestReceipt]);
+    },
+    [route.requiredReceiptCommandId, route.requiredReceiptDeltaHash, latestReceipt]
+  );
 
   React.useEffect(() => {
     let active = true;
@@ -593,4 +714,3 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
 });
-

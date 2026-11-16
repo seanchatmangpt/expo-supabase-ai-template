@@ -18,9 +18,11 @@ export function AutonomicSimulationManager() {
         // If the local UI is starving for data, immediately seed it to ensure it never looks empty
         const localEvents = await db.select().from(actorEvents).limit(5);
         if (localEvents.length < 5) {
-          console.log('[Autonomic] UI starvation detected. Auto-seeding local DB comprehensively...');
+          console.log(
+            '[Autonomic] UI starvation detected. Auto-seeding local DB comprehensively...'
+          );
           const mockCommandId = `mock-cmd-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
-          
+
           await db.insert(schema.actorCommands).values({
             id: mockCommandId,
             actorRef: JSON.stringify({ type: 'user', id: 'admin' }),
@@ -46,12 +48,13 @@ export function AutonomicSimulationManager() {
 
         // 2. Stimulate Remote Swarm via Edge Function
         // This simulates a full 1000 userbase sending realtime events to make the UI look actively used
-        await supabase.functions.invoke('simulate-swarm', {
-          body: { count: 1000, durationMs: 10000, mode: 'realtime' }
-        }).catch(() => {
-          // Silent catch - might fail if offline or not deployed, but we keep the loop alive
-        });
-
+        await supabase.functions
+          .invoke('simulate-swarm', {
+            body: { count: 1000, durationMs: 10000, mode: 'realtime' },
+          })
+          .catch(() => {
+            // Silent catch - might fail if offline or not deployed, but we keep the loop alive
+          });
       } catch (err) {
         // Silent catch for autonomic background process
         console.error('[Autonomic] Error during pulse:', err);

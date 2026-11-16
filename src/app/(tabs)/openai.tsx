@@ -12,19 +12,29 @@ import {
   View,
   TextInput,
   Text,
-  Alert,
   ScrollView,
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
   Image,
-  Animated,
-  Easing,
   Clipboard,
 } from 'react-native';
+import { AlertManager as Alert } from '@/src/framework/ui/dialog/AlertManager';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withRepeat,
+  withSequence,
+  withDelay,
+  Easing as ReanimatedEasing,
+} from 'react-native-reanimated';
+import { useHaptics } from '../../framework/ui/haptics/useHaptics';
+import { HapticFeedbackPattern } from '../../framework/ui/haptics/IntelligentHaptics';
 import { supabase } from '@/lib/supabase';
 import { Tabs } from '@/src/components/AvatarRelativeProjection';
 import { useSession } from '@/context/SessionProvider';
+import { ProtectedRoute } from '@/src/route-law/ProtectedRoute';
 import { Ionicons } from '@expo/vector-icons';
 import { useActorOpsStore } from '@/src/lib/actor/actorOps';
 import { OfflineBanner } from '@/src/components/OfflineBanner';
@@ -92,7 +102,13 @@ export function parseMarkdown(text: string): Segment[] {
 /**
  * Formats inline code and bold styling
  */
-const FormattedText = memo(function FormattedText({ text, textColorClass }: { text: string; textColorClass: string }) {
+const FormattedText = memo(function FormattedText({
+  text,
+  textColorClass,
+}: {
+  text: string;
+  textColorClass: string;
+}) {
   const regex = /(`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*|_[^_]+_)/g;
   const parts = text.split(regex);
 
@@ -104,7 +120,8 @@ const FormattedText = memo(function FormattedText({ text, textColorClass }: { te
           return (
             <Text
               key={i}
-              className="bg-slate-200 dark:bg-slate-800 text-rose-600 dark:text-rose-400 px-1.5 py-0.5 rounded font-mono text-sm font-semibold">
+              className="bg-slate-200 dark:bg-slate-800 text-rose-600 dark:text-rose-400 px-1.5 py-0.5 rounded font-mono text-sm font-semibold"
+            >
               {codeVal}
             </Text>
           );
@@ -136,21 +153,22 @@ const FormattedText = memo(function FormattedText({ text, textColorClass }: { te
  * CodeBlock component with dark styling, language badge, copy button, and syntax highlighting
  */
 const CodeBlock = memo(function CodeBlock({ code, language }: { code: string; language: string }) {
+  const haptics = useHaptics();
   const tokens: CodeToken[] = [];
 
   // Basic Syntax highlighting regex
   const combinedRegex = new RegExp(
     '(' +
-    '\\/\\/[^\\n]*|\\/\\*[\\s\\S]*?\\*\\/|#[^\\n]*' + // comments
-    ')|(' +
-    '"(?:\\\\.|[^"\\\\])*"|\'(?:\\\\.|[^\'\\\\])*\'|`(?:\\\\.|[^`\\\\])*`' + // strings
-    ')|(\\b' +
-    '(?:const|let|var|function|return|if|else|import|export|class|from|as|for|while|await|async|try|catch|finally|new|this|typeof|instanceof|extends|super|def|elif|in|is|not|and|or|except|with|lambda)' +
-    '\\b)|(\\b' +
-    '(?:string|number|boolean|any|void|unknown|never|object|Array|Promise|React|useState|useEffect|useRef|useMemo|useCallback|Response|Request|fetch|console|Deno)' +
-    '\\b)|(\\b' +
-    '(?:\\d+|true|false|null|undefined)' +
-    '\\b)',
+      '\\/\\/[^\\n]*|\\/\\*[\\s\\S]*?\\*\\/|#[^\\n]*' + // comments
+      ')|(' +
+      '"(?:\\\\.|[^"\\\\])*"|\'(?:\\\\.|[^\'\\\\])*\'|`(?:\\\\.|[^`\\\\])*`' + // strings
+      ')|(\\b' +
+      '(?:const|let|var|function|return|if|else|import|export|class|from|as|for|while|await|async|try|catch|finally|new|this|typeof|instanceof|extends|super|def|elif|in|is|not|and|or|except|with|lambda)' +
+      '\\b)|(\\b' +
+      '(?:string|number|boolean|any|void|unknown|never|object|Array|Promise|React|useState|useEffect|useRef|useMemo|useCallback|Response|Request|fetch|console|Deno)' +
+      '\\b)|(\\b' +
+      '(?:\\d+|true|false|null|undefined)' +
+      '\\b)',
     'g'
   );
 
@@ -190,6 +208,7 @@ const CodeBlock = memo(function CodeBlock({ code, language }: { code: string; la
       if (Platform.OS === 'web') {
         if (typeof navigator !== 'undefined' && navigator.clipboard) {
           await navigator.clipboard.writeText(trimmedCode);
+          haptics.trigger(HapticFeedbackPattern.SUCCESS);
           Alert.alert('Copied', 'Code copied to clipboard!');
         } else {
           console.warn('Clipboard API not available');
@@ -197,6 +216,7 @@ const CodeBlock = memo(function CodeBlock({ code, language }: { code: string; la
         return;
       }
       Clipboard.setString(trimmedCode);
+      haptics.trigger(HapticFeedbackPattern.SUCCESS);
       Alert.alert('Copied', 'Code copied to clipboard!');
     } catch (err) {
       console.error('Failed to copy to clipboard', err);
@@ -219,6 +239,7 @@ const CodeBlock = memo(function CodeBlock({ code, language }: { code: string; la
           accessible={true}
           accessibilityRole="button"
           accessibilityLabel="Copy code to clipboard"
+          hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
         >
           <Ionicons name="copy-outline" size={12} color="#94A3B8" />
           <Text className="text-xs text-slate-300 ml-1">Copy</Text>
@@ -264,7 +285,13 @@ const CodeBlock = memo(function CodeBlock({ code, language }: { code: string; la
 /**
  * Custom MarkdownRenderer to display assistant responses beautifully
  */
-const MarkdownRenderer = memo(function MarkdownRenderer({ content, isUser }: { content: string; isUser: boolean }) {
+const MarkdownRenderer = memo(function MarkdownRenderer({
+  content,
+  isUser,
+}: {
+  content: string;
+  isUser: boolean;
+}) {
   const segments = parseMarkdown(content);
   const textColorClass = isUser ? 'text-white' : 'text-slate-800';
 
@@ -341,7 +368,11 @@ interface MessageItemProps {
 /**
  * Chat bubble wrapper component
  */
-const MessageItem = memo(function MessageItem({ message, userAvatarUrl, userInitials }: MessageItemProps) {
+const MessageItem = memo(function MessageItem({
+  message,
+  userAvatarUrl,
+  userInitials,
+}: MessageItemProps) {
   const isUser = message.role === 'user';
 
   if (isUser) {
@@ -387,28 +418,32 @@ const MessageItem = memo(function MessageItem({ message, userAvatarUrl, userInit
  * Pulsing skeleton loading indicator for assistant responses
  */
 function TypingSkeleton() {
-  const [pulseAnim] = useState(() => new Animated.Value(0.3));
+  const dot1 = useSharedValue(0.3);
+  const dot2 = useSharedValue(0.3);
+  const dot3 = useSharedValue(0.3);
 
   useEffect(() => {
-    const animation = Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulseAnim, {
-          toValue: 1,
-          duration: 600,
-          easing: Easing.linear,
-          useNativeDriver: true,
-        }),
-        Animated.timing(pulseAnim, {
-          toValue: 0.3,
-          duration: 600,
-          easing: Easing.linear,
-          useNativeDriver: true,
-        }),
-      ])
-    );
-    animation.start();
-    return () => animation.stop();
-  }, [pulseAnim]);
+    const runPulse = (sharedVal: any, delay: number) => {
+      sharedVal.value = withDelay(
+        delay,
+        withRepeat(
+          withSequence(
+            withTiming(1, { duration: 600, easing: ReanimatedEasing.linear }),
+            withTiming(0.3, { duration: 600, easing: ReanimatedEasing.linear })
+          ),
+          -1,
+          false
+        )
+      );
+    };
+    runPulse(dot1, 0);
+    runPulse(dot2, 200);
+    runPulse(dot3, 400);
+  }, []);
+
+  const styleDot1 = useAnimatedStyle(() => ({ opacity: dot1.value }));
+  const styleDot2 = useAnimatedStyle(() => ({ opacity: dot2.value }));
+  const styleDot3 = useAnimatedStyle(() => ({ opacity: dot3.value }));
 
   return (
     <View className="flex-row items-end justify-start my-2 self-start max-w-[80%]">
@@ -416,9 +451,18 @@ function TypingSkeleton() {
         <Text className="text-base">🤖</Text>
       </View>
       <View className="bg-slate-100 rounded-2xl rounded-tl-none p-4 border border-slate-200 shadow-sm flex-row items-center">
-        <Animated.View style={{ opacity: pulseAnim }} className="w-2.5 h-2.5 rounded-full bg-slate-400" />
-        <Animated.View style={{ opacity: pulseAnim }} className="w-2.5 h-2.5 rounded-full bg-slate-400 mx-1.5" />
-        <Animated.View style={{ opacity: pulseAnim }} className="w-2.5 h-2.5 rounded-full bg-slate-400" />
+        <Animated.View
+          style={styleDot1}
+          className="w-2.5 h-2.5 rounded-full bg-slate-400"
+        />
+        <Animated.View
+          style={styleDot2}
+          className="w-2.5 h-2.5 rounded-full bg-slate-400 mx-1.5"
+        />
+        <Animated.View
+          style={styleDot3}
+          className="w-2.5 h-2.5 rounded-full bg-slate-400"
+        />
       </View>
     </View>
   );
@@ -429,10 +473,12 @@ function TypingSkeleton() {
  */
 export default function OpenAIAvatarRelativeProjection() {
   const { session } = useSession();
+  const haptics = useHaptics();
   const [prompt, setPrompt] = useState('');
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const networkOnline = useActorOpsStore((state) => state.networkOnline);
+  const [inputFocused, setInputFocused] = useState(false);
 
   const [userProfile, setUserProfile] = useState<{ avatarUrl: string; initials: string }>({
     avatarUrl: '',
@@ -460,7 +506,8 @@ export default function OpenAIAvatarRelativeProjection() {
       {
         id: 'welcome',
         role: 'assistant',
-        content: "Hello! I am your AI assistant. How can I help you today? \n\nTry asking me a question or paste code here! **Example:**\n```typescript\nconst greet = () => {\n  console.log('Hello truex app!');\n};\n```",
+        content:
+          "Hello! I am your AI assistant. How can I help you today? \n\nTry asking me a question or paste code here! **Example:**\n```typescript\nconst greet = () => {\n  console.log('Hello truex app!');\n};\n```",
         createdAt: new Date(),
       },
     ]);
@@ -549,34 +596,138 @@ export default function OpenAIAvatarRelativeProjection() {
     setLoading(true);
     scrollToBottom();
 
+    const aiMsgId = (Date.now() + 1).toString();
+    let accumulatedContent = '';
+    let assistantMsgAdded = false;
+
     try {
-      const { data, error } = await supabase.functions.invoke('openai', {
-        body: { message: currentPrompt },
-      });
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      // Use native fetch for streaming
+      const response = await fetch(
+        `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/openai`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${session?.access_token}`,
+            'apikey': process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || '',
+          },
+          body: JSON.stringify({ message: currentPrompt, stream: true }),
+        }
+      );
 
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+      }
+
+      if (!response.body) {
+        throw new Error('Response body is null');
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          const trimmedLine = line.trim();
+          if (!trimmedLine.startsWith('data: ')) continue;
+          
+          const data = trimmedLine.slice(6);
+          if (data === '[DONE]') break;
+
+          try {
+            const parsed = JSON.parse(data);
+            const content = parsed.choices?.[0]?.delta?.content || parsed.message || '';
+            
+            if (content) {
+              if (!assistantMsgAdded) {
+                if (isMountedRef.current) {
+                  setLoading(false);
+                  setMessages((prev) => [
+                    ...prev,
+                    {
+                      id: aiMsgId,
+                      role: 'assistant',
+                      content: '',
+                      createdAt: new Date(),
+                    },
+                  ]);
+                }
+                assistantMsgAdded = true;
+              }
+              
+              accumulatedContent += content;
+              if (isMountedRef.current) {
+                setMessages((prev) =>
+                  prev.map((msg) =>
+                    msg.id === aiMsgId ? { ...msg, content: accumulatedContent } : msg
+                  )
+                );
+                scrollToBottom();
+              }
+            }
+          } catch (e) {
+            // Fallback for non-JSON stream data
+            if (data) {
+              if (!assistantMsgAdded) {
+                if (isMountedRef.current) {
+                  setLoading(false);
+                  setMessages((prev) => [
+                    ...prev,
+                    {
+                      id: aiMsgId,
+                      role: 'assistant',
+                      content: '',
+                      createdAt: new Date(),
+                    },
+                  ]);
+                }
+                assistantMsgAdded = true;
+              }
+              accumulatedContent += data;
+              if (isMountedRef.current) {
+                setMessages((prev) =>
+                  prev.map((msg) =>
+                    msg.id === aiMsgId ? { ...msg, content: accumulatedContent } : msg
+                  )
+                );
+                scrollToBottom();
+              }
+            }
+          }
+        }
+      }
+    } catch (err: any) {
       if (!isMountedRef.current) return;
-
-      if (error) {
-        Alert.alert('Error', error.message || 'Failed to get AI response');
-        // Add error notification message in chat
+      
+      const errorContent = `❌ Sorry, I encountered an error: ${err.message || 'Failed to get AI response'}`;
+      
+      if (!assistantMsgAdded) {
         const errorMsg: Message = {
-          id: (Date.now() + 1).toString(),
+          id: aiMsgId,
           role: 'assistant',
-          content: '❌ Sorry, I encountered an error. Please try again. details: ' + (error.message || 'Function execution failed'),
+          content: errorContent,
           createdAt: new Date(),
         };
         setMessages((prev) => [...prev, errorMsg]);
       } else {
-        const aiMsg: Message = {
-          id: (Date.now() + 1).toString(),
-          role: 'assistant',
-          content: data.message || 'No response message returned.',
-          createdAt: new Date(),
-        };
-        setMessages((prev) => [...prev, aiMsg]);
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === aiMsgId ? { ...msg, content: accumulatedContent + '\n\n' + errorContent } : msg
+          )
+        );
       }
-    } catch (err: any) {
-      if (!isMountedRef.current) return;
+      
       Alert.alert('Error', err.message || 'A network error occurred');
     } finally {
       if (isMountedRef.current) {
@@ -593,12 +744,14 @@ export default function OpenAIAvatarRelativeProjection() {
         text: 'Clear',
         style: 'destructive',
         onPress: () => {
+          haptics.trigger(HapticFeedbackPattern.HEAVY);
           if (isMountedRef.current) {
             setMessages([
               {
                 id: 'welcome',
                 role: 'assistant',
-                content: "Hello! I am your AI assistant. How can I help you today? \n\nTry asking me a question or paste code here! **Example:**\n```typescript\nconst greet = () => {\n  console.log('Hello truex app!');\n};\n```",
+                content:
+                  "Hello! I am your AI assistant. How can I help you today? \n\nTry asking me a question or paste code here! **Example:**\n```typescript\nconst greet = () => {\n  console.log('Hello truex app!');\n};\n```",
                 createdAt: new Date(),
               },
             ]);
@@ -609,10 +762,12 @@ export default function OpenAIAvatarRelativeProjection() {
   }, []);
 
   return (
-    <KeyboardAvoidingView
+    <ProtectedRoute route={{ requiredIdentityBoundary: 'verified', requiredReceiptCommandId: 'cmd_openai_access' }}>
+      <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
       className="flex-1 bg-slate-50"
+      style={{ maxWidth: 800, alignSelf: 'center', width: '100%' }}
     >
       <Tabs.Screen options={{ title: 'AI Assistant' }} />
       <OfflineBanner />
@@ -620,7 +775,9 @@ export default function OpenAIAvatarRelativeProjection() {
       {/* Header Info */}
       <View className="bg-white px-4 py-3 border-b border-slate-200 flex-row justify-between items-center shadow-sm">
         <View className="flex-row items-center">
-          <View className={`w-2.5 h-2.5 ${networkOnline ? 'bg-emerald-500' : 'bg-rose-500'} rounded-full mr-2`} />
+          <View
+            className={`w-2.5 h-2.5 ${networkOnline ? 'bg-emerald-500' : 'bg-rose-500'} rounded-full mr-2`}
+          />
           <View>
             <Text className="font-bold text-slate-800 text-sm">GPT Assistant</Text>
             <Text className="text-[10px] text-slate-500">
@@ -635,6 +792,7 @@ export default function OpenAIAvatarRelativeProjection() {
           accessible={true}
           accessibilityRole="button"
           accessibilityLabel="Clear chat history"
+          hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
         >
           <Ionicons name="trash-outline" size={14} color="#64748B" />
           <Text className="text-xs text-slate-600 ml-1 font-medium">Clear</Text>
@@ -646,8 +804,8 @@ export default function OpenAIAvatarRelativeProjection() {
         <ScrollView
           testID="message-scrollview"
           ref={scrollViewRef}
-          className="flex-1 px-4"
-          contentContainerStyle={{ paddingBottom: 24, paddingTop: 16 }}
+          style={{ flex: 1 }}
+          contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 24, paddingTop: 16 }}
           onContentSizeChange={scrollToBottom}
           onScroll={handleScroll}
           scrollEventThrottle={16}
@@ -670,7 +828,7 @@ export default function OpenAIAvatarRelativeProjection() {
           <TouchableOpacity
             testID="scroll-bottom-button"
             onPress={scrollToBottom}
-            className="absolute bottom-4 right-4 bg-indigo-600 w-10 h-10 rounded-full items-center justify-center shadow-lg border border-indigo-500"
+            className="absolute bottom-4 right-4 bg-indigo-600 w-11 h-11 rounded-full items-center justify-center shadow-lg border border-indigo-500"
             activeOpacity={0.8}
             style={{ zIndex: 10 }}
             accessible={true}
@@ -684,8 +842,16 @@ export default function OpenAIAvatarRelativeProjection() {
 
       {/* Offline Alert Banner */}
       {!networkOnline && (
-        <View testID="openai-offline-state" className="bg-amber-50 border-t border-b border-amber-200 p-3 flex-row items-center justify-center">
-          <Ionicons name="alert-circle-outline" size={18} color="#D97706" style={{ marginRight: 6 }} />
+        <View
+          testID="openai-offline-state"
+          className="bg-amber-50 border-t border-b border-amber-200 p-3 flex-row items-center justify-center"
+        >
+          <Ionicons
+            name="alert-circle-outline"
+            size={18}
+            color="#D97706"
+            style={{ marginRight: 6 }}
+          />
           <Text className="text-amber-800 text-xs font-bold text-center">
             AI Assistant is offline. Please check your network connection.
           </Text>
@@ -694,11 +860,15 @@ export default function OpenAIAvatarRelativeProjection() {
 
       {/* Input Tray */}
       <View className="p-3 bg-white border-t border-slate-200">
-        <View className="flex-row items-end bg-slate-50 border border-slate-200 rounded-2xl p-1.5 pl-3.5 pr-1.5 shadow-sm">
+        <View className={`flex-row items-end bg-slate-50 border rounded-2xl p-1.5 pl-3.5 pr-1.5 shadow-sm transition-all duration-200 ${
+          inputFocused ? 'border-indigo-600 bg-white ring-2 ring-indigo-100' : 'border-slate-200'
+        }`}>
           <TextInput
             className="flex-1 text-slate-800 text-base py-1.5 max-h-24 bg-transparent"
-            placeholder={networkOnline ? "Ask AI anything..." : "AI Assistant is offline..."}
-            placeholderTextColor="#94A3B8"
+            onFocus={() => setInputFocused(true)}
+            onBlur={() => setInputFocused(false)}
+            placeholder={networkOnline ? 'Ask AI anything...' : 'AI Assistant is offline...'}
+            placeholderTextColor="#475569"
             value={prompt}
             onChangeText={setPrompt}
             multiline
@@ -710,7 +880,9 @@ export default function OpenAIAvatarRelativeProjection() {
           <TouchableOpacity
             testID="send-button"
             className={`rounded-xl p-2.5 items-center justify-center ${
-              loading || !prompt.trim() || !networkOnline ? 'bg-slate-100' : 'bg-indigo-600 shadow-sm'
+              loading || !prompt.trim() || !networkOnline
+                ? 'bg-slate-100'
+                : 'bg-indigo-600 shadow-sm'
             }`}
             onPress={callOpenAIFunction}
             disabled={loading || !prompt.trim() || !networkOnline}
@@ -719,6 +891,7 @@ export default function OpenAIAvatarRelativeProjection() {
             accessibilityRole="button"
             accessibilityLabel="Send message"
             accessibilityState={{ disabled: loading || !prompt.trim() || !networkOnline }}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
             <Ionicons
               name={loading ? 'ellipsis-horizontal' : 'send'}
@@ -729,6 +902,7 @@ export default function OpenAIAvatarRelativeProjection() {
         </View>
       </View>
     </KeyboardAvoidingView>
+    </ProtectedRoute>
   );
 }
 

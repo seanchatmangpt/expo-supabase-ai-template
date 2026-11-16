@@ -78,7 +78,10 @@ async function getLatestReceiptHash(): Promise<string> {
   // but admitted_at is ISO-8601 so lexicographic ordering is correct.
   // We fetch all and pick the last; in production this is bounded by the compaction cycle.
   const rows = (await db
-    .select({ receiptHash: syncAdmissionReceipts.receiptHash, admittedAt: syncAdmissionReceipts.admittedAt })
+    .select({
+      receiptHash: syncAdmissionReceipts.receiptHash,
+      admittedAt: syncAdmissionReceipts.admittedAt,
+    })
     .from(syncAdmissionReceipts)) as any[];
 
   if (rows.length === 0) {
@@ -144,7 +147,9 @@ class DrizzleSyncStorageAdapter implements SyncStorageAdapter<SyncJob> {
    * Throws AdmissionGateError if the gate rejects or quarantines the job.
    * Throws on SQLite errors (caller may handle or propagate).
    */
-  async insertJob(job: Omit<SyncJob, 'id' | 'status' | 'attempts' | 'createdAt'>): Promise<SyncJob> {
+  async insertJob(
+    job: Omit<SyncJob, 'id' | 'status' | 'attempts' | 'createdAt'>
+  ): Promise<SyncJob> {
     // ── Phase 1: Gate evaluation — build a SyncEvent from the job for evaluation
     const candidateEvent: SyncEvent = {
       entityId: job.entityId ?? '',
@@ -159,7 +164,13 @@ class DrizzleSyncStorageAdapter implements SyncStorageAdapter<SyncJob> {
       // Use a deterministic idempotency key based on content so the gate has a
       // non-empty key to validate. Callers that need true idempotency should
       // embed the key inside the payload itself.
-      idempotencyKey: blake3(canonicalStringify({ entityId: job.entityId ?? '', jobType: job.jobType, payload: job.payload })),
+      idempotencyKey: blake3(
+        canonicalStringify({
+          entityId: job.entityId ?? '',
+          jobType: job.jobType,
+          payload: job.payload,
+        })
+      ),
       occurredAt: new Date().toISOString(),
     };
 
@@ -177,25 +188,27 @@ class DrizzleSyncStorageAdapter implements SyncStorageAdapter<SyncJob> {
         });
       } catch (quarantineErr: unknown) {
         const msg = quarantineErr instanceof Error ? quarantineErr.message : String(quarantineErr);
-        console.error(
-          '[PATQ] CRITICAL: Failed to write rejected job to quarantine table:',
-          { jobType: job.jobType, entityId: job.entityId, verdict: decision.verdict, error: msg }
-        );
+        console.error('[PATQ] CRITICAL: Failed to write rejected job to quarantine table:', {
+          jobType: job.jobType,
+          entityId: job.entityId,
+          verdict: decision.verdict,
+          error: msg,
+        });
       }
 
-      throw new AdmissionGateError(
-        decision.verdict,
-        decision.reason,
-        job.jobType,
-        job.entityId
-      );
+      throw new AdmissionGateError(decision.verdict, decision.reason, job.jobType, job.entityId);
     }
 
     // ── Phase 2: Generate BLAKE3 receipt and persist BEFORE the event row
     const admittedAt = new Date().toISOString();
     const payloadHash = computePayloadHash(job.jobType, job.payload, job.entityId);
     const previousReceiptHash = await getLatestReceiptHash();
-    const receiptHash = computeReceiptHash(previousReceiptHash, payloadHash, admittedAt, job.jobType);
+    const receiptHash = computeReceiptHash(
+      previousReceiptHash,
+      payloadHash,
+      admittedAt,
+      job.jobType
+    );
     const receiptId = deriveReceiptId(receiptHash);
 
     // Insert receipt with status='pre_insert' — this MUST succeed before the event row
@@ -270,8 +283,14 @@ class DrizzleSyncStorageAdapter implements SyncStorageAdapter<SyncJob> {
     await db.update(syncQueue).set(updates).where(eq(syncQueue.id, id));
   }
 
-  async updateJob(id: number, updates: Partial<Omit<SyncJob, 'id' | 'status' | 'attempts' | 'createdAt'>>): Promise<void> {
-    await db.update(syncQueue).set(updates as any).where(eq(syncQueue.id, id));
+  async updateJob(
+    id: number,
+    updates: Partial<Omit<SyncJob, 'id' | 'status' | 'attempts' | 'createdAt'>>
+  ): Promise<void> {
+    await db
+      .update(syncQueue)
+      .set(updates as any)
+      .where(eq(syncQueue.id, id));
   }
 
   async deleteJob(id: number): Promise<void> {
@@ -334,9 +353,9 @@ class DrizzleSyncStorageAdapter implements SyncStorageAdapter<SyncJob> {
       ? inArray(syncQueue.jobType, supportedJobTypes)
       : undefined;
 
-    const jobs = await (whereClause
+    const jobs = (await (whereClause
       ? db.select().from(syncQueue).where(whereClause)
-      : db.select().from(syncQueue)) as SyncJob[];
+      : db.select().from(syncQueue))) as SyncJob[];
 
     return {
       total: jobs.length,

@@ -17,10 +17,7 @@ export default function AdminReceipts() {
   const fetchReceipts = async () => {
     setRefreshing(true);
     try {
-      const list = await db
-        .select()
-        .from(actorReceipts)
-        .orderBy(desc(actorReceipts.createdAt));
+      const list = await db.select().from(actorReceipts).orderBy(desc(actorReceipts.createdAt));
       setReceiptsList(list);
     } catch (e: any) {
       console.error('Failed to load receipts:', e);
@@ -37,8 +34,8 @@ export default function AdminReceipts() {
   const renderReceiptItem = ({ item }: { item: any }) => {
     const isError = !!item.error;
     return (
-      <AdminCard 
-        title={`Receipt: ${item.id.slice(0, 8)}...`} 
+      <AdminCard
+        title={`Receipt: ${item.id.slice(0, 8)}...`}
         subtitle={new Date(item.createdAt).toLocaleString()}
         headerRight={<ReceiptBadge status={item.status} />}
         style={isError ? styles.cardError : undefined}
@@ -49,7 +46,7 @@ export default function AdminReceipts() {
             <Text style={styles.valueMono}>{item.commandId}</Text>
           </View>
           <View style={styles.divider} />
-          
+
           <View style={styles.detailRow}>
             <Text style={styles.label}>Actor Target</Text>
             <ActorRefView actorRef={item.actorRef} />
@@ -71,9 +68,12 @@ export default function AdminReceipts() {
               <Text style={styles.errorText}>{item.error}</Text>
             </View>
           )}
-          
+
           <View style={styles.jsonWrapper}>
-            <JsonInspector data={{ eventIds: JSON.parse(item.eventIds || '[]') }} title="Event Payloads" />
+            <JsonInspector
+              data={{ eventIds: JSON.parse(item.eventIds || '[]') }}
+              title="Event Payloads"
+            />
           </View>
         </View>
       </AdminCard>
@@ -81,7 +81,11 @@ export default function AdminReceipts() {
   };
 
   return (
-    <AdminShell title="Receipt Audit Logs" subtitle="Historical transaction log matching BEAM event receipts" scrollable={false}>
+    <AdminShell
+      title="Receipt Audit Logs"
+      subtitle="Historical transaction log matching BEAM event receipts"
+      scrollable={false}
+    >
       {errorMsg && (
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{errorMsg}</Text>
@@ -93,7 +97,12 @@ export default function AdminReceipts() {
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContent}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={fetchReceipts} tintColor="#3B82F6" colors={['#3B82F6']} />
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={fetchReceipts}
+            tintColor="#3B82F6"
+            colors={['#3B82F6']}
+          />
         }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>

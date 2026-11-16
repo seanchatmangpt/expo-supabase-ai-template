@@ -43,7 +43,8 @@ describe('AdminShell', () => {
         title="Admin"
         navigationItems={items}
         activeNavigationId="1"
-        onNavigate={onNavigateMock}>
+        onNavigate={onNavigateMock}
+      >
         <Text>Content</Text>
       </AdminShell>
     );

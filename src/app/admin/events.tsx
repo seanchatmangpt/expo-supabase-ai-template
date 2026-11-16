@@ -6,13 +6,26 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export default function AdminEvents() {
   const events = [
-    { id: '1', title: 'Sunday Morning Worship', time: 'Every Sunday, 9:00 AM & 11:00 AM', location: 'Main Sanctuary' },
+    {
+      id: '1',
+      title: 'Sunday Morning Worship',
+      time: 'Every Sunday, 9:00 AM & 11:00 AM',
+      location: 'Main Sanctuary',
+    },
     { id: '2', title: 'Midweek Prayer Gathering', time: 'Wednesdays, 7:00 PM', location: 'Chapel' },
-    { id: '3', title: 'Community Outreach Service', time: 'Saturdays, 10:00 AM', location: 'Downtown Shelter' },
+    {
+      id: '3',
+      title: 'Community Outreach Service',
+      time: 'Saturdays, 10:00 AM',
+      location: 'Downtown Shelter',
+    },
   ];
 
   return (
-    <AdminShell title="Church Calendar Events" subtitle="Monitor scheduled services and outreach events">
+    <AdminShell
+      title="Church Calendar Events"
+      subtitle="Monitor scheduled services and outreach events"
+    >
       <ScrollView contentContainerStyle={styles.container}>
         {events.map((item) => (
           <TouchableOpacity accessibilityRole="button" key={item.id} activeOpacity={0.8}>

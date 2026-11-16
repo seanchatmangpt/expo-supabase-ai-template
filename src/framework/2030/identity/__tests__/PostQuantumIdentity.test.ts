@@ -11,6 +11,7 @@ import { PostQuantumZkEngine } from '../PostQuantumZkEngine';
 import { ZkClaim } from '../../../auth/zkp/types';
 import { PqZkProof, PqSignature, PqReceipt } from '../types';
 import { pqZkEngine } from '../index';
+import { sha256 } from '@/src/lib/crypto/receipts';
 
 const validSnarkProofData = JSON.stringify({
   pi_a: ['12345678901', '12345678902'],
@@ -20,6 +21,34 @@ const validSnarkProofData = JSON.stringify({
   ],
   pi_c: ['12345678907', '12345678908'],
 });
+
+function generateLamportKeyPair(): { publicKey: string; privateKey: string[] } {
+  const privateKey: string[] = [];
+  let publicKey = '';
+  for (let i = 0; i < 256; i++) {
+    const sk0 = sha256(`sk_${i}_0_${Math.random()}`);
+    const sk1 = sha256(`sk_${i}_1_${Math.random()}`);
+    privateKey.push(sk0, sk1);
+    publicKey += sha256(sk0) + sha256(sk1);
+  }
+  return { publicKey, privateKey };
+}
+
+function signLamport(message: string, privateKey: string[]): string {
+  const msgHash = sha256(message);
+  let signature = '';
+  for (let i = 0; i < 256; i++) {
+    const charIndex = Math.floor(i / 4);
+    const bitIndex = i % 4;
+    const hexChar = msgHash[charIndex];
+    const val = parseInt(hexChar, 16);
+    const bit = val & (1 << bitIndex) ? 1 : 0;
+
+    const sk = privateKey[i * 2 + bit];
+    signature += sk;
+  }
+  return signature;
+}
 
 describe('PostQuantumZkEngine', () => {
   let engine: PostQuantumZkEngine;
@@ -43,7 +72,7 @@ describe('PostQuantumZkEngine', () => {
       claimId: 'claim-123',
       proofData: validSnarkProofData,
       publicSignals: ['18'],
-      enclaveSignature: 'valid-signature',
+      enclaveSignature: '0x' + '1'.repeat(40),
     };
 
     const result = await engine.verify(mockClaim, proof);
@@ -53,10 +82,13 @@ describe('PostQuantumZkEngine', () => {
   });
 
   it('should verify a proof with PQ signature', async () => {
+    const { publicKey, privateKey } = generateLamportKeyPair();
+    const signatureData = signLamport(validSnarkProofData, privateKey);
+
     const pqSignature: PqSignature = {
       algorithm: 'Dilithium5',
-      data: 'valid-signature',
-      publicKey: 'valid-pubkey',
+      data: signatureData,
+      publicKey: publicKey,
     };
 
     const proof: PqZkProof = {
@@ -64,7 +96,7 @@ describe('PostQuantumZkEngine', () => {
       proofData: validSnarkProofData,
       publicSignals: ['18'],
       pqSignature,
-      enclaveSignature: 'valid-signature',
+      enclaveSignature: '0x' + '1'.repeat(40),
     };
 
     const result = await engine.verify(mockClaim, proof);

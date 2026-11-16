@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { AlertManager as Alert } from '../../framework/ui/dialog/AlertManager';
 import { AdminShell } from '../../components/admin/AdminShell';
 import { AdminCard } from '../../components/admin/AdminCard';
 import { CommandButton } from '../../components/admin/CommandButton';
@@ -11,13 +12,15 @@ import {
   setCurrentPrincipal,
   globalLocalDispatcher,
   globalRemoteDispatcher,
-  globalVkgClient
+  globalVkgClient,
 } from '@/src/lib/actor/actorOps';
 import { DataFactory } from '../../lib/vkg/rdf';
 import { db } from '../../lib/db/db';
 import { actorOutbox, actorQuarantine } from '../../lib/db/schema';
 import { count } from 'drizzle-orm';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { useHaptics } from '../../framework/ui/haptics/useHaptics';
+import { HapticFeedbackPattern } from '../../framework/ui/haptics/IntelligentHaptics';
 
 interface LogEntry {
   id: string;
@@ -46,7 +49,10 @@ function Connector({ status, label }: ConnectorProps) {
 
   return (
     <View style={styles.connectorContainer}>
-      <View style={[styles.connectorLine, { borderColor: lineColor, borderStyle: lineStyle }]} testID={`connector-${status}`} />
+      <View
+        style={[styles.connectorLine, { borderColor: lineColor, borderStyle: lineStyle }]}
+        testID={`connector-${status}`}
+      />
       {label && (
         <View
           style={[
@@ -56,8 +62,8 @@ function Connector({ status, label }: ConnectorProps) {
                 status === 'error'
                   ? 'rgba(239, 68, 68, 0.2)'
                   : status === 'syncing'
-                  ? 'rgba(59, 130, 246, 0.2)'
-                  : 'rgba(16, 185, 129, 0.2)',
+                    ? 'rgba(59, 130, 246, 0.2)'
+                    : 'rgba(16, 185, 129, 0.2)',
             },
           ]}
         >
@@ -99,7 +105,12 @@ function SimulationNode({
       </View>
       <View style={styles.nodeStatusContainer}>
         {badgeText && (
-          <View style={[styles.nodeBadge, { backgroundColor: statusColor + '25', borderColor: statusColor + '50' }]}>
+          <View
+            style={[
+              styles.nodeBadge,
+              { backgroundColor: statusColor + '25', borderColor: statusColor + '50' },
+            ]}
+          >
             <Text style={[styles.nodeBadgeText, { color: statusColor }]}>{badgeText}</Text>
           </View>
         )}
@@ -110,6 +121,7 @@ function SimulationNode({
 }
 
 export default function ActorLab() {
+  const haptics = useHaptics();
   const {
     networkOnline,
     remoteRejectActive,
@@ -211,7 +223,11 @@ export default function ActorLab() {
 
   const toggleNetwork = (online: boolean) => {
     setNetworkOffline(!online);
-    addLog('INFO', 'NETWORK', `Simulated network status updated to: ${online ? 'ONLINE' : 'OFFLINE'}`);
+    addLog(
+      'INFO',
+      'NETWORK',
+      `Simulated network status updated to: ${online ? 'ONLINE' : 'OFFLINE'}`
+    );
   };
 
   const toggleRemoteRejection = (active: boolean) => {
@@ -228,7 +244,11 @@ export default function ActorLab() {
       id: `usr_${role}`,
       role: role,
     });
-    addLog('INFO', 'TRANSACTION', `Identity session overridden. Principal switched to role: ${role}`);
+    addLog(
+      'INFO',
+      'TRANSACTION',
+      `Identity session overridden. Principal switched to role: ${role}`
+    );
   };
 
   const triggerSync = async () => {
@@ -266,16 +286,19 @@ export default function ActorLab() {
 
   // Simulation daemon control functions
   const startSimulation = () => {
+    haptics.trigger(HapticFeedbackPattern.MEDIUM);
     setSimState('running');
     addLog('SUCCESS', 'SYSTEM', 'Simulation daemon STARTED. Automated state replication active.');
   };
 
   const pauseSimulation = () => {
+    haptics.trigger(HapticFeedbackPattern.MEDIUM);
     setSimState('paused');
     addLog('WARNING', 'SYSTEM', 'Simulation daemon PAUSED. Replication loops halted.');
   };
 
   const restartSimulation = async () => {
+    haptics.trigger(HapticFeedbackPattern.MEDIUM);
     setSimState('stopped');
     toggleNetwork(true);
     toggleRemoteRejection(false);
@@ -319,17 +342,29 @@ export default function ActorLab() {
 
       if (outboxCount > 0) {
         if (networkOnline) {
-          addLog('INFO', 'SYNC', `Found ${outboxCount} unsynced items. Commencing auto-synchronization replay...`);
+          addLog(
+            'INFO',
+            'SYNC',
+            `Found ${outboxCount} unsynced items. Commencing auto-synchronization replay...`
+          );
           try {
             await globalLocalDispatcher.syncOutbox(globalRemoteDispatcher);
-            addLog('SUCCESS', 'SYNC', 'Auto-sync task completed. Replayed items committed to server authority.');
+            addLog(
+              'SUCCESS',
+              'SYNC',
+              'Auto-sync task completed. Replayed items committed to server authority.'
+            );
             await refreshState();
           } catch (err: any) {
             addLog('ERROR', 'SYNC', `Auto-sync failed: ${err.message}`);
             await refreshState();
           }
         } else {
-          addLog('WARNING', 'SYNC', `Outbox contains ${outboxCount} items, but sync is deferred due to network DISCONNECTION.`);
+          addLog(
+            'WARNING',
+            'SYNC',
+            `Outbox contains ${outboxCount} items, but sync is deferred due to network DISCONNECTION.`
+          );
         }
       } else {
         const telemetryChecks = [
@@ -364,7 +399,10 @@ export default function ActorLab() {
         <Text style={styles.statusText}>Actor Runtime Engine: Active & Ready</Text>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        keyboardShouldPersistTaps="handled"
+      >
         {/* 1. Digital Twin Simulation Topology View */}
         <AdminCard
           title="Digital Twin Simulation Topology"
@@ -388,8 +426,12 @@ export default function ActorLab() {
               icon="database"
               title="Local Storage & Outbox"
               subtitle="Offline Journal & Outbox"
-              statusColor={quarantineCount > 0 ? '#EF4444' : outboxCount > 0 ? '#F59E0B' : '#10B981'}
-              statusText={quarantineCount > 0 ? 'QUARANTINE' : outboxCount > 0 ? 'PENDING' : 'SYNCED'}
+              statusColor={
+                quarantineCount > 0 ? '#EF4444' : outboxCount > 0 ? '#F59E0B' : '#10B981'
+              }
+              statusText={
+                quarantineCount > 0 ? 'QUARANTINE' : outboxCount > 0 ? 'PENDING' : 'SYNCED'
+              }
               badgeText={`${outboxCount} Outbox | ${quarantineCount} Quar`}
             />
 
@@ -407,7 +449,10 @@ export default function ActorLab() {
               statusText={networkOnline ? 'ONLINE' : 'OFFLINE'}
             />
 
-            <Connector status={!networkOnline ? 'error' : 'active'} label={!networkOnline ? 'BLOCKED' : 'READY'} />
+            <Connector
+              status={!networkOnline ? 'error' : 'active'}
+              label={!networkOnline ? 'BLOCKED' : 'READY'}
+            />
 
             {/* Node 4: Remote Dispatcher */}
             <SimulationNode
@@ -418,7 +463,10 @@ export default function ActorLab() {
               statusText={remoteRejectActive ? 'REJECTING' : 'HEALTHY'}
             />
 
-            <Connector status={remoteRejectActive ? 'error' : 'active'} label={remoteRejectActive ? 'REJECTED' : 'COMMITTED'} />
+            <Connector
+              status={remoteRejectActive ? 'error' : 'active'}
+              label={remoteRejectActive ? 'REJECTED' : 'COMMITTED'}
+            />
 
             {/* Node 5: Authoritative VKG */}
             <SimulationNode
@@ -444,8 +492,8 @@ export default function ActorLab() {
                 simState === 'running'
                   ? styles.badgeRunning
                   : simState === 'paused'
-                  ? styles.badgePaused
-                  : styles.badgeStopped,
+                    ? styles.badgePaused
+                    : styles.badgeStopped,
               ]}
             >
               <Text
@@ -454,8 +502,8 @@ export default function ActorLab() {
                   simState === 'running'
                     ? styles.textRunning
                     : simState === 'paused'
-                    ? styles.textPaused
-                    : styles.textStopped,
+                      ? styles.textPaused
+                      : styles.textStopped,
                 ]}
               >
                 {simState.toUpperCase()}
@@ -475,7 +523,9 @@ export default function ActorLab() {
                 color={simState === 'running' ? '#F8FAFC' : '#94A3B8'}
                 style={styles.btnIcon}
               />
-              <Text style={[styles.btnText, simState === 'running' && styles.btnTextActive]}>START</Text>
+              <Text style={[styles.btnText, simState === 'running' && styles.btnTextActive]}>
+                START
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -489,10 +539,17 @@ export default function ActorLab() {
                 color={simState === 'paused' ? '#F8FAFC' : '#94A3B8'}
                 style={styles.btnIcon}
               />
-              <Text style={[styles.btnText, simState === 'paused' && styles.btnTextActive]}>PAUSE</Text>
+              <Text style={[styles.btnText, simState === 'paused' && styles.btnTextActive]}>
+                PAUSE
+              </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity accessibilityRole="button" style={styles.btnThird} onPress={restartSimulation} activeOpacity={0.7}>
+            <TouchableOpacity
+              accessibilityRole="button"
+              style={styles.btnThird}
+              onPress={restartSimulation}
+              activeOpacity={0.7}
+            >
               <FontAwesome name="refresh" size={14} color="#94A3B8" style={styles.btnIcon} />
               <Text style={styles.btnText}>RESTART</Text>
             </TouchableOpacity>
@@ -500,7 +557,10 @@ export default function ActorLab() {
         </AdminCard>
 
         {/* 3. Network Simulation Controls */}
-        <AdminCard title="Network Connectivity Simulation" subtitle="Toggle device simulated network connectivity">
+        <AdminCard
+          title="Network Connectivity Simulation"
+          subtitle="Toggle device simulated network connectivity"
+        >
           <View style={styles.btnRow}>
             <TouchableOpacity
               style={[styles.btnHalf, networkOnline && styles.btnActiveGreen]}
@@ -508,7 +568,12 @@ export default function ActorLab() {
               testID="mock-network-on"
               activeOpacity={0.7}
             >
-              <FontAwesome name="wifi" size={16} color={networkOnline ? '#F8FAFC' : '#94A3B8'} style={styles.btnIcon} />
+              <FontAwesome
+                name="wifi"
+                size={16}
+                color={networkOnline ? '#F8FAFC' : '#94A3B8'}
+                style={styles.btnIcon}
+              />
               <Text style={[styles.btnText, networkOnline && styles.btnTextActive]}>ONLINE</Text>
             </TouchableOpacity>
 
@@ -518,14 +583,22 @@ export default function ActorLab() {
               testID="mock-network-off"
               activeOpacity={0.7}
             >
-              <FontAwesome name="ban" size={16} color={!networkOnline ? '#F8FAFC' : '#94A3B8'} style={styles.btnIcon} />
+              <FontAwesome
+                name="ban"
+                size={16}
+                color={!networkOnline ? '#F8FAFC' : '#94A3B8'}
+                style={styles.btnIcon}
+              />
               <Text style={[styles.btnText, !networkOnline && styles.btnTextActive]}>OFFLINE</Text>
             </TouchableOpacity>
           </View>
         </AdminCard>
 
         {/* 4. Authority Simulation Controls */}
-        <AdminCard title="Remote Authority Mock Rejection" subtitle="Force authoritative server transaction failure">
+        <AdminCard
+          title="Remote Authority Mock Rejection"
+          subtitle="Force authoritative server transaction failure"
+        >
           <View style={styles.btnRow}>
             <TouchableOpacity
               style={[styles.btnHalf, remoteRejectActive && styles.btnActiveRed]}
@@ -539,7 +612,9 @@ export default function ActorLab() {
                 color={remoteRejectActive ? '#F8FAFC' : '#94A3B8'}
                 style={styles.btnIcon}
               />
-              <Text style={[styles.btnText, remoteRejectActive && styles.btnTextActive]}>MOCK ON</Text>
+              <Text style={[styles.btnText, remoteRejectActive && styles.btnTextActive]}>
+                MOCK ON
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -554,7 +629,9 @@ export default function ActorLab() {
                 color={!remoteRejectActive ? '#F8FAFC' : '#94A3B8'}
                 style={styles.btnIcon}
               />
-              <Text style={[styles.btnText, !remoteRejectActive && styles.btnTextActive]}>MOCK OFF</Text>
+              <Text style={[styles.btnText, !remoteRejectActive && styles.btnTextActive]}>
+                MOCK OFF
+              </Text>
             </TouchableOpacity>
           </View>
         </AdminCard>
@@ -615,7 +692,10 @@ export default function ActorLab() {
 
             <View style={styles.metricRow}>
               <Text style={styles.metricLabel}>Latest Receipt</Text>
-              <ReceiptBadge status={latestReceipt?.status || 'accepted_pending'} testID="receipt-status" />
+              <ReceiptBadge
+                status={latestReceipt?.status || 'accepted_pending'}
+                testID="receipt-status"
+              />
             </View>
 
             <View style={styles.metricRow}>
@@ -625,7 +705,12 @@ export default function ActorLab() {
               </Text>
             </View>
 
-            <View style={[styles.metricRow, { borderBottomWidth: 0, marginBottom: 0, paddingBottom: 0 }]}>
+            <View
+              style={[
+                styles.metricRow,
+                { borderBottomWidth: 0, marginBottom: 0, paddingBottom: 0 },
+              ]}
+            >
               <Text style={styles.metricLabel}>Error Code Label</Text>
               <Text style={[styles.metricVal, styles.errorText]} testID="latest-error-code">
                 {getErrorCode()}
@@ -635,19 +720,29 @@ export default function ActorLab() {
         </AdminCard>
 
         {/* 8. Virtual Knowledge Graph Projection View */}
-        <AdminCard title="VKG Semantic Sermon Projection" subtitle="Rendered schema:name properties present in standard triple store">
+        <AdminCard
+          title="VKG Semantic Sermon Projection"
+          subtitle="Rendered schema:name properties present in standard triple store"
+        >
           <View style={styles.metricCardBox}>
             {sermonTitles.length > 0 ? (
               sermonTitles.map((titleStr, idx) => (
                 <View key={`${titleStr}-${idx}`} style={styles.sermonRow}>
-                  <FontAwesome name="check-circle" size={16} color="#34D399" style={styles.checkIcon} />
+                  <FontAwesome
+                    name="check-circle"
+                    size={16}
+                    color="#34D399"
+                    style={styles.checkIcon}
+                  />
                   <Text style={styles.sermonTitleText} testID="sermon-title-rendered">
                     {titleStr}
                   </Text>
                 </View>
               ))
             ) : (
-              <Text style={styles.emptyProjectionText}>Virtual Knowledge Graph contains 0 sermon name quads.</Text>
+              <Text style={styles.emptyProjectionText}>
+                Virtual Knowledge Graph contains 0 sermon name quads.
+              </Text>
             )}
           </View>
         </AdminCard>
@@ -660,7 +755,11 @@ export default function ActorLab() {
           {/* Filters */}
           <View style={styles.logFiltersContainer}>
             <Text style={styles.filterTitle}>Filter Level:</Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filterScroll}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.filterScroll}
+            >
               {(['ALL', 'INFO', 'SUCCESS', 'WARNING', 'ERROR'] as const).map((lvl) => {
                 const active = levelFilter === lvl;
                 const colorMap = {
@@ -688,7 +787,14 @@ export default function ActorLab() {
                     testID={`filter-level-${lvl}`}
                     activeOpacity={0.7}
                   >
-                    <Text style={[styles.filterBadgeText, { color: active ? colorMap[lvl] : '#64748B' }]}>{lvl}</Text>
+                    <Text
+                      style={[
+                        styles.filterBadgeText,
+                        { color: active ? colorMap[lvl] : '#64748B' },
+                      ]}
+                    >
+                      {lvl}
+                    </Text>
                   </TouchableOpacity>
                 );
               })}
@@ -697,7 +803,11 @@ export default function ActorLab() {
 
           <View style={styles.logFiltersContainer}>
             <Text style={styles.filterTitle}>Filter Category:</Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.filterScroll}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.filterScroll}
+            >
               {(['ALL', 'SYSTEM', 'TRANSACTION', 'SYNC', 'NETWORK'] as const).map((cat) => {
                 const active = categoryFilter === cat;
                 const colorMap = {
@@ -725,7 +835,14 @@ export default function ActorLab() {
                     testID={`filter-category-${cat}`}
                     activeOpacity={0.7}
                   >
-                    <Text style={[styles.filterBadgeText, { color: active ? colorMap[cat] : '#64748B' }]}>{cat}</Text>
+                    <Text
+                      style={[
+                        styles.filterBadgeText,
+                        { color: active ? colorMap[cat] : '#64748B' },
+                      ]}
+                    >
+                      {cat}
+                    </Text>
                   </TouchableOpacity>
                 );
               })}
@@ -764,7 +881,13 @@ export default function ActorLab() {
             </ScrollView>
           </View>
 
-          <TouchableOpacity accessibilityRole="button" style={styles.clearLogsBtn} onPress={() => setLogs([])} testID="clear-logs" activeOpacity={0.7}>
+          <TouchableOpacity
+            accessibilityRole="button"
+            style={styles.clearLogsBtn}
+            onPress={() => setLogs([])}
+            testID="clear-logs"
+            activeOpacity={0.7}
+          >
             <FontAwesome name="trash" size={14} color="#94A3B8" style={{ marginRight: 6 }} />
             <Text style={styles.clearLogsText}>Clear Terminal Logs</Text>
           </TouchableOpacity>

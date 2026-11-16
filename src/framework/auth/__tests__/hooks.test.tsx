@@ -17,7 +17,8 @@ describe('Auth Hooks', () => {
   const wrapper = ({ children }: { children: React.ReactNode }) => (
     <AuthProvider
       getInitialSession={() => Promise.resolve(mockSession)}
-      resolveParticipant={resolveParticipant}>
+      resolveParticipant={resolveParticipant}
+    >
       {children}
     </AuthProvider>
   );
@@ -25,7 +26,8 @@ describe('Auth Hooks', () => {
   const loadingWrapper = ({ children }: { children: React.ReactNode }) => (
     <AuthProvider
       getInitialSession={() => new Promise(() => {})}
-      resolveParticipant={resolveParticipant}>
+      resolveParticipant={resolveParticipant}
+    >
       {children}
     </AuthProvider>
   );

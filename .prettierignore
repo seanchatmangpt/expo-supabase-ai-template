@@ -1,0 +1,20 @@
+# Ignore artifacts:
+dist/
+web-build/
+.expo/
+node_modules/
+android/
+ios/
+
+# Ignore generated/environment specific files
+*.lock
+yarn.lock
+package-lock.json
+.env
+.env.*
+
+# Ignore specific config and temp files
+.DS_Store
+*.orig.*
+expo-env.d.ts
+nativewind-env.d.ts

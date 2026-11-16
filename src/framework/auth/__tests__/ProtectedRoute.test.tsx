@@ -17,7 +17,8 @@ describe('ProtectedRoute', () => {
         <ProtectedRoute
           route={{ requiredIdentityBoundary: 'authenticated' }}
           resolveParticipant={resolveParticipant}
-          loadingComponent={<Text>AuthLoading</Text>}>
+          loadingComponent={<Text>AuthLoading</Text>}
+        >
           <Text>Protected Content</Text>
         </ProtectedRoute>
       </AuthProvider>
@@ -32,7 +33,8 @@ describe('ProtectedRoute', () => {
       <AuthProvider getInitialSession={getInitialSession}>
         <ProtectedRoute
           route={{ requiredIdentityBoundary: 'authenticated' }}
-          resolveParticipant={resolveParticipant}>
+          resolveParticipant={resolveParticipant}
+        >
           <Text>Protected Content</Text>
         </ProtectedRoute>
       </AuthProvider>
@@ -50,7 +52,8 @@ describe('ProtectedRoute', () => {
         <ProtectedRoute
           route={{ requiredIdentityBoundary: 'authenticated' }}
           resolveParticipant={resolveParticipant}
-          fallback={<Text>Access Denied</Text>}>
+          fallback={<Text>Access Denied</Text>}
+        >
           <Text>Protected Content</Text>
         </ProtectedRoute>
       </AuthProvider>

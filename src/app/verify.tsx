@@ -13,16 +13,14 @@ export default function VerifyScreen() {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.header}>Route Integrity Validation</Text>
-      <Text style={styles.subtitle}>All route screenshots successfully captured from the live iOS Simulator.</Text>
-      
+      <Text style={styles.subtitle}>
+        All route screenshots successfully captured from the live iOS Simulator.
+      </Text>
+
       {proofs.map((proof, idx) => (
         <View key={idx} style={styles.card}>
           <Text style={styles.cardTitle}>{proof.name}</Text>
-          <Image 
-            source={proof.image} 
-            style={styles.image} 
-            resizeMode="contain"
-          />
+          <Image source={proof.image} style={styles.image} resizeMode="contain" />
         </View>
       ))}
     </ScrollView>
@@ -67,5 +65,5 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 400,
     borderRadius: 8,
-  }
+  },
 });

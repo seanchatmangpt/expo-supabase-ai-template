@@ -18,23 +18,25 @@ import { SyncEngine } from '../sync/syncEngine';
 export class VKGRdfSyncEngine extends SyncEngine {
   protected override supportedJobTypes = ['RDF_ADD_QUAD', 'RDF_REMOVE_QUAD'];
 
-  protected async dispatchJob(job: { jobType: string; payload: string; entityId: string | null }): Promise<void> {
+  protected async dispatchJob(job: {
+    jobType: string;
+    payload: string;
+    entityId: string | null;
+  }): Promise<void> {
     const rawQuad = JSON.parse(job.payload);
 
     if (job.jobType === 'RDF_ADD_QUAD') {
-      const { error } = await supabase
-        .from('rdf_quads_ld')
-        .upsert({
-          subject: rawQuad.subject.value,
-          subject_term_type: rawQuad.subject.termType,
-          predicate: rawQuad.predicate.value,
-          object_value: rawQuad.object.value,
-          object_term_type: rawQuad.object.termType,
-          object_datatype: rawQuad.object.datatype?.value ?? null,
-          object_language: rawQuad.object.language ?? null,
-          graph: rawQuad.graph.value,
-          graph_term_type: rawQuad.graph.termType,
-        });
+      const { error } = await supabase.from('rdf_quads_ld').upsert({
+        subject: rawQuad.subject.value,
+        subject_term_type: rawQuad.subject.termType,
+        predicate: rawQuad.predicate.value,
+        object_value: rawQuad.object.value,
+        object_term_type: rawQuad.object.termType,
+        object_datatype: rawQuad.object.datatype?.value ?? null,
+        object_language: rawQuad.object.language ?? null,
+        graph: rawQuad.graph.value,
+        graph_term_type: rawQuad.graph.termType,
+      });
 
       if (error) {
         throw new Error(`Supabase RDF sync failed for quad: ${error.message}`);
@@ -103,9 +105,10 @@ export class VirtualKnowledgeGraphClient {
     const records = await (conditions.length > 0 ? baseQuery.where(and(...conditions)) : baseQuery);
     return records.map((record) => {
       // Reconstruct Terms
-      const s = record.subjectTermType === 'NamedNode' 
-        ? DataFactory.namedNode(record.subject) 
-        : DataFactory.blankNode(record.subject);
+      const s =
+        record.subjectTermType === 'NamedNode'
+          ? DataFactory.namedNode(record.subject)
+          : DataFactory.blankNode(record.subject);
 
       const p = DataFactory.namedNode(record.predicate);
 
@@ -115,15 +118,18 @@ export class VirtualKnowledgeGraphClient {
       } else if (record.objectTermType === 'BlankNode') {
         o = DataFactory.blankNode(record.objectValue);
       } else {
-        const datatype = record.objectDatatype ? DataFactory.namedNode(record.objectDatatype) : undefined;
+        const datatype = record.objectDatatype
+          ? DataFactory.namedNode(record.objectDatatype)
+          : undefined;
         o = DataFactory.literal(record.objectValue, record.objectLanguage || datatype);
       }
 
-      const g = record.graphTermType === 'DefaultGraph'
-        ? DataFactory.defaultGraph()
-        : record.graphTermType === 'NamedNode'
-        ? DataFactory.namedNode(record.graph)
-        : DataFactory.blankNode(record.graph);
+      const g =
+        record.graphTermType === 'DefaultGraph'
+          ? DataFactory.defaultGraph()
+          : record.graphTermType === 'NamedNode'
+            ? DataFactory.namedNode(record.graph)
+            : DataFactory.blankNode(record.graph);
 
       return DataFactory.quad(s, p, o, g);
     });
@@ -149,8 +155,10 @@ export class VirtualKnowledgeGraphClient {
         predicate: quad.predicate.value,
         objectValue: quad.object.value,
         objectTermType: quad.object.termType,
-        objectDatatype: quad.object.termType === 'Literal' ? (quad.object as Literal).datatype.value : null,
-        objectLanguage: quad.object.termType === 'Literal' ? (quad.object as Literal).language : null,
+        objectDatatype:
+          quad.object.termType === 'Literal' ? (quad.object as Literal).datatype.value : null,
+        objectLanguage:
+          quad.object.termType === 'Literal' ? (quad.object as Literal).language : null,
         graph: quad.graph.value,
         graphTermType: quad.graph.termType,
       });
@@ -172,14 +180,16 @@ export class VirtualKnowledgeGraphClient {
   public async removeQuads(quadsList: Quad[]): Promise<void> {
     for (const quad of quadsList) {
       // Delete locally
-      await db.delete(quads).where(
-        and(
-          eq(quads.subject, quad.subject.value),
-          eq(quads.predicate, quad.predicate.value),
-          eq(quads.objectValue, quad.object.value),
-          eq(quads.graph, quad.graph.value)
-        )
-      );
+      await db
+        .delete(quads)
+        .where(
+          and(
+            eq(quads.subject, quad.subject.value),
+            eq(quads.predicate, quad.predicate.value),
+            eq(quads.objectValue, quad.object.value),
+            eq(quads.graph, quad.graph.value)
+          )
+        );
 
       // Queue deletion sync
       await this.syncEngine.queueJob({
@@ -213,11 +223,15 @@ export class VirtualKnowledgeGraphClient {
     // 2. Resolve type assertion if specified
     const typeVal = doc['@type'];
     if (typeVal) {
-      const typePredicate = DataFactory.namedNode('http://www.w3.org/1999/02/22-rdf-syntax-ns#type');
+      const typePredicate = DataFactory.namedNode(
+        'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
+      );
       const processType = (t: any) => {
         if (typeof t === 'string') {
           const typeUri = t.startsWith('http') ? t : `https://schema.org/${t}`;
-          quadsList.push(DataFactory.quad(subject, typePredicate, DataFactory.namedNode(typeUri), defaultGraph));
+          quadsList.push(
+            DataFactory.quad(subject, typePredicate, DataFactory.namedNode(typeUri), defaultGraph)
+          );
         }
       };
       if (Array.isArray(typeVal)) {
@@ -238,7 +252,9 @@ export class VirtualKnowledgeGraphClient {
         continue;
       }
 
-      const predicate = DataFactory.namedNode(key.startsWith('http') ? key : `https://schema.org/${key}`);
+      const predicate = DataFactory.namedNode(
+        key.startsWith('http') ? key : `https://schema.org/${key}`
+      );
 
       const parseValue = (item: any) => {
         if (typeof item === 'object') {

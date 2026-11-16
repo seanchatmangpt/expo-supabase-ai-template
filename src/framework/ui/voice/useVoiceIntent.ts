@@ -38,9 +38,9 @@ export const useVoiceIntent = (options: UseVoiceIntentOptions = {}): UseVoiceInt
 
   const registerIntents = useCallback(
     (intents: VoiceIntent[]) => {
-      const newIntents = intents.filter(i => !registeredIds.current.has(i.id));
+      const newIntents = intents.filter((i) => !registeredIds.current.has(i.id));
       if (newIntents.length > 0) {
-        newIntents.forEach(i => registeredIds.current.add(i.id));
+        newIntents.forEach((i) => registeredIds.current.add(i.id));
         ctxRegister(newIntents);
       }
     },
@@ -49,9 +49,9 @@ export const useVoiceIntent = (options: UseVoiceIntentOptions = {}): UseVoiceInt
 
   const unregisterIntents = useCallback(
     (intentIds: string[]) => {
-      const toRemove = intentIds.filter(id => registeredIds.current.has(id));
+      const toRemove = intentIds.filter((id) => registeredIds.current.has(id));
       if (toRemove.length > 0) {
-        toRemove.forEach(id => registeredIds.current.delete(id));
+        toRemove.forEach((id) => registeredIds.current.delete(id));
         ctxUnregister(toRemove);
       }
     },

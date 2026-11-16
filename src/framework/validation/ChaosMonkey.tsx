@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, StyleSheet, TouchableOpacity, Text, Dimensions, Animated } from 'react-native';
-
-const { width, height } = Dimensions.get('window');
+import { View, StyleSheet, TouchableOpacity, Text, useWindowDimensions, Animated } from 'react-native';
 
 interface ChaosMonkeyProps {
   children: React.ReactNode;
@@ -11,13 +9,16 @@ interface ChaosMonkeyProps {
 
 /**
  * Autonomic Chaos Monkey Validation Subsystem
- * 
+ *
  * When activated in DEV mode, this component intercepts the application tree and
- * randomly injects synthetic touches, rage-clicks, and rapid state mutations to 
+ * randomly injects synthetic touches, rage-clicks, and rapid state mutations to
  * prove the application does not crash under extreme human frustration.
  */
 export function ChaosMonkey({ children, isActive = false, spamRateMs = 200 }: ChaosMonkeyProps) {
-  const [clickIndicators, setClickIndicators] = useState<{x: number, y: number, id: number}[]>([]);
+  const { width, height } = useWindowDimensions();
+  const [clickIndicators, setClickIndicators] = useState<{ x: number; y: number; id: number }[]>(
+    []
+  );
   const clickIdRef = useRef(0);
   const monkeyActive = __DEV__ && isActive;
 
@@ -30,11 +31,11 @@ export function ChaosMonkey({ children, isActive = false, spamRateMs = 200 }: Ch
       // Generate random touch coordinates
       const x = Math.floor(Math.random() * width);
       const y = Math.floor(Math.random() * height);
-      
+
       const id = clickIdRef.current++;
-      
+
       // Show visual indicator of the chaos click
-      setClickIndicators(prev => [...prev.slice(-15), { x, y, id }]);
+      setClickIndicators((prev) => [...prev.slice(-15), { x, y, id }]);
 
       // In a true native environment we would dispatch synthetic UIResponder events.
       // Here we simulate the chaos by causing rapid state updates and rendering pressure.
@@ -44,15 +45,16 @@ export function ChaosMonkey({ children, isActive = false, spamRateMs = 200 }: Ch
       clearInterval(interval);
       console.log('🐒 [Chaos Monkey] Contained.');
     };
-  }, [monkeyActive, spamRateMs]);
+  }, [monkeyActive, spamRateMs, width, height]);
 
   return (
     <View style={styles.container}>
       {children}
-      
-      {monkeyActive && clickIndicators.map((click) => (
-        <ChaosClickIndicator key={click.id} x={click.x} y={click.y} />
-      ))}
+
+      {monkeyActive &&
+        clickIndicators.map((click) => (
+          <ChaosClickIndicator key={click.id} x={click.x} y={click.y} />
+        ))}
 
       {monkeyActive && (
         <View style={styles.warningBanner} pointerEvents="none">
@@ -63,7 +65,7 @@ export function ChaosMonkey({ children, isActive = false, spamRateMs = 200 }: Ch
   );
 }
 
-function ChaosClickIndicator({ x, y }: { x: number, y: number }) {
+function ChaosClickIndicator({ x, y }: { x: number; y: number }) {
   const [opacity] = useState(new Animated.Value(1));
   const [scale] = useState(new Animated.Value(0));
 
@@ -72,18 +74,18 @@ function ChaosClickIndicator({ x, y }: { x: number, y: number }) {
       Animated.timing(opacity, {
         toValue: 0,
         duration: 500,
-        useNativeDriver: true
+        useNativeDriver: true,
       }),
       Animated.spring(scale, {
         toValue: 2,
         tension: 40,
-        useNativeDriver: true
-      })
+        useNativeDriver: true,
+      }),
     ]).start();
   }, []);
 
   return (
-    <Animated.View 
+    <Animated.View
       pointerEvents="none"
       style={[
         styles.indicator,
@@ -91,9 +93,9 @@ function ChaosClickIndicator({ x, y }: { x: number, y: number }) {
           left: x - 15,
           top: y - 15,
           opacity,
-          transform: [{ scale }]
-        }
-      ]} 
+          transform: [{ scale }],
+        },
+      ]}
     />
   );
 }
@@ -127,5 +129,5 @@ const styles = StyleSheet.create({
     fontWeight: '900',
     fontSize: 12,
     letterSpacing: 2,
-  }
+  },
 });

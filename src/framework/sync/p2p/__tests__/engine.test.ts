@@ -41,9 +41,11 @@ describe('MeshSyncEngine', () => {
       payload: {
         id: 'reg-1',
         state: { value: 'remote-value', timestamp: Date.now() + 1000, peerId: 'peer-remote' },
+        proof: { claimId: 'identity', proofData: '{}', publicSignals: [], enclaveSignature: '0x' + 'a'.repeat(40) },
       },
+      proof: { claimId: 'identity', proofData: '{}', publicSignals: [], enclaveSignature: '0x' + 'a'.repeat(40) },
       timestamp: Date.now(),
-    });
+    } as any);
 
     expect(reg.value).toBe('remote-value');
   });

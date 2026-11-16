@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
-import { TouchableOpacity, Text, StyleSheet, ActivityIndicator, ViewStyle, TextStyle } from 'react-native';
+import {
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  ViewStyle,
+  TextStyle,
+} from 'react-native';
 
 interface CommandButtonProps {
   title: string;
@@ -11,14 +18,14 @@ interface CommandButtonProps {
   testID?: string;
 }
 
-export function CommandButton({ 
-  title, 
-  onPress, 
-  style, 
-  textStyle, 
-  disabled = false, 
+export function CommandButton({
+  title,
+  onPress,
+  style,
+  textStyle,
+  disabled = false,
   variant = 'primary',
-  testID 
+  testID,
 }: CommandButtonProps) {
   const [loading, setLoading] = useState(false);
 
@@ -60,12 +67,7 @@ export function CommandButton({
 
   const vStyles = getVariantStyles();
 
-  const buttonStyle = [
-    styles.baseButton,
-    vStyles.button,
-    disabled && styles.disabledButton,
-    style
-  ];
+  const buttonStyle = [styles.baseButton, vStyles.button, disabled && styles.disabledButton, style];
 
   return (
     <TouchableOpacity

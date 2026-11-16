@@ -19,6 +19,14 @@ const supabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || "";
 
 const isServer = typeof window === 'undefined';
 
+if (isServer && typeof global.WebSocket === 'undefined') {
+  try {
+    global.WebSocket = require('ws');
+  } catch (e) {
+    console.warn('Could not load ws polyfill');
+  }
+}
+
 const customStorage = isServer ? {
   getItem: () => Promise.resolve(null),
   setItem: () => Promise.resolve(),

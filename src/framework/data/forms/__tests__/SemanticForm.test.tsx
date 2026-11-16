@@ -2,6 +2,7 @@ import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import { SemanticForm } from '../SemanticForm';
 import { useSemanticForm } from '../useSemanticForm';
+import { A11yAuditor } from '../../../validation/A11yAuditor';
 
 jest.mock('../useSemanticForm');
 
@@ -81,5 +82,16 @@ describe('SemanticForm', () => {
       'https://schema.org/name',
       'Jane Doe'
     );
+  });
+
+  it('passes accessibility audit', () => {
+    const { UNSAFE_root } = render(
+      <SemanticForm
+        targetType="https://schema.org/Person"
+        onSubmit={mockSubmit}
+        onCancel={mockCancel}
+      />
+    );
+    expect(() => A11yAuditor.auditTree(UNSAFE_root)).not.toThrow();
   });
 });

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { AlertManager as Alert } from '../../framework/ui/dialog/AlertManager';
 import { AdminShell } from '../../components/admin/AdminShell';
 import { AdminCard } from '../../components/admin/AdminCard';
 import { CommandButton } from '../../components/admin/CommandButton';
@@ -24,7 +25,7 @@ export default function AdminSermons() {
 
     const commandId = `cmd_${Math.random().toString(36).substr(2, 9)}`;
     const actorId = `sermon_${Math.random().toString(36).substr(2, 5)}`;
-    
+
     const envelope: CommandEnvelope = {
       id: commandId,
       actor: {
@@ -57,14 +58,20 @@ export default function AdminSermons() {
   };
 
   return (
-    <AdminShell title="Sermons Directory" subtitle="Publish sermons via actor command routing fabric">
-      <AdminCard title="Publish New Sermon" subtitle="Dispatches 'PublishSermon' event to SermonActor">
+    <AdminShell
+      title="Sermons Directory"
+      subtitle="Publish sermons via actor command routing fabric"
+    >
+      <AdminCard
+        title="Publish New Sermon"
+        subtitle="Dispatches 'PublishSermon' event to SermonActor"
+      >
         <View style={styles.formGroup}>
           <Text style={styles.label}>Sermon Title</Text>
           <TextInput
             style={[styles.input, isFocusedTitle && styles.inputFocused]}
             placeholder="e.g. The Power of Grace"
-            placeholderTextColor="#64748B"
+            placeholderTextColor="#475569"
             value={title}
             onChangeText={setTitle}
             onFocus={() => setIsFocusedTitle(true)}
@@ -76,11 +83,13 @@ export default function AdminSermons() {
         </View>
 
         <View style={styles.formGroup}>
-          <Text style={styles.label}>Sermon Video URL <Text style={styles.optional}>(Optional)</Text></Text>
+          <Text style={styles.label}>
+            Sermon Video URL <Text style={styles.optional}>(Optional)</Text>
+          </Text>
           <TextInput
             style={[styles.input, isFocusedUrl && styles.inputFocused]}
             placeholder="e.g. https://example.com/sermon.mp4"
-            placeholderTextColor="#64748B"
+            placeholderTextColor="#475569"
             value={videoUrl}
             onChangeText={setVideoUrl}
             onFocus={() => setIsFocusedUrl(true)}
@@ -93,8 +102,8 @@ export default function AdminSermons() {
           />
         </View>
 
-        <CommandButton 
-          title="Publish Sermon" 
+        <CommandButton
+          title="Publish Sermon"
           onPress={handlePublish}
           testID="publish-sermon-submit"
           style={styles.submitBtn}
@@ -113,13 +122,15 @@ export default function AdminSermons() {
               <Text style={styles.receiptLabel}>Command ID</Text>
               <Text style={styles.valueMono}>{dispatchReceipt.commandId}</Text>
             </View>
-            
+
             {dispatchReceipt.error && (
               <View style={styles.errorContainer}>
                 <View style={styles.errorHeader}>
                   <Text style={styles.errorLabel}>Rejection Details</Text>
                   <Text style={styles.errorText} testID="latest-error-code">
-                    {dispatchReceipt.error.includes('AuthorizationError') ? 'AUTHZ_DENIED' : 'INPUT_INVALID'}
+                    {dispatchReceipt.error.includes('AuthorizationError')
+                      ? 'AUTHZ_DENIED'
+                      : 'INPUT_INVALID'}
                   </Text>
                 </View>
                 <Text style={styles.errorSubText}>{dispatchReceipt.error}</Text>

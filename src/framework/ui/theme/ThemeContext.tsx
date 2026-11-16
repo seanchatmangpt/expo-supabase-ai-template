@@ -51,9 +51,12 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     storage.remove(THEME_STORAGE_KEY);
   }, [deviceColorScheme]);
 
-  // Sync with device color scheme changes if no override is present?
-  // Actually, let's keep it simple: if user hasn't overridden, follow device.
-  // But if we have stored theme, we use it.
+  useEffect(() => {
+    const stored = storage.getString(THEME_STORAGE_KEY);
+    if (!stored) {
+      setTheme(deviceColorScheme === 'dark' ? defaultDarkTheme : defaultLightTheme);
+    }
+  }, [deviceColorScheme]);
 
   const themeVars = vars({
     '--color-primary': theme.colors.primary,

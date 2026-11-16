@@ -65,7 +65,8 @@ describe('FusionAccessibilityLayer', () => {
     render(
       <FusionAccessibilityLayer
         translations={translations}
-        initialIntents={[{ id: 'test', commands: ['test'], action: jest.fn() }]}>
+        initialIntents={[{ id: 'test', commands: ['test'], action: jest.fn() }]}
+      >
         <Text>hello</Text>
       </FusionAccessibilityLayer>
     );

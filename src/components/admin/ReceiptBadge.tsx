@@ -46,9 +46,7 @@ export function ReceiptBadge({ status, testID }: ReceiptBadgeProps) {
       accessible={true}
       accessibilityLabel={`Receipt status: ${safeStatus.replace('_', ' ')}`}
     >
-      <Text style={[styles.text, { color: textColor }]}>
-        {safeStatus.replace('_', ' ')}
-      </Text>
+      <Text style={[styles.text, { color: textColor }]}>{safeStatus.replace('_', ' ')}</Text>
     </View>
   );
 }

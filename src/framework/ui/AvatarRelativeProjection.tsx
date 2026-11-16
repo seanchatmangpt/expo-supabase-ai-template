@@ -55,7 +55,7 @@ function useShallowStable<T>(obj: T): T {
 function useMemoizedChildren(children: React.ReactNode): React.ReactNode[] {
   return React.useMemo(() => {
     const list: React.ReactNode[] = [];
-    
+
     const flatten = (nodes: React.ReactNode) => {
       React.Children.forEach(nodes, (child) => {
         if (!child || !React.isValidElement(child)) return;
@@ -177,7 +177,8 @@ const AvatarProjectionCard = React.memo(
               style={[
                 matrixStyles.roleBadge,
                 { backgroundColor: roleColor + '20', borderColor: roleColor },
-              ]}>
+              ]}
+            >
               <Text style={[matrixStyles.roleBadgeText, { color: roleColor }]}>{role}</Text>
             </View>
             <Text style={matrixStyles.surfaceText} accessibilityRole="header">
@@ -194,7 +195,8 @@ const AvatarProjectionCard = React.memo(
               style={[
                 matrixStyles.visibilityText,
                 { color: projection.visible ? '#10B981' : '#64748B' },
-              ]}>
+              ]}
+            >
               {projection.visible ? 'Visible' : 'Hidden'}
             </Text>
           </View>
@@ -487,7 +489,8 @@ export function AvatarRelativeProjectionMatrixView({
                 onPress={decreaseOpenSlots}
                 accessible={true}
                 accessibilityRole="button"
-                accessibilityLabel="Decrease open slots">
+                accessibilityLabel="Decrease open slots"
+              >
                 <Text style={matrixStyles.btnText}>-</Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -495,7 +498,8 @@ export function AvatarRelativeProjectionMatrixView({
                 onPress={increaseOpenSlots}
                 accessible={true}
                 accessibilityRole="button"
-                accessibilityLabel="Increase open slots">
+                accessibilityLabel="Increase open slots"
+              >
                 <Text style={matrixStyles.btnText}>+</Text>
               </TouchableOpacity>
             </View>
@@ -539,12 +543,14 @@ export function AvatarRelativeProjectionMatrixView({
                     accessible={true}
                     accessibilityRole="button"
                     accessibilityLabel={`Set open slots to ${val}`}
-                    accessibilityState={{ selected: openSlots === val }}>
+                    accessibilityState={{ selected: openSlots === val }}
+                  >
                     <Text
                       style={[
                         matrixStyles.sliderStepText,
                         openSlots === val && matrixStyles.sliderStepTextActive,
-                      ]}>
+                      ]}
+                    >
                       {val}
                     </Text>
                   </TouchableOpacity>
@@ -564,7 +570,8 @@ export function AvatarRelativeProjectionMatrixView({
               onPress={addCandidate}
               accessible={true}
               accessibilityRole="button"
-              accessibilityLabel="Add Candidate">
+              accessibilityLabel="Add Candidate"
+            >
               <Text style={matrixStyles.addBtnText}>+ Add Candidate</Text>
             </TouchableOpacity>
           </View>
@@ -578,7 +585,8 @@ export function AvatarRelativeProjectionMatrixView({
                   onPress={() => removeCandidate(idx)}
                   accessible={true}
                   accessibilityRole="button"
-                  accessibilityLabel={`Remove candidate ${cand}`}>
+                  accessibilityLabel={`Remove candidate ${cand}`}
+                >
                   <FontAwesome
                     name="times-circle"
                     size={12}
@@ -603,7 +611,7 @@ export function AvatarRelativeProjectionMatrixView({
             value={stateHash}
             onChangeText={setStateHash}
             placeholder="State hash (e.g. vkg_genesis_a4f9)"
-            placeholderTextColor="#64748B"
+            placeholderTextColor="#475569"
             accessibilityLabel="VKG State Hash input"
             accessibilityHint="Edit the VKG state hash"
           />

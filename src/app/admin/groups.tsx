@@ -6,8 +6,18 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export default function AdminGroups() {
   const groups = [
-    { id: '1', name: 'Downtown Community Group', leader: 'Pastor David Choi', members: '14 members' },
-    { id: '2', name: 'Westside Families Fellowship', leader: 'Sarah Jenkins', members: '18 members' },
+    {
+      id: '1',
+      name: 'Downtown Community Group',
+      leader: 'Pastor David Choi',
+      members: '14 members',
+    },
+    {
+      id: '2',
+      name: 'Westside Families Fellowship',
+      leader: 'Sarah Jenkins',
+      members: '18 members',
+    },
     { id: '3', name: 'College & Young Adults', leader: 'Michael Chang', members: '22 members' },
   ];
 

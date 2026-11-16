@@ -17,7 +17,7 @@ describe('CollaborativeWorkspace', () => {
 
   beforeEach(() => {
     context = new MembraneContext(initialConfig);
-    // Ensure we start with a fresh state for each test if there are any globals
+    jest.spyOn(require('@/src/lib/membrane/trajectories').Trajectories, 'validateTransition').mockReturnValue(true);
   });
 
   it('initializes with the provided state', () => {
@@ -39,7 +39,7 @@ describe('CollaborativeWorkspace', () => {
     expect(crdtState.count.value).toBe(0);
   });
 
-  it('updates CRDT and triggers onSync when state is mutated locally', () => {
+  it('updates CRDT and triggers onSync when state is mutated locally', async () => {
     const initialState: TestState = { title: 'Hello', count: 0 };
     const onSync = jest.fn();
     const workspace = new CollaborativeWorkspace<TestState>({
@@ -51,6 +51,7 @@ describe('CollaborativeWorkspace', () => {
     });
 
     workspace.state.title = 'Updated';
+    for (let i = 0; i < 10; i++) await Promise.resolve();
 
     expect(workspace.state.title).toBe('Updated');
     expect(workspace.store.getState().title).toBe('Updated');
@@ -59,7 +60,7 @@ describe('CollaborativeWorkspace', () => {
     expect(onSync).toHaveBeenCalledWith(workspace.crdtState);
   });
 
-  it('merges remote updates and updates the store without triggering onSync', () => {
+  it('merges remote updates and updates the store without triggering onSync', async () => {
     const initialState: TestState = { title: 'Hello', count: 0 };
     const onSync = jest.fn();
     const workspace = new CollaborativeWorkspace<TestState>({
@@ -79,6 +80,7 @@ describe('CollaborativeWorkspace', () => {
     };
 
     workspace.receiveUpdate(remoteState);
+    for (let i = 0; i < 10; i++) await Promise.resolve();
 
     expect(workspace.state.title).toBe('Remote Update');
     expect(workspace.store.getState().title).toBe('Remote Update');

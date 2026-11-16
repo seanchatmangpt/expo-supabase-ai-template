@@ -1,5 +1,1 @@
-export {
-  generateReceipt,
-  verifyReceiptIntegrity,
-  verifyReceiptChain
-} from '../hook-otp/receipts';
+export { generateReceipt, verifyReceiptIntegrity, verifyReceiptChain } from '../hook-otp/receipts';

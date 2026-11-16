@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform } from '
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useColorScheme } from './useColorScheme';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AutoFixer } from '../framework/ui/auto-fix/AutoFixer';
 
 export interface ErrorBoundaryProps {
   error: Error;
@@ -18,6 +20,19 @@ export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
     router.replace('/(tabs)');
   };
 
+  const handleClearCache = async () => {
+    try {
+      await AsyncStorage.clear();
+      if (Platform.OS === 'web') {
+        window.location.reload();
+      } else {
+        retry();
+      }
+    } catch (e) {
+      retry();
+    }
+  };
+
   return (
     <View style={[styles.container, isDark ? styles.containerDark : styles.containerLight]}>
       <View style={styles.card}>
@@ -25,24 +40,33 @@ export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
           <Ionicons name="alert-circle" size={48} color="#EF4444" />
         </View>
         <Text style={[styles.title, isDark ? styles.textDark : styles.textLight]}>
-          Avatar Projection Exception
+          Unexpected Application Error
         </Text>
         <Text style={[styles.subtitle, isDark ? styles.subtextDark : styles.subtextLight]}>
-          An unexpected tension occurred within the membrane client. The system state has been preserved.
+          The application encountered an unexpected error. Your data has been preserved, but you
+          may need to restart the app.
         </Text>
 
         <View style={[styles.errorBox, isDark ? styles.errorBoxDark : styles.errorBoxLight]}>
           <ScrollView style={styles.errorScroll} nestedScrollEnabled>
             <Text style={[styles.errorText, isDark ? styles.errorTextDark : styles.errorTextLight]}>
-              {error?.name || 'Error'}: {error?.message || 'Unknown Exception'}
+              {error?.name || 'Error'}: {error?.message || 'Unknown Error'}
             </Text>
             {error?.stack && (
-              <Text style={[styles.stackText, isDark ? styles.stackTextDark : styles.stackTextLight]}>
+              <Text
+                style={[styles.stackText, isDark ? styles.stackTextDark : styles.stackTextLight]}
+              >
                 {error.stack}
               </Text>
             )}
           </ScrollView>
         </View>
+
+        {__DEV__ && (
+          <View style={styles.autoFixerSection}>
+            <AutoFixer error={error} onReset={retry} />
+          </View>
+        )}
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity
@@ -51,22 +75,64 @@ export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
             style={[styles.button, styles.retryButton]}
             activeOpacity={0.7}
             accessibilityRole="button"
-            accessibilityLabel="Retry Intake"
+            accessibilityLabel="Try Again"
           >
             <Ionicons name="refresh" size={16} color="#FFFFFF" style={styles.buttonIcon} />
-            <Text style={styles.retryButtonText}>Retry Intake</Text>
+            <Text style={styles.retryButtonText}>Try Again</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            testID="error-boundary-clear-cache-button"
+            onPress={handleClearCache}
+            style={[
+              styles.button,
+              styles.clearButton,
+              isDark ? styles.clearButtonDark : styles.clearButtonLight,
+            ]}
+            activeOpacity={0.7}
+            accessibilityRole="button"
+            accessibilityLabel="Clear Cache & Reload"
+          >
+            <Ionicons
+              name="trash-outline"
+              size={16}
+              color={isDark ? '#FCA5A5' : '#B91C1C'}
+              style={styles.buttonIcon}
+            />
+            <Text
+              style={[
+                styles.clearButtonText,
+                isDark ? styles.clearButtonTextDark : styles.clearButtonTextLight,
+              ]}
+            >
+              Clear Cache & Reload
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             testID="error-boundary-home-button"
             onPress={handleGoHome}
-            style={[styles.button, styles.homeButton, isDark ? styles.homeButtonDark : styles.homeButtonLight]}
+            style={[
+              styles.button,
+              styles.homeButton,
+              isDark ? styles.homeButtonDark : styles.homeButtonLight,
+            ]}
             activeOpacity={0.7}
             accessibilityRole="button"
             accessibilityLabel="Go to Home"
           >
-            <Ionicons name="home" size={16} color={isDark ? '#E2E8F0' : '#475569'} style={styles.buttonIcon} />
-            <Text style={[styles.homeButtonText, isDark ? styles.homeButtonTextDark : styles.homeButtonTextLight]}>
+            <Ionicons
+              name="home"
+              size={16}
+              color={isDark ? '#E2E8F0' : '#475569'}
+              style={styles.buttonIcon}
+            />
+            <Text
+              style={[
+                styles.homeButtonText,
+                isDark ? styles.homeButtonTextDark : styles.homeButtonTextLight,
+              ]}
+            >
               Go to Home
             </Text>
           </TouchableOpacity>
@@ -169,17 +235,17 @@ const styles = StyleSheet.create({
     color: '#94A3B8',
   },
   buttonContainer: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     gap: 12,
     width: '100%',
   },
   button: {
-    flex: 1,
     flexDirection: 'row',
     height: 48,
     borderRadius: 14,
     justifyContent: 'center',
     alignItems: 'center',
+    width: '100%',
   },
   retryButton: {
     backgroundColor: '#3B82F6',
@@ -188,6 +254,27 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: '700',
     fontSize: 14,
+  },
+  clearButton: {
+    borderWidth: 1,
+  },
+  clearButtonLight: {
+    backgroundColor: '#FEF2F2',
+    borderColor: '#FCA5A5',
+  },
+  clearButtonDark: {
+    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+    borderColor: '#7F1D1D',
+  },
+  clearButtonText: {
+    fontWeight: '700',
+    fontSize: 14,
+  },
+  clearButtonTextLight: {
+    color: '#B91C1C',
+  },
+  clearButtonTextDark: {
+    color: '#FCA5A5',
   },
   homeButton: {
     borderWidth: 1,
@@ -212,5 +299,9 @@ const styles = StyleSheet.create({
   },
   buttonIcon: {
     marginRight: 6,
+  },
+  autoFixerSection: {
+    width: '100%',
+    marginBottom: 16,
   },
 });

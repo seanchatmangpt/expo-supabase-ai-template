@@ -84,13 +84,9 @@ export class ProxyableBridge {
           const commandId = `cmd_set_${String(prop)}_${Date.now()}`;
           const originalVal = Reflect.get(obj, prop, receiver);
 
-          // Optimistically set the value
-          const setSuccess = Reflect.set(obj, prop, value, receiver);
-          if (!setSuccess) {
-            return false;
-          }
-
-          if (options.onMutation) {
+          // Apply optimistically
+          const success = Reflect.set(obj, prop, value, receiver);
+          if (success && options.onMutation) {
             options.onMutation(prop, value);
           }
 
@@ -101,7 +97,7 @@ export class ProxyableBridge {
             originalValue: originalVal,
             value,
             flowName: options.flowName,
-            success: undefined
+            success: undefined,
           });
 
           const input = {
@@ -109,44 +105,51 @@ export class ProxyableBridge {
             value,
             flowName: options.flowName,
             fromState: originalVal,
-            toState: value
+            toState: value,
           };
 
-          // Run async membrane checking in background
-          context.run('property-mutator', commandId, input, async () => {
-            return true;
-          }).then((res) => {
-            if (!res.success) {
-              // Rollback optimistic write if membrane denies/fails
-              // Note: Use direct set on target to bypass proxy set trap during rollback
-              Reflect.set(obj, prop, originalVal);
-              if (options.onMutation) {
-                options.onMutation(prop, originalVal);
-              }
-              emit({
-                timestamp: new Date().toISOString(),
-                type: 'rollback',
-                property: String(prop),
-                originalValue: value,
-                value: originalVal,
-                flowName: options.flowName,
-                success: false,
-                error: res.error || 'Transition denied'
-              });
-            } else {
-              emit({
-                timestamp: new Date().toISOString(),
-                type: 'set',
-                property: String(prop),
-                originalValue: originalVal,
-                value,
-                flowName: options.flowName,
-                success: true
-              });
-            }
-          });
+          // Run async membrane checking
+          context
+            .run('property-mutator', commandId, input, async () => {
+              return true; // Already applied optimistically
+            })
+            .then((res) => {
+              if (!res.success) {
+                // Rollback on failure
+                activeTrap = 'set';
+                try {
+                  Reflect.set(obj, prop, originalVal, receiver);
+                  if (options.onMutation) {
+                    options.onMutation(prop, originalVal);
+                  }
+                } finally {
+                  activeTrap = null;
+                }
 
-          return true;
+                emit({
+                  timestamp: new Date().toISOString(),
+                  type: 'rollback',
+                  property: String(prop),
+                  originalValue: value,
+                  value: originalVal,
+                  flowName: options.flowName,
+                  success: false,
+                  error: res.error || 'Transition denied',
+                });
+              } else {
+                emit({
+                  timestamp: new Date().toISOString(),
+                  type: 'set',
+                  property: String(prop),
+                  originalValue: originalVal,
+                  value,
+                  flowName: options.flowName,
+                  success: true,
+                });
+              }
+            });
+
+          return success;
         } finally {
           activeTrap = null;
         }
@@ -173,7 +176,7 @@ export class ProxyableBridge {
               property: String(prop),
               originalValue: value,
               value,
-              flowName: options.flowName
+              flowName: options.flowName,
             });
           }
 
@@ -201,13 +204,9 @@ export class ProxyableBridge {
             return true;
           }
 
-          // Optimistically delete
-          const deleteSuccess = Reflect.deleteProperty(obj, prop);
-          if (!deleteSuccess) {
-            return false;
-          }
-
-          if (options.onMutation) {
+          // Apply optimistically
+          const success = Reflect.deleteProperty(obj, prop);
+          if (success && options.onMutation) {
             options.onMutation(prop, undefined);
           }
 
@@ -218,7 +217,7 @@ export class ProxyableBridge {
             originalValue: originalVal,
             value: undefined,
             flowName: options.flowName,
-            success: undefined
+            success: undefined,
           });
 
           const input = {
@@ -226,42 +225,50 @@ export class ProxyableBridge {
             action: 'delete',
             flowName: options.flowName,
             fromState: originalVal,
-            toState: undefined
+            toState: undefined,
           };
 
-          context.run('property-deleter', commandId, input, async () => {
-            return true;
-          }).then((res) => {
-            if (!res.success) {
-              // Rollback delete without receiver
-              Reflect.set(obj, prop, originalVal);
-              if (options.onMutation) {
-                options.onMutation(prop, originalVal);
-              }
-              emit({
-                timestamp: new Date().toISOString(),
-                type: 'rollback',
-                property: String(prop),
-                originalValue: undefined,
-                value: originalVal,
-                flowName: options.flowName,
-                success: false,
-                error: res.error || 'Delete denied'
-              });
-            } else {
-              emit({
-                timestamp: new Date().toISOString(),
-                type: 'delete',
-                property: String(prop),
-                originalValue: originalVal,
-                value: undefined,
-                flowName: options.flowName,
-                success: true
-              });
-            }
-          });
+          context
+            .run('property-deleter', commandId, input, async () => {
+              return true; // Already applied optimistically
+            })
+            .then((res) => {
+              if (!res.success) {
+                // Rollback on failure
+                activeTrap = 'delete';
+                try {
+                  Reflect.set(obj, prop, originalVal);
+                  if (options.onMutation) {
+                    options.onMutation(prop, originalVal);
+                  }
+                } finally {
+                  activeTrap = null;
+                }
 
-          return true;
+                emit({
+                  timestamp: new Date().toISOString(),
+                  type: 'rollback',
+                  property: String(prop),
+                  originalValue: undefined,
+                  value: originalVal,
+                  flowName: options.flowName,
+                  success: false,
+                  error: res.error || 'Delete denied',
+                });
+              } else {
+                emit({
+                  timestamp: new Date().toISOString(),
+                  type: 'delete',
+                  property: String(prop),
+                  originalValue: originalVal,
+                  value: undefined,
+                  flowName: options.flowName,
+                  success: true,
+                });
+              }
+            });
+
+          return success;
         } finally {
           activeTrap = null;
         }
@@ -278,13 +285,9 @@ export class ProxyableBridge {
           const exists = Reflect.has(obj, prop);
           const value = descriptor.value;
 
-          // Optimistically define property
-          const defineSuccess = Reflect.defineProperty(obj, prop, descriptor);
-          if (!defineSuccess) {
-            return false;
-          }
-
-          if (options.onMutation) {
+          // Apply optimistically
+          const success = Reflect.defineProperty(obj, prop, descriptor);
+          if (success && options.onMutation) {
             options.onMutation(prop, value);
           }
 
@@ -295,7 +298,7 @@ export class ProxyableBridge {
             originalValue: originalVal,
             value,
             flowName: options.flowName,
-            success: undefined
+            success: undefined,
           });
 
           const input = {
@@ -303,53 +306,61 @@ export class ProxyableBridge {
             value,
             flowName: options.flowName,
             fromState: exists ? originalVal : undefined,
-            toState: value
+            toState: value,
           };
 
-          context.run('property-mutator', commandId, input, async () => {
-            return true;
-          }).then((res) => {
-            if (!res.success) {
-              // Rollback without receiver/proxy traps
-              if (exists) {
-                Reflect.set(obj, prop, originalVal);
-                if (options.onMutation) {
-                  options.onMutation(prop, originalVal);
+          context
+            .run('property-mutator', commandId, input, async () => {
+              return true; // Already applied optimistically
+            })
+            .then((res) => {
+              if (!res.success) {
+                // Rollback on failure
+                activeTrap = 'define';
+                try {
+                  if (exists) {
+                    Reflect.defineProperty(obj, prop, { value: originalVal, configurable: true, writable: true, enumerable: true });
+                    if (options.onMutation) {
+                      options.onMutation(prop, originalVal);
+                    }
+                  } else {
+                    Reflect.deleteProperty(obj, prop);
+                    if (options.onMutation) {
+                      options.onMutation(prop, undefined);
+                    }
+                  }
+                } finally {
+                  activeTrap = null;
                 }
-              } else {
-                Reflect.deleteProperty(obj, prop);
-                if (options.onMutation) {
-                  options.onMutation(prop, undefined);
-                }
-              }
-              emit({
-                timestamp: new Date().toISOString(),
-                type: 'rollback',
-                property: String(prop),
-                originalValue: value,
-                value: exists ? originalVal : undefined,
-                flowName: options.flowName,
-                success: false,
-                error: res.error || 'Define denied'
-              });
-            } else {
-              emit({
-                timestamp: new Date().toISOString(),
-                type: 'set',
-                property: String(prop),
-                originalValue: originalVal,
-                value,
-                flowName: options.flowName,
-                success: true
-              });
-            }
-          });
 
-          return true;
+                emit({
+                  timestamp: new Date().toISOString(),
+                  type: 'rollback',
+                  property: String(prop),
+                  originalValue: value,
+                  value: exists ? originalVal : undefined,
+                  flowName: options.flowName,
+                  success: false,
+                  error: res.error || 'Define denied',
+                });
+              } else {
+                emit({
+                  timestamp: new Date().toISOString(),
+                  type: 'set',
+                  property: String(prop),
+                  originalValue: originalVal,
+                  value,
+                  flowName: options.flowName,
+                  success: true,
+                });
+              }
+            });
+
+          return success;
         } finally {
           activeTrap = null;
         }
-      }
+      },
     };
 
     return new Proxy(target, handler);

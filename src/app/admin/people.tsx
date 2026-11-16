@@ -7,8 +7,18 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 export default function AdminPeople() {
   const staff = [
     { id: '1', name: 'Pastor David Choi', role: 'Lead Pastor', email: 'david@zoecommunity.church' },
-    { id: '2', name: 'Sarah Jenkins', role: 'Family Ministries Director', email: 'sarah@zoecommunity.church' },
-    { id: '3', name: 'Michael Chang', role: 'Worship Director', email: 'michael@zoecommunity.church' },
+    {
+      id: '2',
+      name: 'Sarah Jenkins',
+      role: 'Family Ministries Director',
+      email: 'sarah@zoecommunity.church',
+    },
+    {
+      id: '3',
+      name: 'Michael Chang',
+      role: 'Worship Director',
+      email: 'michael@zoecommunity.church',
+    },
   ];
 
   return (

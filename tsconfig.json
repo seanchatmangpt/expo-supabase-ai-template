@@ -4,6 +4,27 @@
     "strict": true,
     "types": ["node", "jest"],
     "paths": {
+      "effect": [
+        "./src/framework/supervision/effect-compat.ts"
+      ],
+      "expo-haptics": [
+        "./src/framework/ui/haptics/expo-haptics-compat.ts"
+      ],
+      "@powersync/react-native": [
+        "./src/framework/sync/powersync/powersync-compat.ts"
+      ],
+      "expo-background-fetch": [
+        "./src/framework/sync/powersync/background-fetch-compat.ts"
+      ],
+      "expo-task-manager": [
+        "./src/framework/sync/powersync/task-manager-compat.ts"
+      ],
+      "expo-battery": [
+        "./src/framework/sync/powersync/battery-compat.ts"
+      ],
+      "expo-network": [
+        "./src/framework/sync/powersync/network-compat.ts"
+      ],
       "@/*": [
         "./*"
       ],

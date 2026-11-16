@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { useTheme } from '../../framework/ui/theme/useTheme';
 
 interface AdminMetricProps {
   label: string;
@@ -12,23 +13,43 @@ interface AdminMetricProps {
   testID?: string;
 }
 
-export function AdminMetric({ label, value, icon, iconColor = '#3B82F6', trend, trendDirection = 'neutral', testID }: AdminMetricProps) {
-  const trendColor = trendDirection === 'up' ? '#10B981' : trendDirection === 'down' ? '#FCA5A5' : '#94A3B8';
+export function AdminMetric({
+  label,
+  value,
+  icon,
+  iconColor = '#3B82F6',
+  trend,
+  trendDirection = 'neutral',
+  testID,
+}: AdminMetricProps) {
+  const theme = useTheme();
+  const trendColor =
+    trendDirection === 'up' ? '#10B981' : trendDirection === 'down' ? '#FCA5A5' : '#94A3B8';
 
   return (
     <View
-      style={styles.container}
+      style={[
+        styles.container,
+        {
+          backgroundColor: theme.colors.card,
+          borderColor: theme.colors.border,
+        },
+      ]}
       testID={testID}
       accessible={true}
       accessibilityLabel={`Metric: ${label}, Value: ${value}${trend ? `, trend: ${trend}` : ''}`}
     >
       <View style={styles.header}>
-        <Text style={styles.label} numberOfLines={1}>{label}</Text>
+        <Text style={[styles.label, { color: theme.colors.secondary }]} numberOfLines={1}>
+          {label}
+        </Text>
         <View style={[styles.iconWrapper, { backgroundColor: iconColor + '20' }]}>
           <FontAwesome name={icon} size={16} color={iconColor} testID={`${testID}-icon`} />
         </View>
       </View>
-      <Text style={styles.value} numberOfLines={1}>{value}</Text>
+      <Text style={[styles.value, { color: theme.colors.text }]} numberOfLines={1}>
+        {value}
+      </Text>
       {trend ? (
         <Text style={[styles.trend, { color: trendColor }]} testID={`${testID}-trend`}>
           {trendDirection === 'up' && '▲ '}

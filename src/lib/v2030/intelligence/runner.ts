@@ -32,7 +32,9 @@ export class IntelligenceRunner {
     for (const key of Object.keys(capability.inputContract.properties)) {
       const spec = capability.inputContract.properties[key];
       if (spec.required && (input[key] === undefined || input[key] === null)) {
-        throw new Error(`InputContract Error: Missing required property '${key}' for capability '${capabilityId}'`);
+        throw new Error(
+          `InputContract Error: Missing required property '${key}' for capability '${capabilityId}'`
+        );
       }
     }
 
@@ -48,7 +50,10 @@ export class IntelligenceRunner {
       hashVal = (hashVal << 5) - hashVal + rawResultStr.charCodeAt(i);
       hashVal |= 0;
     }
-    const computedHash = generateReceiptHash('', { receiptId, resultHash: Math.abs(hashVal).toString(16) });
+    const computedHash = generateReceiptHash('', {
+      receiptId,
+      resultHash: Math.abs(hashVal).toString(16),
+    });
 
     const receipt: IntelligenceReceipt = {
       id: receiptId,
@@ -57,7 +62,7 @@ export class IntelligenceRunner {
       success: runResult.success,
       deltaHash: computedHash,
       logs: runResult.logs,
-      error: runResult.error
+      error: runResult.error,
     };
 
     const replayArtifact: ReplayArtifact = {
@@ -66,7 +71,7 @@ export class IntelligenceRunner {
       timestamp,
       input,
       output: runResult.result,
-      logs: runResult.logs
+      logs: runResult.logs,
     };
 
     // Store replay artifact conditionally depending on environment
@@ -96,7 +101,7 @@ export class IntelligenceRunner {
         deltaHash: computedHash,
         eventIds: JSON.stringify([]),
         error: runResult.error || null,
-        createdAt: new Date()
+        createdAt: new Date(),
       });
     } catch (e) {
       console.error('Failed to log intelligence receipt in SQLite database:', e);
@@ -138,7 +143,7 @@ export class IntelligenceRunner {
           for (const file of files) {
             if (file.endsWith('.json')) {
               const data = JSON.parse(fs.readFileSync(path.join(replaysDir, file), 'utf8'));
-              if (!list.some(x => x.receiptId === data.receiptId)) {
+              if (!list.some((x) => x.receiptId === data.receiptId)) {
                 list.push(data);
               }
             }

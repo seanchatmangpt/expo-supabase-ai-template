@@ -5,6 +5,7 @@ import { Tabs } from '@/src/components/AvatarRelativeProjection';
 import Colors from '@/src/constants/Colors';
 import { useColorScheme } from '@/src/components/useColorScheme';
 import { useClientOnlyValue } from '@/src/components/useClientOnlyValue';
+import { ProtectedRoute } from '@/src/route-law/ProtectedRoute';
 
 // Custom TabBarIcon component with perfect alignment
 function TabBarIcon(props: {
@@ -19,7 +20,8 @@ export default function TabLayout() {
   const themeColors = Colors[colorScheme === 'dark' ? 'dark' : 'light'];
 
   return (
-    <Tabs
+    <ProtectedRoute route={{ requiredIdentityBoundary: 'authenticated' }}>
+      <Tabs
       avatarRelativeProjectionOptions={{
         tabBarActiveTintColor: themeColors.tint,
         tabBarInactiveTintColor: themeColors.tabIconDefault,
@@ -67,7 +69,8 @@ export default function TabLayout() {
         headerTintColor: themeColors.tint,
         // Disable the static render of the header on web
         headerShown: useClientOnlyValue(false, true),
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
@@ -120,6 +123,7 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
+    </ProtectedRoute>
   );
 }
 

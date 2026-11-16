@@ -1,7 +1,23 @@
 const crypto = {
-  createHash: (algo: string) => ({ update: (d: string) => ({ digest: (e: string) => (d.length.toString(16) + '00000000000000000000000000000000').substring(0, 64) }) }),
-  createHmac: (algo: string, secret: string) => ({ update: (d: string) => ({ digest: (e: string) => ((d.length + secret.length).toString(16) + '1111111111111111111111111111111111111111111111111111111111111111').substring(0, 64) }) }),
-  timingSafeEqual: (a: string, b: string) => { if (a.length !== b.length) throw new Error('length mismatch'); return a === b; },
+  createHash: (algo: string) => ({
+    update: (d: string) => ({
+      digest: (e: string) =>
+        (d.length.toString(16) + '00000000000000000000000000000000').substring(0, 64),
+    }),
+  }),
+  createHmac: (algo: string, secret: string) => ({
+    update: (d: string) => ({
+      digest: (e: string) =>
+        (
+          (d.length + secret.length).toString(16) +
+          '1111111111111111111111111111111111111111111111111111111111111111'
+        ).substring(0, 64),
+    }),
+  }),
+  timingSafeEqual: (a: string, b: string) => {
+    if (a.length !== b.length) throw new Error('length mismatch');
+    return a === b;
+  },
 };
 
 export interface ZKPIdentity {

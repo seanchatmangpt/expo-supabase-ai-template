@@ -4,6 +4,9 @@
 
 export * from './types';
 export * from './PostQuantumZkEngine';
+export * from './bindings';
+export * from './PqCryptographicEngine';
+export * from './ClaimTypestate';
 
 import { PostQuantumZkEngine } from './PostQuantumZkEngine';
 

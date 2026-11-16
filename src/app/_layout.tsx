@@ -13,6 +13,7 @@ import { TransitionOverlay } from '@/src/components/TransitionOverlay';
 import Colors from '@/src/constants/Colors';
 import { PcpFrameworkProvider } from '@pcp/core/PcpFrameworkProvider';
 import { AutonomicSimulationManager } from '@/src/components/AutonomicSimulationManager';
+import { AdaptiveInteractionWrapper } from '@/src/framework/auto/ux/adaptive/AdaptiveInteractionWrapper';
 
 // Import your global CSS file
 import '../../global.css';
@@ -94,49 +95,34 @@ const CustomDarkTheme = {
   },
 };
 
-import { useRouter, useSegments } from 'expo-router';
-
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
-  const { session, loading, isTransitioning, transitionType } = useSession();
-  const segments = useSegments();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (loading) return;
-    const inAuthGroup = segments[0] === '(auth)';
-    
-    // Explicit redirects for rock-solid authentication flow
-    if (!session && !inAuthGroup) {
-      router.replace('/(auth)');
-    } else if (session && inAuthGroup) {
-      router.replace('/(tabs)');
-    }
-  }, [session, loading, segments]);
+  const { isTransitioning, transitionType } = useSession();
 
   return (
     <PcpFrameworkProvider>
-      <ThemeProvider value={colorScheme === 'dark' ? CustomDarkTheme : CustomLightTheme}>
-        <View style={{ flex: 1 }}>
-          <Stack
-            screenOptions={{
-              animation: 'fade',
-              animationDuration: 300,
-            }}
-          >
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="admin" options={{ headerShown: false }} />
-            <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          </Stack>
-          <TransitionOverlay 
-            isTransitioning={isTransitioning}
-            transitionType={transitionType}
-            colorScheme={colorScheme as any}
-          />
-        </View>
-      </ThemeProvider>
+      <AdaptiveInteractionWrapper>
+        <ThemeProvider value={colorScheme === 'dark' ? CustomDarkTheme : CustomLightTheme}>
+          <View style={{ flex: 1 }}>
+            <Stack
+              screenOptions={{
+                animation: 'fade',
+                animationDuration: 300,
+              }}
+            >
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen name="admin" options={{ headerShown: false }} />
+              <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+            </Stack>
+            <TransitionOverlay
+              isTransitioning={isTransitioning}
+              transitionType={transitionType}
+              colorScheme={colorScheme as any}
+            />
+          </View>
+        </ThemeProvider>
+      </AdaptiveInteractionWrapper>
     </PcpFrameworkProvider>
   );
 }
-

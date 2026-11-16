@@ -44,7 +44,7 @@ describe('AgentNativeInterface Resiliency & Threat Model Simulator', () => {
           claimId: 'claim_pollution',
           proofData: 'valid_proof',
           publicSignals: ['1'],
-          enclaveSignature: 'valid-signature',
+          enclaveSignature: '0x' + 'a'.repeat(40),
         },
       };
 
@@ -64,7 +64,7 @@ describe('AgentNativeInterface Resiliency & Threat Model Simulator', () => {
           claimId: 'claim_pollution_inspect',
           proofData: 'valid_proof',
           publicSignals: ['1'],
-          enclaveSignature: 'valid-signature',
+          enclaveSignature: '0x' + 'a'.repeat(40),
         },
       };
 
@@ -82,7 +82,7 @@ describe('AgentNativeInterface Resiliency & Threat Model Simulator', () => {
           claimId: 'claim_leak',
           proofData: 'valid_proof',
           publicSignals: ['1'],
-          enclaveSignature: 'valid-signature',
+          enclaveSignature: '0x' + 'a'.repeat(40),
         },
       };
 

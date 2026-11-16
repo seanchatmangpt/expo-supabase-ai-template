@@ -7,6 +7,8 @@ import { ZkClaim } from '../../auth/zkp/types';
 import { ZkEngine } from '../../auth/zkp/engine';
 import { PqZkProvider, PqZkProof, PqVerificationResult, PqSignature, PqReceipt } from './types';
 import { canonicalStringify } from '@/src/lib/crypto/receipts';
+import { PqCryptographicEngine, hexToBytes, base64ToBytes } from './PqCryptographicEngine';
+
 
 /**
  * PostQuantumZkEngine extends the standard ZkEngine to provide
@@ -53,23 +55,52 @@ export class PostQuantumZkEngine extends ZkEngine implements PqZkProvider {
 
   /**
    * Cryptographic verification for Post-Quantum Signature.
-   * Leverages a concrete, pure-JS post-quantum Lamport signature validation
-   * to eliminate stubs and ensure cryptographic soundness.
+   * Supports both Lamport and ML-DSA-65 signature validation.
    */
   private verifyPqSignature(signature: PqSignature, data: string): boolean {
     if (!signature.data || !signature.publicKey) return false;
 
-    // Detect if they are attempting to use the full Lamport keys/signatures
-    if (signature.data.length > 100 || signature.publicKey.length > 100) {
-      if (signature.data.length !== 16384 || signature.publicKey.length !== 32768) {
-        return false;
-      }
+    const isHex = (str: string) => /^[0-9a-fA-F]+$/.test(str);
+
+    // 1. Check for Lamport signature by string length (16384 bytes, hex encoded)
+    if (
+      signature.data.length === 16384 &&
+      isHex(signature.data) &&
+      signature.publicKey.length === 32768 &&
+      isHex(signature.publicKey)
+    ) {
       return this.verifyLamportSignature(signature.data, signature.publicKey, data);
     }
 
-    // Backward compatibility fallback for legacy/compatibility test mocks
-    if (signature.data === 'INVALID_SIG') return false;
-    return true;
+    // 2. Decode as hex or base64 for ML-DSA-65 signature
+    let sigBytes: Uint8Array;
+    let pkBytes: Uint8Array;
+    try {
+      if (isHex(signature.data)) {
+        sigBytes = hexToBytes(signature.data);
+      } else {
+        sigBytes = base64ToBytes(signature.data);
+      }
+
+      if (isHex(signature.publicKey)) {
+        pkBytes = hexToBytes(signature.publicKey);
+      } else {
+        pkBytes = base64ToBytes(signature.publicKey);
+      }
+    } catch {
+      return false;
+    }
+
+    if (sigBytes.length === 3309 && pkBytes.length === 1952) {
+      // Validate ML-DSA-65 signature against the SHA-256 hash of the proof data
+      const dataHashHex = sha256(data);
+      const messageBytes = hexToBytes(dataHashHex);
+
+      const engine = new PqCryptographicEngine();
+      return engine.verifySignatureSync(pkBytes, messageBytes, sigBytes, new Uint8Array(0));
+    }
+
+    return false;
   }
 
   /**
@@ -119,25 +150,17 @@ export class PostQuantumZkEngine extends ZkEngine implements PqZkProvider {
       return false;
     if (!zkProofData) return false;
 
-    // Ensure the receipt is bound to the ZK proof by verifying the SHA-256 hash binding
+    // Ensure the receipt is bound to the ZK proof by verifying the SHA-256 hash binding.
+    // Testing bypasses with hardcoded hashes are removed.
     const hash = sha256(zkProofData);
-    const isValidBinding =
-      hash === receipt.zkProofHash ||
-      receipt.zkProofHash === 'hash-123' ||
-      receipt.zkProofHash === 'c1f64477c049ca1d3d1dfdde3731fd29af149d105a09fe9529ac44e58f8f9f37';
+    const isValidBinding = hash === receipt.zkProofHash;
 
     // Verify the PQ signature on the receipt (excluding the signature itself to avoid circular references)
     const { pqSignature, ...unsignedReceipt } = receipt;
 
-    // Fallback logic for mock tests where signature data is structural
-    let isSigValid = false;
-    if (pqSignature.data === 'INVALID_SIG') {
-      isSigValid = false;
-    } else if (pqSignature.data === 'valid-signature' || pqSignature.data === 'valid') {
-      isSigValid = true;
-    } else {
-      isSigValid = this.verifyPqSignature(pqSignature, canonicalStringify(unsignedReceipt));
-    }
+    // Enforce strict PQ signature verification on the receipt.
+    // Testing bypasses for 'valid', 'valid-signature', and 'INVALID_SIG' are removed.
+    const isSigValid = this.verifyPqSignature(pqSignature, canonicalStringify(unsignedReceipt));
 
     return isValidBinding && isSigValid;
   }

@@ -314,3 +314,7 @@ export class AutonomicFramework {
     return this.conformance.evaluateTraceConformance(declared, actual);
   }
 }
+
+export * from './EffectSyncSupervisor';
+export * from './ZkpProverSupervisor';
+

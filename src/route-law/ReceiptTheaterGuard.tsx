@@ -18,13 +18,7 @@
  */
 
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -36,7 +30,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { mmkvInstance } from '../lib/store/mmkvStorage';
-import { blake3, canonicalStringify } from '../lib/crypto/receipts';
+import { blake3, canonicalStringify, verifyEcdsaSignature, sha256 } from '../lib/crypto/receipts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Typestates
@@ -117,10 +111,7 @@ export function emitRouteAdmissionSpan(
 
   // Persist span to MMKV for local OTel pipeline pickup
   try {
-    mmkvInstance.set(
-      `otel:route.admission.verified:${routeKey}`,
-      canonicalStringify(span)
-    );
+    mmkvInstance.set(`otel:route.admission.verified:${routeKey}`, canonicalStringify(span));
   } catch {
     // MMKV unavailable — best-effort persistence only
   }
@@ -156,12 +147,37 @@ export async function lookupReceiptForRoute(
   routeKey: string,
   expectedBlake3Hash?: string
 ): Promise<ReceiptLookupResult> {
+  const isSecurePath = routeKey.startsWith('cmd_');
+
   // ── Tier 1: MMKV receipt JSON ──────────────────────────────────────────────
   try {
     const mmkvReceiptJson = mmkvInstance.getString(`receipt_${routeKey}`);
     if (mmkvReceiptJson) {
       const receipt = JSON.parse(mmkvReceiptJson);
       const actualHash: string = receipt.deltaHash ?? receipt.blake3Hash ?? '';
+
+      if (isSecurePath) {
+        const { signature, publicKey, ...unsignedReceipt } = receipt;
+        if (!signature || !publicKey) {
+          return {
+            found: false,
+            blake3Hash: actualHash,
+            mismatched: false,
+            error: 'Receipt signature or public key is missing for secure path',
+          };
+        }
+        const messageHash = sha256(canonicalStringify(unsignedReceipt));
+        const sigResult = verifyEcdsaSignature(messageHash, signature, publicKey);
+        if (!sigResult.valid) {
+          return {
+            found: false,
+            blake3Hash: actualHash,
+            mismatched: false,
+            error: `Receipt signature is invalid for secure path: ${sigResult.error}`,
+          };
+        }
+      }
+
       if (expectedBlake3Hash) {
         if (actualHash === expectedBlake3Hash) {
           return { found: true, blake3Hash: actualHash, mismatched: false };
@@ -183,6 +199,14 @@ export async function lookupReceiptForRoute(
   try {
     const mmkvHash = mmkvInstance.getString(`receipt_hash_${routeKey}`);
     if (mmkvHash) {
+      if (isSecurePath) {
+        return {
+          found: false,
+          blake3Hash: mmkvHash,
+          mismatched: false,
+          error: 'Receipt signature is missing for secure path (raw hash in MMKV)',
+        };
+      }
       if (expectedBlake3Hash) {
         if (mmkvHash === expectedBlake3Hash) {
           return { found: true, blake3Hash: mmkvHash, mismatched: false };
@@ -206,7 +230,7 @@ export async function lookupReceiptForRoute(
     const { actorReceipts } = require('../lib/db/schema');
     const { eq } = require('drizzle-orm');
 
-    const records: Array<{ deltaHash?: string | null }> = await db
+    const records: Array<{ deltaHash?: string | null; actorRef: string }> = await db
       .select()
       .from(actorReceipts)
       .where(eq(actorReceipts.commandId, routeKey));
@@ -214,6 +238,30 @@ export async function lookupReceiptForRoute(
     if (records.length > 0) {
       const record = records[0];
       const actualHash = record.deltaHash ?? '';
+
+      if (isSecurePath) {
+        let isSigValid = false;
+        try {
+          const receipt = JSON.parse(record.actorRef);
+          const { signature, publicKey, ...unsignedReceipt } = receipt;
+          if (signature && publicKey) {
+            const messageHash = sha256(canonicalStringify(unsignedReceipt));
+            const sigResult = verifyEcdsaSignature(messageHash, signature, publicKey);
+            isSigValid = !!sigResult.valid;
+          }
+        } catch (e) {
+          isSigValid = false;
+        }
+
+        if (!isSigValid) {
+          return {
+            found: false,
+            blake3Hash: actualHash,
+            mismatched: false,
+            error: 'Receipt signature is invalid or unsigned in SQLite storage.',
+          };
+        }
+      }
 
       if (expectedBlake3Hash) {
         if (actualHash === expectedBlake3Hash) {
@@ -262,10 +310,7 @@ const VerifyingPulseOrb: React.FC = () => {
       false
     );
     pulseOpacity.value = withRepeat(
-      withSequence(
-        withTiming(0.8, { duration: 700 }),
-        withTiming(0.3, { duration: 700 })
-      ),
+      withSequence(withTiming(0.8, { duration: 700 }), withTiming(0.3, { duration: 700 })),
       -1,
       false
     );
@@ -355,181 +400,175 @@ export interface CryptographicVerificationOverlayProps {
  * verifying the BLAKE3 receipt. This is the cryptographic gating UI that
  * enforces Receipt Theater — the route content is NEVER rendered beneath this.
  */
-export const CryptographicVerificationOverlay: React.FC<CryptographicVerificationOverlayProps> =
-  ({
-    routeKey,
-    isVerifying,
-    missingReason,
-    errorDetail,
-    expectedBlake3Hash,
-    onRetry,
-    onEscalate,
-    escalateLabel = 'Return to Safety',
-  }) => {
-    const cardAppear = useSharedValue(0);
-    const cardScale = useSharedValue(0.92);
+export const CryptographicVerificationOverlay: React.FC<CryptographicVerificationOverlayProps> = ({
+  routeKey,
+  isVerifying,
+  missingReason,
+  errorDetail,
+  expectedBlake3Hash,
+  onRetry,
+  onEscalate,
+  escalateLabel = 'Return to Safety',
+}) => {
+  const cardAppear = useSharedValue(0);
+  const cardScale = useSharedValue(0.92);
 
-    React.useEffect(() => {
-      cardAppear.value = withTiming(1, { duration: 340, easing: Easing.out(Easing.cubic) });
-      cardScale.value = withSpring(1, { damping: 14, stiffness: 110 });
-    }, []);
+  React.useEffect(() => {
+    cardAppear.value = withTiming(1, { duration: 340, easing: Easing.out(Easing.cubic) });
+    cardScale.value = withSpring(1, { damping: 14, stiffness: 110 });
+  }, []);
 
-    const cardStyle = useAnimatedStyle(() => ({
-      opacity: cardAppear.value,
-      transform: [{ scale: cardScale.value }],
-    }));
+  const cardStyle = useAnimatedStyle(() => ({
+    opacity: cardAppear.value,
+    transform: [{ scale: cardScale.value }],
+  }));
 
-    const reasonLabel: Record<ReceiptMissingReason, string> = {
-      RECEIPT_NOT_FOUND: 'Receipt Not Found',
-      RECEIPT_HASH_MISMATCH: 'Hash Mismatch',
-      VERIFICATION_ERROR: 'Verification Error',
-      TIMEOUT: 'Verification Timed Out',
-    };
+  const reasonLabel: Record<ReceiptMissingReason, string> = {
+    RECEIPT_NOT_FOUND: 'Receipt Not Found',
+    RECEIPT_HASH_MISMATCH: 'Hash Mismatch',
+    VERIFICATION_ERROR: 'Verification Error',
+    TIMEOUT: 'Verification Timed Out',
+  };
 
-    const reasonColor: Record<ReceiptMissingReason, string> = {
-      RECEIPT_NOT_FOUND: '#F43F5E',
-      RECEIPT_HASH_MISMATCH: '#F59E0B',
-      VERIFICATION_ERROR: '#F43F5E',
-      TIMEOUT: '#F59E0B',
-    };
+  const reasonColor: Record<ReceiptMissingReason, string> = {
+    RECEIPT_NOT_FOUND: '#F43F5E',
+    RECEIPT_HASH_MISMATCH: '#F59E0B',
+    VERIFICATION_ERROR: '#F43F5E',
+    TIMEOUT: '#F59E0B',
+  };
 
-    return (
-      <View style={styles.overlayRoot}>
-        {/* Ambient background glows */}
-        <View style={styles.ambientGlowTop} />
-        <View style={styles.ambientGlowBottom} />
+  return (
+    <View style={styles.overlayRoot}>
+      {/* Ambient background glows */}
+      <View style={styles.ambientGlowTop} />
+      <View style={styles.ambientGlowBottom} />
 
-        <Animated.View style={[styles.card, cardStyle]}>
-          {/* Header area with orb */}
-          <View style={styles.headerArea}>
-            {isVerifying ? <VerifyingPulseOrb /> : <FailureOrb />}
+      <Animated.View style={[styles.card, cardStyle]}>
+        {/* Header area with orb */}
+        <View style={styles.headerArea}>
+          {isVerifying ? <VerifyingPulseOrb /> : <FailureOrb />}
 
-            <Text style={styles.titleText}>
-              {isVerifying ? 'Verifying Cryptographic Receipt' : 'Admission Blocked'}
-            </Text>
-            <Text style={styles.subtitleText}>
-              {isVerifying
-                ? 'BLAKE3 Receipt Theater Enforcement Active'
-                : `Receipt Theater Guard: ${missingReason ? reasonLabel[missingReason] : 'Unknown Failure'}`}
-            </Text>
+          <Text style={styles.titleText}>
+            {isVerifying ? 'Verifying Cryptographic Receipt' : 'Admission Blocked'}
+          </Text>
+          <Text style={styles.subtitleText}>
+            {isVerifying
+              ? 'BLAKE3 Receipt Theater Enforcement Active'
+              : `Receipt Theater Guard: ${missingReason ? reasonLabel[missingReason] : 'Unknown Failure'}`}
+          </Text>
+        </View>
+
+        {/* Metadata panel */}
+        <View style={styles.metadataPanel}>
+          {/* Proof level badge row */}
+          <View style={styles.metadataRow}>
+            <Text style={styles.metadataLabel}>Proof Level</Text>
+            {isVerifying ? (
+              <View style={styles.badgeVerifying}>
+                <View style={styles.badgeDotVerifying} />
+                <Text style={styles.badgeTextVerifying}>BLAKE3 • Tier-3 Fallback</Text>
+              </View>
+            ) : missingReason === 'RECEIPT_HASH_MISMATCH' ? (
+              <View style={styles.badgeMismatch}>
+                <View style={styles.badgeDotMismatch} />
+                <Text style={[styles.badgeTextMismatch, { color: reasonColor[missingReason] }]}>
+                  {reasonLabel[missingReason]}
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.badgeMissing}>
+                <View style={styles.badgeDotMissing} />
+                <Text style={styles.badgeTextMissing}>
+                  {missingReason ? reasonLabel[missingReason] : 'Missing Proof'}
+                </Text>
+              </View>
+            )}
           </View>
 
-          {/* Metadata panel */}
-          <View style={styles.metadataPanel}>
-            {/* Proof level badge row */}
-            <View style={styles.metadataRow}>
-              <Text style={styles.metadataLabel}>Proof Level</Text>
-              {isVerifying ? (
-                <View style={styles.badgeVerifying}>
-                  <View style={styles.badgeDotVerifying} />
-                  <Text style={styles.badgeTextVerifying}>BLAKE3 • Tier-3 Fallback</Text>
-                </View>
-              ) : missingReason === 'RECEIPT_HASH_MISMATCH' ? (
-                <View style={styles.badgeMismatch}>
-                  <View style={styles.badgeDotMismatch} />
-                  <Text
-                    style={[
-                      styles.badgeTextMismatch,
-                      { color: reasonColor[missingReason] },
-                    ]}
-                  >
-                    {reasonLabel[missingReason]}
-                  </Text>
-                </View>
-              ) : (
-                <View style={styles.badgeMissing}>
-                  <View style={styles.badgeDotMissing} />
-                  <Text style={styles.badgeTextMissing}>
-                    {missingReason ? reasonLabel[missingReason] : 'Missing Proof'}
-                  </Text>
-                </View>
-              )}
+          {/* Route key */}
+          <View style={styles.metadataField}>
+            <Text style={styles.metadataFieldLabel}>Route Key (commandId)</Text>
+            <View style={styles.monoBox}>
+              <Text style={styles.monoText} numberOfLines={1}>
+                {routeKey}
+              </Text>
+              <FontAwesome name="key" size={11} color="#64748B" />
             </View>
+          </View>
 
-            {/* Route key */}
-            <View style={styles.metadataField}>
-              <Text style={styles.metadataFieldLabel}>Route Key (commandId)</Text>
+          {/* Expected BLAKE3 hash */}
+          {expectedBlake3Hash ? (
+            <View style={[styles.metadataField, styles.metadataFieldBorderTop]}>
+              <Text style={styles.metadataFieldLabel}>Expected BLAKE3 Hash</Text>
               <View style={styles.monoBox}>
-                <Text style={styles.monoText} numberOfLines={1}>
-                  {routeKey}
-                </Text>
-                <FontAwesome name="key" size={11} color="#64748B" />
-              </View>
-            </View>
-
-            {/* Expected BLAKE3 hash */}
-            {expectedBlake3Hash ? (
-              <View style={[styles.metadataField, styles.metadataFieldBorderTop]}>
-                <Text style={styles.metadataFieldLabel}>Expected BLAKE3 Hash</Text>
-                <View style={styles.monoBox}>
-                  <Text style={styles.monoTextHash} numberOfLines={1}>
-                    {expectedBlake3Hash}
-                  </Text>
-                </View>
-              </View>
-            ) : null}
-
-            {/* Verification status badge */}
-            <View style={[styles.metadataRow, styles.metadataFieldBorderTop]}>
-              <Text style={styles.metadataLabel}>Signature Status</Text>
-              {isVerifying ? (
-                <View style={styles.statusChecking}>
-                  <Text style={styles.statusCheckingText}>Checking…</Text>
-                </View>
-              ) : !missingReason ? (
-                <View style={styles.statusOk}>
-                  <Text style={styles.statusOkText}>Verified ✅</Text>
-                </View>
-              ) : (
-                <View style={styles.statusFailed}>
-                  <Text style={styles.statusFailedText}>Unverified ❌</Text>
-                </View>
-              )}
-            </View>
-          </View>
-
-          {/* Error detail block */}
-          {!isVerifying && errorDetail ? (
-            <View style={styles.errorBlock}>
-              <View style={styles.errorBlockHeader}>
-                <FontAwesome name="shield" size={13} color="#F43F5E" />
-                <Text style={styles.errorBlockTitle}>
-                  {`Refusal (${missingReason ?? 'UNKNOWN'})`}
+                <Text style={styles.monoTextHash} numberOfLines={1}>
+                  {expectedBlake3Hash}
                 </Text>
               </View>
-              <Text style={styles.errorBlockBody}>{errorDetail}</Text>
             </View>
           ) : null}
 
-          {/* Action buttons */}
-          <View style={styles.actionArea}>
-            {!isVerifying ? (
-              <TouchableOpacity
-                onPress={onRetry}
-                activeOpacity={0.82}
-                style={styles.retryButton}
-                testID="receipt-theater-retry-btn"
-              >
-                <FontAwesome name="refresh" size={13} color="#FFFFFF" />
-                <Text style={styles.retryButtonText}>Retry Verification</Text>
-              </TouchableOpacity>
-            ) : null}
-
-            <TouchableOpacity
-              onPress={onEscalate}
-              activeOpacity={0.82}
-              style={styles.escalateButton}
-              testID="receipt-theater-escalate-btn"
-            >
-              <Text style={styles.escalateButtonText}>
-                {isVerifying ? 'Cancel & Return' : escalateLabel}
-              </Text>
-            </TouchableOpacity>
+          {/* Verification status badge */}
+          <View style={[styles.metadataRow, styles.metadataFieldBorderTop]}>
+            <Text style={styles.metadataLabel}>Signature Status</Text>
+            {isVerifying ? (
+              <View style={styles.statusChecking}>
+                <Text style={styles.statusCheckingText}>Checking…</Text>
+              </View>
+            ) : !missingReason ? (
+              <View style={styles.statusOk}>
+                <Text style={styles.statusOkText}>Verified ✅</Text>
+              </View>
+            ) : (
+              <View style={styles.statusFailed}>
+                <Text style={styles.statusFailedText}>Unverified ❌</Text>
+              </View>
+            )}
           </View>
-        </Animated.View>
-      </View>
-    );
-  };
+        </View>
+
+        {/* Error detail block */}
+        {!isVerifying && errorDetail ? (
+          <View style={styles.errorBlock}>
+            <View style={styles.errorBlockHeader}>
+              <FontAwesome name="shield" size={13} color="#F43F5E" />
+              <Text style={styles.errorBlockTitle}>
+                {`Refusal (${missingReason ?? 'UNKNOWN'})`}
+              </Text>
+            </View>
+            <Text style={styles.errorBlockBody}>{errorDetail}</Text>
+          </View>
+        ) : null}
+
+        {/* Action buttons */}
+        <View style={styles.actionArea}>
+          {!isVerifying ? (
+            <TouchableOpacity
+              onPress={onRetry}
+              activeOpacity={0.82}
+              style={styles.retryButton}
+              testID="receipt-theater-retry-btn"
+            >
+              <FontAwesome name="refresh" size={13} color="#FFFFFF" />
+              <Text style={styles.retryButtonText}>Retry Verification</Text>
+            </TouchableOpacity>
+          ) : null}
+
+          <TouchableOpacity
+            onPress={onEscalate}
+            activeOpacity={0.82}
+            style={styles.escalateButton}
+            testID="receipt-theater-escalate-btn"
+          >
+            <Text style={styles.escalateButtonText}>
+              {isVerifying ? 'Cancel & Return' : escalateLabel}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Animated.View>
+    </View>
+  );
+};
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ReceiptTheaterGuard — primary export
@@ -712,13 +751,7 @@ export const ReceiptTheaterGuard: React.FC<ReceiptTheaterGuardProps> = ({
           reason = 'VERIFICATION_ERROR';
         }
 
-        emitRouteAdmissionSpan(
-          routeKey,
-          result.blake3Hash,
-          durationMs,
-          'ERROR',
-          result.error
-        );
+        emitRouteAdmissionSpan(routeKey, result.blake3Hash, durationMs, 'ERROR', result.error);
 
         // ── Transition: PENDING_VERIFICATION → RECEIPT_MISSING ───────────────
         setTheaterState({
@@ -742,10 +775,7 @@ export const ReceiptTheaterGuard: React.FC<ReceiptTheaterGuardProps> = ({
     if (subscribeToMMKV) {
       try {
         mmkvListener = mmkvInstance.addOnValueChangedListener((key: string) => {
-          if (
-            key === `receipt_${routeKey}` ||
-            key === `receipt_hash_${routeKey}`
-          ) {
+          if (key === `receipt_${routeKey}` || key === `receipt_hash_${routeKey}`) {
             // A new receipt appeared in MMKV — re-run verification automatically
             runVerification(isActive);
           }

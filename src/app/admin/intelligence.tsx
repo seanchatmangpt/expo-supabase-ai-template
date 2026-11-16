@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { AlertManager as Alert } from '../../framework/ui/dialog/AlertManager';
 import { AdminShell } from '../../components/admin/AdminShell';
 import { AdminCard } from '../../components/admin/AdminCard';
 import { CommandButton } from '../../components/admin/CommandButton';
@@ -47,25 +48,28 @@ export default function AdminIntelligence() {
       case 'jtbd-conformance-auditor':
         return {
           declaredWorkflow: jtbdConformanceFixture.declaredWorkflow,
-          actualEvents: selectedFixtureType === 'truthful' 
-            ? jtbdConformanceFixture.truthfulTrace 
-            : jtbdConformanceFixture.deviantTrace
+          actualEvents:
+            selectedFixtureType === 'truthful'
+              ? jtbdConformanceFixture.truthfulTrace
+              : jtbdConformanceFixture.deviantTrace,
         };
       case 'concept-drift-detector':
         return {
-          activities: selectedFixtureType === 'truthful'
-            ? conceptDriftFixture.stableActivities
-            : conceptDriftFixture.driftingActivities,
+          activities:
+            selectedFixtureType === 'truthful'
+              ? conceptDriftFixture.stableActivities
+              : conceptDriftFixture.driftingActivities,
           windowSize: 3,
-          threshold: 0.4
+          threshold: 0.4,
         };
       case 'rl-orchestrator-monitor':
         return rlOrchestratorFixture;
       case 'compliance-safety-guard':
         return {
-          traceCommands: selectedFixtureType === 'truthful'
-            ? complianceGuardFixture.compliantTrace
-            : complianceGuardFixture.nonCompliantTrace
+          traceCommands:
+            selectedFixtureType === 'truthful'
+              ? complianceGuardFixture.compliantTrace
+              : complianceGuardFixture.nonCompliantTrace,
         };
       default:
         return {};
@@ -101,64 +105,86 @@ export default function AdminIntelligence() {
       timestamp: replay.timestamp,
       success: replay.output ? true : false,
       deltaHash: 'Chain verified',
-      logs: replay.logs
+      logs: replay.logs,
     });
     setReplayArtifact(replay);
   };
 
-  const selectedCap = capabilities.find(c => c.id === selectedCapId);
+  const selectedCap = capabilities.find((c) => c.id === selectedCapId);
 
   return (
-    <AdminShell title="Process Intelligence" subtitle="wasm4pm Deterministic Substrate Operator Console" scrollable={true}>
-      
+    <AdminShell
+      title="Process Intelligence"
+      subtitle="wasm4pm Deterministic Substrate Operator Console"
+      scrollable={true}
+    >
       {/* Capability Selector */}
-      <AdminCard title="Select Process Capability" subtitle="Active wasm4pm algorithms in substrate">
+      <AdminCard
+        title="Select Process Capability"
+        subtitle="Active wasm4pm algorithms in substrate"
+      >
         <View style={styles.capList}>
           {capabilities.map((cap) => (
             <TouchableOpacity
               key={cap.id}
               activeOpacity={0.8}
-              style={[
-                styles.capItem,
-                selectedCapId === cap.id && styles.capItemActive
-              ]}
+              style={[styles.capItem, selectedCapId === cap.id && styles.capItemActive]}
               onPress={() => {
                 setSelectedCapId(cap.id);
                 setLatestReceipt(null);
                 setReplayArtifact(null);
               }}
             >
-              <Text style={[
-                styles.capItemText,
-                selectedCapId === cap.id && styles.capItemTextActive
-              ]}>
+              <Text
+                style={[styles.capItemText, selectedCapId === cap.id && styles.capItemTextActive]}
+              >
                 {cap.name}
               </Text>
             </TouchableOpacity>
           ))}
         </View>
-        
+
         {selectedCap && (
           <View style={styles.capDetail}>
             <Text style={styles.capDesc}>{selectedCap.description}</Text>
-            
+
             {/* Fixture Scenarios */}
-            {(selectedCap.id === 'jtbd-conformance-auditor' || 
-              selectedCap.id === 'concept-drift-detector' || 
+            {(selectedCap.id === 'jtbd-conformance-auditor' ||
+              selectedCap.id === 'concept-drift-detector' ||
               selectedCap.id === 'compliance-safety-guard') && (
               <View style={styles.scenarioRow}>
                 <Text style={styles.scenarioLabel}>Scenario:</Text>
-                <TouchableOpacity 
-                  style={[styles.scenarioBtn, selectedFixtureType === 'truthful' && styles.scenarioBtnActive]}
+                <TouchableOpacity
+                  style={[
+                    styles.scenarioBtn,
+                    selectedFixtureType === 'truthful' && styles.scenarioBtnActive,
+                  ]}
                   onPress={() => setSelectedFixtureType('truthful')}
                 >
-                  <Text style={[styles.scenarioBtnText, selectedFixtureType === 'truthful' && styles.scenarioBtnTextActive]}>Conforming / Stable</Text>
+                  <Text
+                    style={[
+                      styles.scenarioBtnText,
+                      selectedFixtureType === 'truthful' && styles.scenarioBtnTextActive,
+                    ]}
+                  >
+                    Conforming / Stable
+                  </Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
-                  style={[styles.scenarioBtn, selectedFixtureType === 'deviant' && styles.scenarioBtnActive]}
+                <TouchableOpacity
+                  style={[
+                    styles.scenarioBtn,
+                    selectedFixtureType === 'deviant' && styles.scenarioBtnActive,
+                  ]}
                   onPress={() => setSelectedFixtureType('deviant')}
                 >
-                  <Text style={[styles.scenarioBtnText, selectedFixtureType === 'deviant' && styles.scenarioBtnTextActive]}>Deviant / Drifted</Text>
+                  <Text
+                    style={[
+                      styles.scenarioBtnText,
+                      selectedFixtureType === 'deviant' && styles.scenarioBtnTextActive,
+                    ]}
+                  >
+                    Deviant / Drifted
+                  </Text>
                 </TouchableOpacity>
               </View>
             )}
@@ -176,7 +202,13 @@ export default function AdminIntelligence() {
 
       {/* Active Run Results */}
       {latestReceipt && (
-        <AdminCard title="Audit Run Receipt" subtitle={`ID: ${latestReceipt.id}`} headerRight={<ReceiptBadge status={latestReceipt.success ? 'applied_remote' : 'quarantined'} />}>
+        <AdminCard
+          title="Audit Run Receipt"
+          subtitle={`ID: ${latestReceipt.id}`}
+          headerRight={
+            <ReceiptBadge status={latestReceipt.success ? 'applied_remote' : 'quarantined'} />
+          }
+        >
           <View style={styles.receiptGrid}>
             <View style={styles.receiptField}>
               <Text style={styles.fieldLabel}>Capability ID:</Text>
@@ -184,7 +216,9 @@ export default function AdminIntelligence() {
             </View>
             <View style={styles.receiptField}>
               <Text style={styles.fieldLabel}>Hash Chain Checksum:</Text>
-              <Text style={styles.fieldValMono} numberOfLines={1}>{latestReceipt.deltaHash}</Text>
+              <Text style={styles.fieldValMono} numberOfLines={1}>
+                {latestReceipt.deltaHash}
+              </Text>
             </View>
             <View style={styles.receiptField}>
               <Text style={styles.fieldLabel}>Timestamp:</Text>
@@ -205,7 +239,14 @@ export default function AdminIntelligence() {
                     <Text style={styles.driftLabel}>W{s.windowIndex}</Text>
                     <Text style={styles.driftBars}>{bars}</Text>
                     <Text style={styles.driftVal}>EWMA: {pct.toFixed(2)}</Text>
-                    {s.alert && <FontAwesome name="warning" size={12} color="#EF4444" style={styles.alertIcon} />}
+                    {s.alert && (
+                      <FontAwesome
+                        name="warning"
+                        size={12}
+                        color="#EF4444"
+                        style={styles.alertIcon}
+                      />
+                    )}
                   </View>
                 );
               })}
@@ -220,15 +261,26 @@ export default function AdminIntelligence() {
               <Text style={styles.visualizerHeader}>JTBD Conformance Verdict</Text>
               <View style={styles.metricItem}>
                 <Text style={styles.metricLabel}>Process Fitness:</Text>
-                <Text style={styles.metricValue}>{(replayArtifact.output?.fitness * 100).toFixed(0)}%</Text>
+                <Text style={styles.metricValue}>
+                  {(replayArtifact.output?.fitness * 100).toFixed(0)}%
+                </Text>
               </View>
               <View style={styles.metricItem}>
                 <Text style={styles.metricLabel}>Precision Score:</Text>
-                <Text style={styles.metricValue}>{(replayArtifact.output?.precision * 100).toFixed(0)}%</Text>
+                <Text style={styles.metricValue}>
+                  {(replayArtifact.output?.precision * 100).toFixed(0)}%
+                </Text>
               </View>
               <View style={styles.metricItem}>
                 <Text style={styles.metricLabel}>Verdict status:</Text>
-                <Text style={[styles.metricValue, { color: replayArtifact.output?.verdict === 'TRUTHFUL' ? '#10B981' : '#F59E0B' }]}>
+                <Text
+                  style={[
+                    styles.metricValue,
+                    {
+                      color: replayArtifact.output?.verdict === 'TRUTHFUL' ? '#10B981' : '#F59E0B',
+                    },
+                  ]}
+                >
                   {replayArtifact.output?.verdict}
                 </Text>
               </View>
@@ -238,29 +290,43 @@ export default function AdminIntelligence() {
           <Text style={styles.logsHeader}>Execution Console Logs</Text>
           <View style={styles.logsConsole}>
             {latestReceipt.logs.map((log: string, i: number) => (
-              <Text key={i} style={styles.logLine}>{log}</Text>
+              <Text key={i} style={styles.logLine}>
+                {log}
+              </Text>
             ))}
           </View>
         </AdminCard>
       )}
 
       {/* Replays History */}
-      <AdminCard title="Audit Replay Artifacts History" subtitle="List of persistent local-first verification files">
+      <AdminCard
+        title="Audit Replay Artifacts History"
+        subtitle="List of persistent local-first verification files"
+      >
         {replaysList.length === 0 ? (
           <Text style={styles.emptyText}>No local audit logs generated yet.</Text>
         ) : (
           replaysList.map((item) => (
-            <TouchableOpacity accessibilityRole="button" activeOpacity={0.8} key={item.receiptId} style={styles.replayItem} onPress={() => handleSelectReplay(item)}>
+            <TouchableOpacity
+              accessibilityRole="button"
+              activeOpacity={0.8}
+              key={item.receiptId}
+              style={styles.replayItem}
+              onPress={() => handleSelectReplay(item)}
+            >
               <View style={styles.replayMeta}>
                 <Text style={styles.replayCap}>{item.capabilityId}</Text>
-                <Text style={styles.replayTime}>{new Date(item.timestamp).toLocaleTimeString()}</Text>
+                <Text style={styles.replayTime}>
+                  {new Date(item.timestamp).toLocaleTimeString()}
+                </Text>
               </View>
-              <Text style={styles.replayId} numberOfLines={1}>{item.receiptId}</Text>
+              <Text style={styles.replayId} numberOfLines={1}>
+                {item.receiptId}
+              </Text>
             </TouchableOpacity>
           ))
         )}
       </AdminCard>
-
     </AdminShell>
   );
 }

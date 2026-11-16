@@ -5,31 +5,50 @@ import { AdminCard } from '../../components/admin/AdminCard';
 
 export default function AdminPrayer() {
   const prayers = [
-    { id: '1', request: 'Healing for Mrs. Henderson during chemotherapy.', submittedBy: 'John Henderson', visibility: 'Pastors Only', date: '2h ago' },
-    { id: '2', request: 'Safe travels for the youth mission team.', submittedBy: 'Michael Chang', visibility: 'Public Community', date: '1d ago' },
-    { id: '3', request: 'Guidance in finding a new group coordinator.', submittedBy: 'Sarah Jenkins', visibility: 'Staff Only', date: '3d ago' },
+    {
+      id: '1',
+      request: 'Healing for Mrs. Henderson during chemotherapy.',
+      submittedBy: 'John Henderson',
+      visibility: 'Pastors Only',
+      date: '2h ago',
+    },
+    {
+      id: '2',
+      request: 'Safe travels for the youth mission team.',
+      submittedBy: 'Michael Chang',
+      visibility: 'Public Community',
+      date: '1d ago',
+    },
+    {
+      id: '3',
+      request: 'Guidance in finding a new group coordinator.',
+      submittedBy: 'Sarah Jenkins',
+      visibility: 'Staff Only',
+      date: '3d ago',
+    },
   ];
 
   const getVisibilityColor = (vis: string) => {
     switch (vis) {
-      case 'Pastors Only': return { bg: 'rgba(239, 68, 68, 0.15)', text: '#EF4444' };
-      case 'Staff Only': return { bg: 'rgba(245, 158, 11, 0.15)', text: '#F59E0B' };
-      default: return { bg: 'rgba(16, 185, 129, 0.15)', text: '#10B981' };
+      case 'Pastors Only':
+        return { bg: 'rgba(239, 68, 68, 0.15)', text: '#EF4444' };
+      case 'Staff Only':
+        return { bg: 'rgba(245, 158, 11, 0.15)', text: '#F59E0B' };
+      default:
+        return { bg: 'rgba(16, 185, 129, 0.15)', text: '#10B981' };
     }
   };
 
-  const renderItem = ({ item }: { item: typeof prayers[0] }) => {
+  const renderItem = ({ item }: { item: (typeof prayers)[0] }) => {
     const visColors = getVisibilityColor(item.visibility);
 
     return (
-      <AdminCard 
-        title={item.submittedBy} 
+      <AdminCard
+        title={item.submittedBy}
         subtitle={`Submitted ${item.date}`}
         headerRight={
           <View style={[styles.badge, { backgroundColor: visColors.bg }]}>
-            <Text style={[styles.badgeText, { color: visColors.text }]}>
-              {item.visibility}
-            </Text>
+            <Text style={[styles.badgeText, { color: visColors.text }]}>{item.visibility}</Text>
           </View>
         }
       >
@@ -49,7 +68,10 @@ export default function AdminPrayer() {
   };
 
   return (
-    <AdminShell title="Community Prayer Requests" subtitle="Monitor prayer needs and visibility policies">
+    <AdminShell
+      title="Community Prayer Requests"
+      subtitle="Monitor prayer needs and visibility policies"
+    >
       <FlatList
         data={prayers}
         renderItem={renderItem}

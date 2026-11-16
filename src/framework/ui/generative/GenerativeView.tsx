@@ -92,7 +92,8 @@ export const GenerativeView: React.FC<GenerativeViewProps> = ({
       {criticalActions.length > 0 && (
         <SafeAreaView
           className="p-4 border-t border-red-500/30 bg-card mt-auto"
-          testID="iron-law-fallback">
+          testID="iron-law-fallback"
+        >
           <Text className="text-xs font-bold text-red-500 mb-2 uppercase">Critical Actions</Text>
           {criticalActions.map((action) => (
             <Pressable
@@ -100,7 +101,8 @@ export const GenerativeView: React.FC<GenerativeViewProps> = ({
               className="p-3 bg-red-500/10 rounded-lg mb-2"
               onPress={() =>
                 onAction?.(action.predicate || action.key, data[action.predicate || action.key])
-              }>
+              }
+            >
               <Text className="text-red-700 font-semibold">{action.label}</Text>
             </Pressable>
           ))}

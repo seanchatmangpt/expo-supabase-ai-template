@@ -1,6 +1,6 @@
 /**
  * UserExperienceObserver
- * 
+ *
  * Part of the AUTONOMIC_VALIDATION suite (Agent 3/10).
  * Hooks into PCP UI components to verify visual outcomes of simulations.
  */
@@ -59,17 +59,21 @@ export class UserExperienceObserver {
     });
 
     if (!found) {
-      throw new Error(`[UserExperienceObserver] Assertion Failed: Visual adaptation "${expectedTrait}" not detected.`);
+      throw new Error(
+        `[UserExperienceObserver] Assertion Failed: Visual adaptation "${expectedTrait}" not detected.`
+      );
     }
 
-    console.log(`[UserExperienceObserver] Assertion Passed: Visual adaptation "${expectedTrait}" verified.`);
+    console.log(
+      `[UserExperienceObserver] Assertion Passed: Visual adaptation "${expectedTrait}" verified.`
+    );
   }
 
   private sanitizeProps(props: any): any {
     if (!props) return {};
     const sanitized: any = {};
     const allowedKeys = ['className', 'testID', 'trait', 'adaptation', 'children'];
-    
+
     for (const key of allowedKeys) {
       if (props[key] !== undefined) {
         if (key === 'children' && typeof props[key] !== 'string') continue;

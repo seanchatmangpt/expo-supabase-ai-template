@@ -1,4 +1,11 @@
-import React, { createContext, useContext, useState, useCallback, ReactNode, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  ReactNode,
+  useEffect,
+} from 'react';
 import { HookRuntime } from '../lib/truex/hook-otp/runtime';
 import { HookActorRef, HookMessage, HookReceipt, HookBehavior } from '../lib/truex/hook-otp/types';
 import { AvatarRole, AvatarProjection } from '../lib/truex/avatar/types';
@@ -105,7 +112,8 @@ export function VkgProvider({ children }: { children: ReactNode }) {
   // Update state/projection when activeHookId or avatar changes
   useEffect(() => {
     const registry = runtime.getRegistry();
-    const currentRef = activeHookId === 'volunteer_shortage' ? volunteerActorRef : livestreamActorRef;
+    const currentRef =
+      activeHookId === 'volunteer_shortage' ? volunteerActorRef : livestreamActorRef;
     const instance = registry.get(currentRef);
     if (instance) {
       setActorState({ ...instance.state });
@@ -246,7 +254,8 @@ export function VkgProvider({ children }: { children: ReactNode }) {
 
   const repairLastQuarantine = useCallback(async () => {
     const registry = runtime.getRegistry();
-    const currentRef = activeHookId === 'volunteer_shortage' ? volunteerActorRef : livestreamActorRef;
+    const currentRef =
+      activeHookId === 'volunteer_shortage' ? volunteerActorRef : livestreamActorRef;
     const instance = registry.get(currentRef);
     if (instance) {
       const repairMsg: HookMessage = {
@@ -312,4 +321,3 @@ export function useVkgEngine() {
   }
   return context;
 }
-

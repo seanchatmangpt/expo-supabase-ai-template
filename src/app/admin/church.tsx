@@ -37,7 +37,10 @@ export default function AdminChurch() {
         </TouchableOpacity>
 
         <TouchableOpacity accessibilityRole="button" activeOpacity={0.8}>
-          <AdminCard title="Location details" subtitle="Vocabulary: https://schema.org/PostalAddress">
+          <AdminCard
+            title="Location details"
+            subtitle="Vocabulary: https://schema.org/PostalAddress"
+          >
             <View style={styles.cardContent}>
               <View style={styles.row}>
                 <View style={styles.labelContainer}>
@@ -62,7 +65,12 @@ export default function AdminChurch() {
               </View>
               <View style={styles.row}>
                 <View style={styles.labelContainer}>
-                  <FontAwesome name="envelope-square" size={12} color="#94A3B8" style={styles.icon} />
+                  <FontAwesome
+                    name="envelope-square"
+                    size={12}
+                    color="#94A3B8"
+                    style={styles.icon}
+                  />
                   <Text style={styles.label}>Postal Code:</Text>
                 </View>
                 <Text style={styles.val}>98101</Text>

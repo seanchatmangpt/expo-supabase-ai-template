@@ -24,7 +24,8 @@ jest.mock('../../../ui/glassmorphism/GlassCard', () => {
         data-intensity={intensity}
         data-tint={tint}
         style={style}
-        {...props}>
+        {...props}
+      >
         {children}
       </View>
     ),

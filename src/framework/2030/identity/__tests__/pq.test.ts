@@ -88,7 +88,7 @@ describe('PostQuantumZkEngine Cryptographic Verification', () => {
         proofData: proofData,
         publicSignals: ['18'],
         pqSignature,
-        enclaveSignature: 'valid-signature',
+        enclaveSignature: '0x' + 'a'.repeat(40),
       };
 
       const result = await engine.verify(mockClaim, proof);
@@ -118,7 +118,7 @@ describe('PostQuantumZkEngine Cryptographic Verification', () => {
         proofData: proofData,
         publicSignals: ['18'],
         pqSignature,
-        enclaveSignature: 'valid-signature',
+        enclaveSignature: '0x' + 'a'.repeat(40),
       };
 
       const result = await engine.verify(mockClaim, proof);
@@ -139,7 +139,7 @@ describe('PostQuantumZkEngine Cryptographic Verification', () => {
         proofData: validSnarkProofData,
         publicSignals: ['18'],
         pqSignature,
-        enclaveSignature: 'valid-signature',
+        enclaveSignature: '0x' + 'a'.repeat(40),
       };
 
       const result = await engine.verify(mockClaim, proof);

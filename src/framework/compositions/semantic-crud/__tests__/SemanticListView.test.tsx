@@ -2,6 +2,7 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import { SemanticListView } from '../SemanticListView';
 import { useOfflineSearch } from '../../../data/offline-search';
+import { A11yAuditor } from '../../../validation/A11yAuditor';
 
 // Mock useOfflineSearch
 jest.mock('../../../data/offline-search', () => ({
@@ -81,5 +82,16 @@ describe('SemanticListView', () => {
 
     fireEvent.press(getByTestId('item-https://pcp.app/person/1'));
     expect(mockOnSelect).toHaveBeenCalledWith('https://pcp.app/person/1');
+  });
+
+  it('passes accessibility audit', () => {
+    const { UNSAFE_root } = render(
+      <SemanticListView
+        targetType="https://schema.org/Person"
+        onSelect={mockOnSelect}
+        onCreate={mockOnCreate}
+      />
+    );
+    expect(() => A11yAuditor.auditTree(UNSAFE_root)).not.toThrow();
   });
 });

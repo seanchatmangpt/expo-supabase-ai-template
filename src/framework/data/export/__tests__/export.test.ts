@@ -21,13 +21,17 @@ jest.mock('expo-file-system/legacy', () => ({
   writeAsStringAsync: jest.fn(),
 }));
 
-jest.mock('expo-file-system/build/legacy', () => ({
-  documentDirectory: 'file://doc/',
-  cacheDirectory: 'file://cache/',
-  EncodingType: { Base64: 'base64' },
-  readAsStringAsync: jest.fn(),
-  writeAsStringAsync: jest.fn(),
-}), { virtual: true });
+jest.mock(
+  'expo-file-system/build/legacy',
+  () => ({
+    documentDirectory: 'file://doc/',
+    cacheDirectory: 'file://cache/',
+    EncodingType: { Base64: 'base64' },
+    readAsStringAsync: jest.fn(),
+    writeAsStringAsync: jest.fn(),
+  }),
+  { virtual: true }
+);
 
 jest.mock('@/src/lib/crypto/receipts', () => ({
   blake3: jest.fn().mockReturnValue('mock-sig'),

@@ -26,7 +26,7 @@ describe('AgentNativeInterface Process Mining & Conformance Checking Suite', () 
       pi_c: ['77883344556677889900112233', '88883344556677889900112233', '1'],
     }),
     publicSignals: ['1'],
-    enclaveSignature: 'valid-signature',
+    enclaveSignature: '0x' + 'a'.repeat(40),
   };
 
   beforeEach(() => {

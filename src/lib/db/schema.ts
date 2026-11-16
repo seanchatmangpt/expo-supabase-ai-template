@@ -56,9 +56,7 @@ export const syncJobQuarantine = sqliteTable('sync_job_quarantine', {
   payload: text('payload').notNull(), // JSON stringified payload
   entityId: text('entity_id'),
   rejectionReason: text('rejection_reason').notNull(),
-  verdict: text('verdict')
-    .notNull()
-    .$type<'reject' | 'quarantine'>(),
+  verdict: text('verdict').notNull().$type<'reject' | 'quarantine'>(),
   createdAt: integer('created_at', { mode: 'timestamp' })
     .notNull()
     .$defaultFn(() => new Date()),
@@ -92,7 +90,10 @@ export const actorCommands = sqliteTable('actor_commands', {
   idempotencyKey: text('idempotency_key').notNull(),
   causationId: text('causation_id'),
   correlationId: text('correlation_id'),
-  status: text('status').notNull().$type<'pending' | 'processing' | 'applied' | 'rejected'>().default('pending'),
+  status: text('status')
+    .notNull()
+    .$type<'pending' | 'processing' | 'applied' | 'rejected'>()
+    .default('pending'),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
 });
 
@@ -139,7 +140,10 @@ export const actorOutbox = sqliteTable('actor_outbox', {
   commandId: text('command_id').notNull(),
   jobType: text('job_type').notNull(), // e.g. 'DISPATCH_AUTHORITATIVE'
   payload: text('payload').notNull(), // JSON stringified command envelope
-  status: text('status').notNull().$type<'pending' | 'processing' | 'completed' | 'failed'>().default('pending'),
+  status: text('status')
+    .notNull()
+    .$type<'pending' | 'processing' | 'completed' | 'failed'>()
+    .default('pending'),
   attempts: integer('attempts').notNull().default(0),
   createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
 });
@@ -158,7 +162,3 @@ export const actorQuarantine = sqliteTable('actor_quarantine', {
 
 export type ActorQuarantineRecord = typeof actorQuarantine.$inferSelect;
 export type NewActorQuarantineRecord = typeof actorQuarantine.$inferInsert;
-
-
-
-

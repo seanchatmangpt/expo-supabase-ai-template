@@ -17,9 +17,9 @@ export const SermonFlow: TransitionFamily = {
     drafted: ['reviewed'],
     reviewed: ['published'],
     published: ['archived'],
-    archived: []
+    archived: [],
   },
-  initialState: 'idle'
+  initialState: 'idle',
 };
 
 export const OrderFlow: TransitionFamily = {
@@ -30,9 +30,9 @@ export const OrderFlow: TransitionFamily = {
     cart_updated: ['address_added'],
     address_added: ['processing'],
     processing: ['paid'],
-    paid: []
+    paid: [],
   },
-  initialState: 'idle'
+  initialState: 'idle',
 };
 
 export const VolunteerFlow: TransitionFamily = {
@@ -43,25 +43,31 @@ export const VolunteerFlow: TransitionFamily = {
     applied: ['interview_scheduled'],
     interview_scheduled: ['approved'],
     approved: ['assigned'],
-    assigned: []
+    assigned: [],
   },
-  initialState: 'idle'
+  initialState: 'idle',
 };
 
 const FAMILIES: Record<string, TransitionFamily> = {
   SermonFlow,
   OrderFlow,
-  VolunteerFlow
+  VolunteerFlow,
 };
 
 /**
  * Validates whether a state progression trajectory follows permitted transition paths.
  * Returns { success: true } if valid, or a refusal message if an illegal transition is detected.
  */
-export function validateTrajectory(familyId: string, trajectory: string[]): { success: boolean; error?: string } {
+export function validateTrajectory(
+  familyId: string,
+  trajectory: string[]
+): { success: boolean; error?: string } {
   const family = FAMILIES[familyId];
   if (!family) {
-    return { success: false, error: `TransitionFamilyRefused: Unknown transition family '${familyId}'` };
+    return {
+      success: false,
+      error: `TransitionFamilyRefused: Unknown transition family '${familyId}'`,
+    };
   }
 
   if (trajectory.length === 0) {
@@ -72,7 +78,7 @@ export function validateTrajectory(familyId: string, trajectory: string[]): { su
   if (trajectory[0] !== family.initialState) {
     return {
       success: false,
-      error: `TransitionFamilyRefused: Trajectory in ${familyId} must start at initial state '${family.initialState}' (got '${trajectory[0]}')`
+      error: `TransitionFamilyRefused: Trajectory in ${familyId} must start at initial state '${family.initialState}' (got '${trajectory[0]}')`,
     };
   }
 
@@ -83,13 +89,13 @@ export function validateTrajectory(familyId: string, trajectory: string[]): { su
     if (!family.states.includes(currentState)) {
       return {
         success: false,
-        error: `TransitionFamilyRefused: Invalid state '${currentState}' in ${familyId}`
+        error: `TransitionFamilyRefused: Invalid state '${currentState}' in ${familyId}`,
       };
     }
     if (!family.states.includes(nextState)) {
       return {
         success: false,
-        error: `TransitionFamilyRefused: Invalid state '${nextState}' in ${familyId}`
+        error: `TransitionFamilyRefused: Invalid state '${nextState}' in ${familyId}`,
       };
     }
 
@@ -103,13 +109,13 @@ export function validateTrajectory(familyId: string, trajectory: string[]): { su
         const skipped = family.states.slice(currentIdx + 1, nextIdx);
         return {
           success: false,
-          error: `TransitionFamilyRefused: Illegal transition from '${currentState}' to '${nextState}' in ${familyId}. Missing required intermediate states: ${skipped.join(', ')}`
+          error: `TransitionFamilyRefused: Illegal transition from '${currentState}' to '${nextState}' in ${familyId}. Missing required intermediate states: ${skipped.join(', ')}`,
         };
       }
 
       return {
         success: false,
-        error: `TransitionFamilyRefused: Illegal transition from '${currentState}' to '${nextState}' in ${familyId}`
+        error: `TransitionFamilyRefused: Illegal transition from '${currentState}' to '${nextState}' in ${familyId}`,
       };
     }
   }

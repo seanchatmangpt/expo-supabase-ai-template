@@ -1,4 +1,5 @@
-import { Vibration, Platform } from 'react-native';
+import { Vibration } from 'react-native';
+import * as Haptics from 'expo-haptics';
 
 /**
  * Haptic Feedback Patterns supported by the IntelligentHaptics engine.
@@ -44,6 +45,71 @@ export class IntelligentHaptics {
   static trigger(pattern: HapticFeedbackPattern): void {
     if (!this.isEnabled) return;
 
+    const hasExpoHaptics =
+      typeof Haptics !== 'undefined' &&
+      Haptics !== null &&
+      typeof Haptics.notificationAsync === 'function';
+
+    if (hasExpoHaptics) {
+      const run = async () => {
+        try {
+          switch (pattern) {
+            case HapticFeedbackPattern.SUCCESS:
+              await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+              break;
+            case HapticFeedbackPattern.WARNING:
+              await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+              break;
+            case HapticFeedbackPattern.ERROR:
+              await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+              break;
+            case HapticFeedbackPattern.LIGHT:
+              await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              break;
+            case HapticFeedbackPattern.MEDIUM:
+              await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+              break;
+            case HapticFeedbackPattern.HEAVY:
+              await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+              break;
+            case HapticFeedbackPattern.SELECTION:
+              await Haptics.selectionAsync();
+              break;
+          }
+        } catch (e) {
+          this.triggerFallback(pattern);
+        }
+      };
+      run();
+    } else {
+      this.triggerFallback(pattern);
+    }
+  }
+
+  /**
+   * Triggers an impact based on a continuous "tension" or intensity value.
+   * Useful for gesture-based interactions like pulling or dragging.
+   *
+   * @param tension - A value between 0 and 1 representing the interaction intensity.
+   */
+  static impact(tension: number): void {
+    if (!this.isEnabled) return;
+
+    const normalizedTension = Math.max(0, Math.min(1, tension));
+
+    if (normalizedTension > 0.9) {
+      this.trigger(HapticFeedbackPattern.HEAVY);
+    } else if (normalizedTension > 0.5) {
+      this.trigger(HapticFeedbackPattern.MEDIUM);
+    } else if (normalizedTension > 0.1) {
+      this.trigger(HapticFeedbackPattern.LIGHT);
+    }
+  }
+
+  /**
+   * Internal helper to trigger the standard react-native Vibration fallback.
+   */
+  private static triggerFallback(pattern: HapticFeedbackPattern): void {
     switch (pattern) {
       case HapticFeedbackPattern.SUCCESS:
         this.vibrate([0, 10, 50, 10]);
@@ -70,31 +136,9 @@ export class IntelligentHaptics {
   }
 
   /**
-   * Triggers an impact based on a continuous "tension" or intensity value.
-   * Useful for gesture-based interactions like pulling or dragging.
-   *
-   * @param tension - A value between 0 and 1 representing the interaction intensity.
-   */
-  static impact(tension: number): void {
-    if (!this.isEnabled) return;
-
-    const normalizedTension = Math.max(0, Math.min(1, tension));
-
-    if (normalizedTension > 0.9) {
-      this.trigger(HapticFeedbackPattern.HEAVY);
-    } else if (normalizedTension > 0.5) {
-      this.trigger(HapticFeedbackPattern.MEDIUM);
-    } else if (normalizedTension > 0.1) {
-      this.trigger(HapticFeedbackPattern.LIGHT);
-    }
-  }
-
-  /**
    * Internal helper to handle cross-platform vibration.
    */
   private static vibrate(pattern: number | number[]): void {
-    // On iOS, Vibration.vibrate is binary (on/off) and doesn't respect duration well
-    // without specialized libraries. However, we provide the best possible fallback.
     Vibration.vibrate(pattern);
   }
 }

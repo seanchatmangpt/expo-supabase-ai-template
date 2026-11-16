@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, RefreshControl, Alert, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+  TouchableOpacity,
+} from 'react-native';
+import { AlertManager as Alert } from '../../framework/ui/dialog/AlertManager';
 import { AdminShell } from '../../components/admin/AdminShell';
 import { AdminCard } from '../../components/admin/AdminCard';
 import { OutboxBadge } from '../../components/admin/OutboxBadge';
@@ -7,7 +15,11 @@ import { CommandButton } from '../../components/admin/CommandButton';
 import { db } from '../../lib/db/db';
 import { actorOutbox, actorQuarantine } from '../../lib/db/schema';
 import { desc } from 'drizzle-orm';
-import { globalLocalDispatcher, globalRemoteDispatcher, useActorOpsStore } from '@/src/lib/actor/actorOps';
+import {
+  globalLocalDispatcher,
+  globalRemoteDispatcher,
+  useActorOpsStore,
+} from '@/src/lib/actor/actorOps';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 export function formatTimestamp(date: Date | any): string {
@@ -54,7 +66,11 @@ export function CodePayload({ data, title }: CodePayloadProps) {
           <View style={styles.jsonBadge}>
             <Text style={styles.jsonBadgeText}>JSON</Text>
           </View>
-          <FontAwesome name={collapsed ? 'chevron-right' : 'chevron-down'} size={10} color="#94A3B8" />
+          <FontAwesome
+            name={collapsed ? 'chevron-right' : 'chevron-down'}
+            size={10}
+            color="#94A3B8"
+          />
         </View>
       </TouchableOpacity>
       {!collapsed && (
@@ -79,10 +95,7 @@ export default function AdminOutbox() {
   const fetchQueueData = async () => {
     setRefreshing(true);
     try {
-      const outbox = await db
-        .select()
-        .from(actorOutbox)
-        .orderBy(desc(actorOutbox.createdAt));
+      const outbox = await db.select().from(actorOutbox).orderBy(desc(actorOutbox.createdAt));
       setOutboxList(outbox);
 
       const quarantine = await db
@@ -128,8 +141,8 @@ export default function AdminOutbox() {
     } catch (e) {}
 
     return (
-      <AdminCard 
-        title={`Job: ${item.id.slice(0, 10)}...`} 
+      <AdminCard
+        title={`Job: ${item.id.slice(0, 10)}...`}
         subtitle={`Created: ${formatTimestamp(item.createdAt)}`}
         headerRight={<OutboxBadge status={item.status} />}
         style={styles.cardSpacing}
@@ -160,8 +173,8 @@ export default function AdminOutbox() {
     } catch (e) {}
 
     return (
-      <AdminCard 
-        title={`Quarantine: ${item.id.slice(0, 10)}...`} 
+      <AdminCard
+        title={`Quarantine: ${item.id.slice(0, 10)}...`}
         subtitle={`Quarantined: ${formatTimestamp(item.createdAt)}`}
         style={StyleSheet.flatten([styles.quarantineCard, styles.cardSpacing])}
       >
@@ -172,65 +185,102 @@ export default function AdminOutbox() {
           </View>
           <View style={styles.errorBox}>
             <View style={styles.errorHeader}>
-              <FontAwesome name="exclamation-circle" size={12} color="#F87171" style={{ marginRight: 6 }} />
+              <FontAwesome
+                name="exclamation-circle"
+                size={12}
+                color="#F87171"
+                style={{ marginRight: 6 }}
+              />
               <Text style={styles.errorLabel}>Last Rejection Error:</Text>
             </View>
             <Text style={styles.errorText}>{item.error}</Text>
           </View>
-          <CodePayload data={{ actor: actorParsed, payload: payloadParsed }} title="Execution Dump Data" />
+          <CodePayload
+            data={{ actor: actorParsed, payload: payloadParsed }}
+            title="Execution Dump Data"
+          />
         </View>
       </AdminCard>
     );
   };
 
   return (
-    <AdminShell title="Outbox & Sync Manager" subtitle="Control authoritative synchronization replays" scrollable={false}>
+    <AdminShell
+      title="Outbox & Sync Manager"
+      subtitle="Control authoritative synchronization replays"
+      scrollable={false}
+    >
       <View style={styles.headerControls}>
         <View style={styles.buttonRow}>
-          <CommandButton 
-            title={syncing ? 'Flushing...' : 'Flush Outbox'} 
+          <CommandButton
+            title={syncing ? 'Flushing...' : 'Flush Outbox'}
             onPress={triggerSync}
             disabled={syncing || !networkOnline}
             testID="flush-outbox"
             style={styles.flushBtn}
           />
-          <CommandButton 
-            title={syncing ? 'Syncing...' : 'Sync Outbox Now'} 
+          <CommandButton
+            title={syncing ? 'Syncing...' : 'Sync Outbox Now'}
             onPress={triggerSync}
             disabled={syncing || !networkOnline}
             testID="sync-outbox-now"
             style={styles.syncBtn}
           />
         </View>
-        {syncStatusMsg && (
-          <Text style={styles.syncStatus}>{syncStatusMsg}</Text>
-        )}
-        {errorMsg && (
-          <Text style={styles.errorText}>{errorMsg}</Text>
-        )}
+        {syncStatusMsg && <Text style={styles.syncStatus}>{syncStatusMsg}</Text>}
+        {errorMsg && <Text style={styles.errorText}>{errorMsg}</Text>}
         {!networkOnline && (
           <View testID="outbox-offline-state" style={styles.offlineContainer}>
-            <FontAwesome name="exclamation-triangle" size={12} color="#D97706" style={{ marginRight: 6 }} />
+            <FontAwesome
+              name="exclamation-triangle"
+              size={12}
+              color="#D97706"
+              style={{ marginRight: 6 }}
+            />
             <Text style={styles.offlineText}>
               Device is offline. Synchronization is disabled until network is restored.
             </Text>
           </View>
         )}
         {syncStatusMsg && (
-          <View style={[
-            styles.statusMessageContainer,
-            syncStatusMsg.includes('Failed') ? styles.statusContainerFail : syncStatusMsg.includes('Completed') ? styles.statusContainerSuccess : null
-          ]}>
-            <FontAwesome 
-              name={syncStatusMsg.includes('Failed') ? 'times-circle' : syncStatusMsg.includes('Completed') ? 'check-circle' : 'spinner'} 
-              size={14} 
-              color={syncStatusMsg.includes('Failed') ? '#F87171' : syncStatusMsg.includes('Completed') ? '#34D399' : '#94A3B8'} 
-              style={{ marginRight: 8 }} 
+          <View
+            style={[
+              styles.statusMessageContainer,
+              syncStatusMsg.includes('Failed')
+                ? styles.statusContainerFail
+                : syncStatusMsg.includes('Completed')
+                  ? styles.statusContainerSuccess
+                  : null,
+            ]}
+          >
+            <FontAwesome
+              name={
+                syncStatusMsg.includes('Failed')
+                  ? 'times-circle'
+                  : syncStatusMsg.includes('Completed')
+                    ? 'check-circle'
+                    : 'spinner'
+              }
+              size={14}
+              color={
+                syncStatusMsg.includes('Failed')
+                  ? '#F87171'
+                  : syncStatusMsg.includes('Completed')
+                    ? '#34D399'
+                    : '#94A3B8'
+              }
+              style={{ marginRight: 8 }}
             />
-            <Text style={[
-              styles.statusMessage, 
-              syncStatusMsg.includes('Failed') ? styles.statusFail : syncStatusMsg.includes('Completed') ? styles.statusSuccess : null
-            ]}>
+            <Text
+              style={[
+                styles.statusMessage,
+                syncStatusMsg.includes('Failed')
+                  ? styles.statusFail
+                  : syncStatusMsg.includes('Completed')
+                    ? styles.statusSuccess
+                    : null,
+              ]}
+            >
               {syncStatusMsg}
             </Text>
           </View>
@@ -241,18 +291,28 @@ export default function AdminOutbox() {
         <View style={styles.metricCard}>
           <View style={styles.metricHeader}>
             <Text style={styles.metricLabel}>Outbox Queue</Text>
-            <View style={[styles.statusIndicator, outboxList.length > 0 ? styles.indicatorPending : styles.indicatorSuccess]} />
+            <View
+              style={[
+                styles.statusIndicator,
+                outboxList.length > 0 ? styles.indicatorPending : styles.indicatorSuccess,
+              ]}
+            />
           </View>
           <View style={styles.metricBody}>
             <Text style={styles.metricValue}>{outboxList.length}</Text>
             <Text style={styles.metricSubtext}>Pending synchronization</Text>
           </View>
         </View>
-        
+
         <View style={styles.metricCard}>
           <View style={styles.metricHeader}>
             <Text style={styles.metricLabel}>Quarantined</Text>
-            <View style={[styles.statusIndicator, quarantineList.length > 0 ? styles.indicatorFailed : styles.indicatorSuccess]} />
+            <View
+              style={[
+                styles.statusIndicator,
+                quarantineList.length > 0 ? styles.indicatorFailed : styles.indicatorSuccess,
+              ]}
+            />
           </View>
           <View style={styles.metricBody}>
             <Text style={styles.metricValue}>{quarantineList.length}</Text>
@@ -272,7 +332,12 @@ export default function AdminOutbox() {
         ListHeaderComponent={
           <View style={styles.listHeader}>
             <Text style={styles.sectionTitle}>Sync Outbox Queue</Text>
-            <View style={[styles.sectionBadge, outboxList.length > 0 ? styles.sectionBadgePending : styles.sectionBadgeEmpty]}>
+            <View
+              style={[
+                styles.sectionBadge,
+                outboxList.length > 0 ? styles.sectionBadgePending : styles.sectionBadgeEmpty,
+              ]}
+            >
               <Text style={styles.sectionBadgeText}>{outboxList.length}</Text>
             </View>
           </View>
@@ -281,7 +346,12 @@ export default function AdminOutbox() {
           <>
             <View style={styles.listHeader}>
               <Text style={styles.sectionTitle}>Quarantine Failures</Text>
-              <View style={[styles.sectionBadge, quarantineList.length > 0 ? styles.sectionBadgeFailed : styles.sectionBadgeEmpty]}>
+              <View
+                style={[
+                  styles.sectionBadge,
+                  quarantineList.length > 0 ? styles.sectionBadgeFailed : styles.sectionBadgeEmpty,
+                ]}
+              >
                 <Text style={styles.sectionBadgeText}>{quarantineList.length}</Text>
               </View>
             </View>
@@ -292,7 +362,12 @@ export default function AdminOutbox() {
               scrollEnabled={false}
               ListEmptyComponent={
                 <View style={styles.emptyContainer}>
-                  <FontAwesome name="shield" size={24} color="#334155" style={{ marginBottom: 8 }} />
+                  <FontAwesome
+                    name="shield"
+                    size={24}
+                    color="#334155"
+                    style={{ marginBottom: 8 }}
+                  />
                   <Text style={styles.emptyText}>No quarantined commands detected.</Text>
                 </View>
               }
@@ -301,7 +376,12 @@ export default function AdminOutbox() {
         }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <FontAwesome name="check-circle-o" size={24} color="#334155" style={{ marginBottom: 8 }} />
+            <FontAwesome
+              name="check-circle-o"
+              size={24}
+              color="#334155"
+              style={{ marginBottom: 8 }}
+            />
             <Text style={styles.emptyText}>Outbox queue is empty. Ready for offline commands.</Text>
           </View>
         }
@@ -541,7 +621,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   syncStatus: {
-    color: "#A7F3D0",
+    color: '#A7F3D0',
     fontSize: 13,
     marginTop: 8,
   },

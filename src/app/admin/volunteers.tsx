@@ -5,20 +5,43 @@ import { AdminCard } from '../../components/admin/AdminCard';
 
 export default function AdminVolunteers() {
   const assignments = [
-    { id: '1', team: 'Welcoming / Ushers', count: 12, coordinator: 'Sarah Jenkins', status: 'Optimal' },
-    { id: '2', title: 'Worship / AV Sound', count: 6, coordinator: 'Michael Chang', status: 'Needs Volunteers' },
-    { id: '3', title: 'Kids Church Helpers', count: 14, coordinator: 'Jenny Choi', status: 'Optimal' },
+    {
+      id: '1',
+      team: 'Welcoming / Ushers',
+      count: 12,
+      coordinator: 'Sarah Jenkins',
+      status: 'Optimal',
+    },
+    {
+      id: '2',
+      title: 'Worship / AV Sound',
+      count: 6,
+      coordinator: 'Michael Chang',
+      status: 'Needs Volunteers',
+    },
+    {
+      id: '3',
+      title: 'Kids Church Helpers',
+      count: 14,
+      coordinator: 'Jenny Choi',
+      status: 'Optimal',
+    },
   ];
 
-  const renderItem = ({ item }: { item: typeof assignments[0] }) => {
+  const renderItem = ({ item }: { item: (typeof assignments)[0] }) => {
     const isNeedsVols = item.status === 'Needs Volunteers';
     return (
-      <AdminCard 
-        title={item.team || item.title} 
+      <AdminCard
+        title={item.team || item.title}
         subtitle={`${item.count} Volunteers`}
         headerRight={
           <View style={[styles.badge, isNeedsVols ? styles.badgeWarning : styles.badgeSuccess]}>
-            <Text style={[styles.badgeText, isNeedsVols ? styles.badgeTextWarning : styles.badgeTextSuccess]}>
+            <Text
+              style={[
+                styles.badgeText,
+                isNeedsVols ? styles.badgeTextWarning : styles.badgeTextSuccess,
+              ]}
+            >
               {item.status}
             </Text>
           </View>

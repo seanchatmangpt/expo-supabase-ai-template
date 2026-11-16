@@ -36,7 +36,15 @@ export interface IntelligenceCapability {
 
 export interface AppIntervention {
   id: string; // e.g. "urn:zoe:intervention:<uuid>"
-  verb: 'PROMPT' | 'REORDER' | 'RECOMMEND' | 'REMIND' | 'SUPPRESS' | 'ESCALATE' | 'ASSIGN' | 'RECEIPT';
+  verb:
+    | 'PROMPT'
+    | 'REORDER'
+    | 'RECOMMEND'
+    | 'REMIND'
+    | 'SUPPRESS'
+    | 'ESCALATE'
+    | 'ASSIGN'
+    | 'RECEIPT';
   rdfQuads: {
     subject: string;
     predicate: string;

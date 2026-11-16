@@ -35,7 +35,13 @@ export class AutonomicSimulator {
    * Updates sync behaviors via ActorOps store.
    */
   static simulateNetworkChaos(latency: number, dropRate: number) {
-    console.log('[AutonomicSimulator] Simulating network chaos: ' + latency + 'ms latency, ' + dropRate + ' drop rate');
+    console.log(
+      '[AutonomicSimulator] Simulating network chaos: ' +
+        latency +
+        'ms latency, ' +
+        dropRate +
+        ' drop rate'
+    );
     useActorOpsStore.getState().setPacketDropRate(dropRate);
   }
 

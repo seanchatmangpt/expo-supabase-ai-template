@@ -7,6 +7,65 @@ import { useLawEngine } from '@pcp/v30/post-cyberpunk/law-engine';
 import { useAgiCourt } from '@pcp/v30/post-cyberpunk/agi-court';
 import { GlassCard } from '@pcp/ui/glassmorphism/GlassCard';
 import { HolographicGlassCard } from '@pcp/2030/ui-holographic/HolographicGlassCard';
+import { Skeleton } from '../../framework/ui/Skeleton';
+
+function DashboardSkeleton() {
+  return (
+    <ScrollView
+      className="flex-1 bg-[#090d16]"
+      style={{ flex: 1 }}
+      contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 48, paddingBottom: 120 }}
+    >
+      <View className="mb-10">
+        <Skeleton width={220} height={36} borderRadius={8} className="mb-2 bg-slate-800/40" />
+        <Skeleton width={180} height={16} borderRadius={4} className="bg-slate-800/40" />
+      </View>
+
+      {/* Reality Actuator Card Skeleton */}
+      <View className="p-6 mb-8 bg-[#0f172a]/90 rounded-[24px] border border-slate-800/60 shadow-xl shadow-slate-950/20">
+        <View className="flex-row items-center mb-6">
+          <Skeleton width={48} height={48} borderRadius={16} className="mr-4 bg-slate-800/40" />
+          <View className="flex-1">
+            <Skeleton width={140} height={20} borderRadius={4} className="mb-2 bg-slate-800/40" />
+            <Skeleton width={90} height={14} borderRadius={4} className="bg-slate-800/40" />
+          </View>
+        </View>
+        <Skeleton width="100%" height={56} borderRadius={16} className="bg-slate-800/40" />
+      </View>
+
+      {/* Metrics Row Skeleton */}
+      <View className="flex-row mb-8">
+        <View className="flex-1 mr-2 p-5 h-32 bg-[#0f172a]/90 rounded-2xl border border-slate-800/60 justify-between">
+          <Skeleton width={20} height={20} borderRadius={10} className="bg-slate-800/40" />
+          <View>
+            <Skeleton width={70} height={12} borderRadius={4} className="mb-2 bg-slate-800/40" />
+            <Skeleton width={60} height={20} borderRadius={4} className="bg-slate-800/40" />
+          </View>
+        </View>
+        <View className="flex-1 ml-2 p-5 h-32 bg-[#0f172a]/90 rounded-2xl border border-slate-800/60 justify-between">
+          <Skeleton width={20} height={20} borderRadius={10} className="bg-slate-800/40" />
+          <View>
+            <Skeleton width={70} height={12} borderRadius={4} className="mb-2 bg-slate-800/40" />
+            <Skeleton width={60} height={20} borderRadius={4} className="bg-slate-800/40" />
+          </View>
+        </View>
+      </View>
+
+      {/* AGI Court Card Skeleton */}
+      <View className="bg-[#0f172a]/90 border border-slate-800/60 rounded-3xl p-6 mb-12 shadow-xl shadow-slate-950/20">
+        <Skeleton width={160} height={14} borderRadius={4} className="mb-6 bg-slate-800/40" />
+        <View className="space-y-4">
+          {[1, 2, 3].map((i) => (
+            <View key={i} className="flex-row justify-between items-center py-2.5 border-b border-slate-800/30">
+              <Skeleton width={110} height={16} borderRadius={4} className="bg-slate-800/40" />
+              <Skeleton width={50} height={14} borderRadius={4} className="bg-slate-800/40" />
+            </View>
+          ))}
+        </View>
+      </View>
+    </ScrollView>
+  );
+}
 
 /**
  * ZOEapp Dashboard (Post-Cyberpunk Edition)
@@ -16,11 +75,7 @@ export default function PcpDashboard() {
   const { session, loading } = useSession();
 
   if (loading) {
-    return (
-      <View className="flex-1 bg-slate-950 justify-center items-center">
-        <ActivityIndicator size="large" color="#8B5CF6" />
-      </View>
-    );
+    return <DashboardSkeleton />;
   }
 
   return (
@@ -31,9 +86,16 @@ export default function PcpDashboard() {
 }
 
 function DashboardContent({ user }: { user: any }) {
-  const { submitClaim } = useLawEngine({ 
-    laws: [], 
-    boundary: { execute: async () => ({ id: 'r1', artifactId: 'a1', executionTime: Date.now(), status: 'SUCCESS' }) }
+  const { submitClaim } = useLawEngine({
+    laws: [],
+    boundary: {
+      execute: async () => ({
+        id: 'r1',
+        artifactId: 'a1',
+        executionTime: Date.now(),
+        status: 'SUCCESS',
+      }),
+    },
   });
   const [actuationStatus, setStatus] = useState<'idle' | 'processing' | 'success'>('idle');
 
@@ -43,18 +105,20 @@ function DashboardContent({ user }: { user: any }) {
     await submitClaim({
       id: `act_${Date.now()}`,
       description: 'Actuating ministry context via Post-Cyberpunk law',
-      requiredEvidence: ['ZKP_AUTH', 'HARDWARE_ATTESTATION']
+      requiredEvidence: ['ZKP_AUTH', 'HARDWARE_ATTESTATION'],
     } as any);
     setStatus('success');
     setTimeout(() => setStatus('idle'), 2000);
   };
 
   return (
-    <ScrollView className="flex-1 bg-slate-950 px-6 py-12">
+    <ScrollView
+      className="flex-1 bg-background"
+      style={{ flex: 1 }}
+      contentContainerStyle={{ paddingHorizontal: 24, paddingTop: 48, paddingBottom: 120 }}
+    >
       <View className="mb-10">
-        <Text className="text-4xl font-black text-white tracking-tighter mb-2">
-          PCP DASHBOARD
-        </Text>
+        <Text className="text-4xl font-black text-slate-900 dark:text-text tracking-tighter mb-2">PCP DASHBOARD</Text>
         <Text className="text-slate-400 text-lg font-medium">
           Post-Cyberpunk Operating Substrate
         </Text>
@@ -71,12 +135,15 @@ function DashboardContent({ user }: { user: any }) {
           </View>
         </View>
 
-        <TouchableOpacity 
+        <TouchableOpacity
           onPress={handleActuation}
           disabled={actuationStatus === 'processing'}
           className={`h-14 rounded-2xl items-center justify-center ${
             actuationStatus === 'processing' ? 'bg-slate-800' : 'bg-violet-600'
           }`}
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel="Actuate Reality Law"
         >
           {actuationStatus === 'processing' ? (
             <ActivityIndicator color="white" />
@@ -109,7 +176,7 @@ function DashboardContent({ user }: { user: any }) {
         </View>
       </View>
 
-      <View className="bg-slate-900/50 border border-slate-800 rounded-3xl p-6 mb-12">
+      <View className="bg-card/50 border border-border rounded-3xl p-6 mb-12">
         <Text className="text-slate-300 font-bold mb-4 uppercase tracking-widest text-xs">
           Internal Court (AGI Court)
         </Text>
@@ -119,7 +186,10 @@ function DashboardContent({ user }: { user: any }) {
             { label: 'ZKP Boundary', status: 'VERIFIED' },
             { label: 'Causal Window', status: 'GATED' },
           ].map((item, i) => (
-            <View key={i} className="flex-row justify-between items-center py-2 border-b border-slate-800/50">
+            <View
+              key={i}
+              className="flex-row justify-between items-center py-2 border-b border-slate-800/50"
+            >
               <Text className="text-slate-400 font-medium">{item.label}</Text>
               <Text className="text-violet-400 font-mono text-xs font-bold">{item.status}</Text>
             </View>
@@ -131,9 +201,7 @@ function DashboardContent({ user }: { user: any }) {
         <Text className="text-slate-500 font-mono text-[10px]">
           SESSION_ID: {user?.id?.slice(0, 12)}...
         </Text>
-        <Text className="text-slate-500 font-mono text-[10px]">
-          PCP_FOUNDRY_V30_OMEGA
-        </Text>
+        <Text className="text-slate-500 font-mono text-[10px]">PCP_FOUNDRY_V30_OMEGA</Text>
       </View>
     </ScrollView>
   );

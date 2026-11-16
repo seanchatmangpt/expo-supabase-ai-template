@@ -12,8 +12,8 @@ export default function ModalAvatarRelativeProjection() {
       <View className="bg-white border-b border-gray-200 pt-16 pb-4 px-6">
         <View className="flex-row items-center justify-between">
           <Text className="text-2xl font-bold text-gray-900">App Information</Text>
-          <TouchableOpacity 
-            className="bg-gray-100 rounded-full p-2" 
+          <TouchableOpacity
+            className="bg-gray-100 rounded-full p-2"
             onPress={() => router.back()}
             accessibilityRole="button"
             accessibilityLabel="Close Modal"
@@ -23,7 +23,10 @@ export default function ModalAvatarRelativeProjection() {
         </View>
       </View>
 
-      <ScrollView className="flex-1 px-6 py-6">
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ paddingHorizontal: 24, paddingVertical: 24 }}
+      >
         {/* Welcome Card */}
         <View className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 mb-6">
           <View className="items-center mb-4">
@@ -32,7 +35,8 @@ export default function ModalAvatarRelativeProjection() {
             </View>
             <Text className="text-xl font-bold text-gray-900 mb-2">Welcome to the Modal</Text>
             <Text className="text-gray-600 text-center leading-6">
-              This is a modal Avatar-Relative Projection that demonstrates how modals work in Expo Router.
+              This is a modal Avatar-Relative Projection that demonstrates how modals work in Expo
+              Router.
             </Text>
           </View>
         </View>
@@ -47,7 +51,9 @@ export default function ModalAvatarRelativeProjection() {
                 <AntDesign name="check" size={14} color="#059669" />
               </View>
               <View className="flex-1">
-                <Text className="font-medium text-gray-900">Full Avatar-Relative Projection Modal</Text>
+                <Text className="font-medium text-gray-900">
+                  Full Avatar-Relative Projection Modal
+                </Text>
                 <Text className="text-gray-600 text-sm">
                   Presented as a modal with custom navigation
                 </Text>

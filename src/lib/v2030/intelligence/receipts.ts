@@ -8,29 +8,32 @@ export class IntelligenceReceiptManager {
   /**
    * Cryptographically verify the integrity signature of an intelligence receipt
    */
-  static async verify(receiptId: string): Promise<{ verified: boolean; receipt: any; error?: string }> {
+  static async verify(
+    receiptId: string
+  ): Promise<{ verified: boolean; receipt: any; error?: string }> {
     try {
-      const records = await db
-        .select()
-        .from(actorReceipts)
-        .where(eq(actorReceipts.id, receiptId));
+      const records = await db.select().from(actorReceipts).where(eq(actorReceipts.id, receiptId));
 
       if (records.length === 0) {
-        return { verified: false, receipt: null, error: `Receipt '${receiptId}' not found in database.` };
+        return {
+          verified: false,
+          receipt: null,
+          error: `Receipt '${receiptId}' not found in database.`,
+        };
       }
 
       const rec = records[0];
       const data = {
         receiptId,
-        resultHash: rec.deltaHash ? rec.deltaHash.split('_').pop() : ''
+        resultHash: rec.deltaHash ? rec.deltaHash.split('_').pop() : '',
       };
 
       // In this version, we match the exact runner generation logic
       const verified = rec.status === 'applied_remote' || rec.status === 'applied_local';
-      
+
       return {
         verified,
-        receipt: rec
+        receipt: rec,
       };
     } catch (e: any) {
       return { verified: false, receipt: null, error: e.message };

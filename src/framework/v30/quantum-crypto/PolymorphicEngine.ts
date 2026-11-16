@@ -5,22 +5,33 @@
  * at runtime based on device entropy and simulated DNA-sequence parameters.
  */
 
-const randomBytes = (size: number) => { const a = new Uint8Array(size); for(let i=0;i<size;i++)a[i]=Math.floor(Math.random()*256); return a as any; };
-const Buffer = typeof global !== 'undefined' && global.Buffer ? global.Buffer : require('buffer').Buffer;
-const createCipheriv = (a:any,b:any,c:any) => {
+const randomBytes = (size: number) => {
+  const a = new Uint8Array(size);
+  for (let i = 0; i < size; i++) a[i] = Math.floor(Math.random() * 256);
+  return a as any;
+};
+const Buffer =
+  typeof global !== 'undefined' && global.Buffer ? global.Buffer : require('buffer').Buffer;
+const createCipheriv = (a: any, b: any, c: any) => {
   let data = '';
   return {
-    update: (x:any,y:any,z:any) => { data += typeof x === 'string' ? x : x.toString(); return ''; },
-    final: (x:any) => Buffer.from(data).toString('base64'),
-    getAuthTag: () => Buffer.from('tag')
+    update: (x: any, y: any, z: any) => {
+      data += typeof x === 'string' ? x : x.toString();
+      return '';
+    },
+    final: (x: any) => Buffer.from(data).toString('base64'),
+    getAuthTag: () => Buffer.from('tag'),
   };
 };
-const createDecipheriv = (a:any,b:any,c:any) => {
+const createDecipheriv = (a: any, b: any, c: any) => {
   let data = '';
   return {
-    update: (x:any,y:any,z:any) => { data += typeof x === 'string' ? x : x.toString(); return ''; },
-    final: (x:any) => Buffer.from(data, 'base64').toString('utf8'),
-    setAuthTag: (x:any) => {}
+    update: (x: any, y: any, z: any) => {
+      data += typeof x === 'string' ? x : x.toString();
+      return '';
+    },
+    final: (x: any) => Buffer.from(data, 'base64').toString('utf8'),
+    setAuthTag: (x: any) => {},
   };
 };
 

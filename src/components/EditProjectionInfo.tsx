@@ -24,7 +24,8 @@ export default function EditProjectionInfo({ path }: { path: string }) {
       <View className="mt-6 border-t border-slate-200 dark:border-slate-800 pt-5 items-center">
         <ExternalLink
           className="py-3 px-6 rounded-full bg-blue-50 dark:bg-blue-900/30 active:opacity-70 transition-opacity"
-          href="https://docs.expo.io/get-started/create-a-new-app/#opening-the-app-on-your-phonetablet">
+          href="https://docs.expo.io/get-started/create-a-new-app/#opening-the-app-on-your-phonetablet"
+        >
           <Text className="text-center text-sm font-semibold text-blue-600 dark:text-blue-400">
             Tap here if your app doesn&apos;t automatically update
           </Text>

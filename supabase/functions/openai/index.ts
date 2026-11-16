@@ -187,33 +187,55 @@ Deno.serve(async (req: Request): Promise<Response> => {
       );
     }
 
-    // Call OpenAI API
-    const completion = await openai.chat.completions.create({
+    // Call OpenAI API with streaming enabled
+    const stream = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
         {
           role: "system",
           content:
-            "You are a helpful AI assistant. Provide concise and helpful responses.",
+            "You are a highly capable agentic AI integrated with TRUEX and Ostar capabilities. You are proactive, strategic, and focused on delivering high-impact results using advanced Ostar-derived logic and TRUEX operational standards.",
         },
         {
           role: "user",
           content: message.trim(),
         },
       ],
-      max_tokens: 500,
+      max_tokens: 1000,
       temperature: 0.7,
+      stream: true,
     });
 
-    const responseMessage = completion.choices[0]?.message?.content;
+    // Create a ReadableStream for Server-Sent Events (SSE)
+    const encoder = new TextEncoder();
+    const readableStream = new ReadableStream({
+      async start(controller) {
+        try {
+          for await (const chunk of stream) {
+            const text = chunk.choices[0]?.delta?.content || "";
+            if (text) {
+              const data = JSON.stringify({ message: text } as OpenAIResponse);
+              controller.enqueue(encoder.encode(`data: ${data}\n\n`));
+            }
+          }
+        } catch (err) {
+          console.error("Stream error:", err);
+          const errorData = JSON.stringify({ error: "Stream encountered an error" } as ErrorResponse);
+          controller.enqueue(encoder.encode(`data: ${errorData}\n\n`));
+        } finally {
+          controller.close();
+        }
+      },
+    });
 
-    const responseData: OpenAIResponse = {
-      message: responseMessage || null,
-    };
-
-    return new Response(JSON.stringify(responseData), {
+    return new Response(readableStream, {
       status: 200,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+      headers: {
+        ...corsHeaders,
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+      },
     });
   } catch (error) {
     console.error("OpenAI API Error:", error);

@@ -4,14 +4,23 @@ import * as schema from './schema';
 export async function initializeAndSeedDatabase() {
   try {
     console.log('[Seeder] Checking if database needs seeding...');
-    
+
     // Check if actor_events is empty
     const result = await db.select().from(schema.actorEvents).limit(1);
-    
+
     if (result.length === 0) {
       console.log('[Seeder] Database is empty! Generating synthetic population...');
-      
-      const eventTypes = ['login', 'click', 'scroll', 'type', 'logout', 'purchase', 'authenticate', 'verify'];
+
+      const eventTypes = [
+        'login',
+        'click',
+        'scroll',
+        'type',
+        'logout',
+        'purchase',
+        'authenticate',
+        'verify',
+      ];
       const commandNames = ['Init', 'Update', 'Submit'];
       const statuses = ['pending', 'processing', 'applied', 'rejected'] as const;
 
@@ -21,7 +30,7 @@ export async function initializeAndSeedDatabase() {
       for (let i = 0; i < 100; i++) {
         const commandId = `cmd_${i}_${Date.now()}`;
         const actorRef = `actor_${i}`;
-        
+
         commands.push({
           id: commandId,
           actorRef: JSON.stringify({ id: actorRef }),

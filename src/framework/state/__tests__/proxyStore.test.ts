@@ -14,7 +14,7 @@ interface TestStore {
 }
 
 describe('createProxyStore', () => {
-  it('should create a governed proxy and a bound store that syncs mutations', () => {
+  it('should create a governed proxy and a bound store that syncs mutations', async () => {
     const context = new MembraneContext({
       mode: 'strict',
       tenantId: 'test',
@@ -49,17 +49,19 @@ describe('createProxyStore', () => {
 
     // Mutate proxy directly
     proxy.count = 5;
+    for (let i = 0; i < 10; i++) await Promise.resolve();
     expect(proxy.count).toBe(5);
     // Since proxy mutation is synchronous to store in our setup
     expect(useStore.getState().count).toBe(5);
 
     // Mutate via store actions
     useStore.getState().setMessage('world');
+    for (let i = 0; i < 10; i++) await Promise.resolve();
     expect(proxy.message).toBe('world');
     expect(useStore.getState().message).toBe('world');
   });
 
-  it('handles mutations before the store is fully initialized (edge case with storeSet)', () => {
+  it('handles mutations before the store is fully initialized (edge case with storeSet)', async () => {
     const context = new MembraneContext({
       mode: 'strict',
       tenantId: 'test',
@@ -85,6 +87,7 @@ describe('createProxyStore', () => {
       },
     });
 
+    await new Promise(resolve => setTimeout(resolve, 10));
     expect(proxy.count).toBe(10);
     expect(capturedSet).toBeDefined();
   });

@@ -8,7 +8,7 @@ import type {
   OcelAttributeValueTs,
   EventObjectLinkTs,
   ObjectObjectLinkTs,
-  ObjectChangeTs
+  ObjectChangeTs,
 } from '@wasm4pm/types';
 
 export type {
@@ -19,7 +19,7 @@ export type {
   OcelAttributeValueTs,
   EventObjectLinkTs,
   ObjectObjectLinkTs,
-  ObjectChangeTs
+  ObjectChangeTs,
 };
 
 export interface OcelObject {
@@ -47,7 +47,7 @@ export function exportToOcel(receipts: HookReceipt[]): OcelLog {
 
   for (const receipt of receipts) {
     const actorKey = stringifyActorRef(receipt.actorRef);
-    
+
     // Register the hook actor as an object if not present
     if (!objects[actorKey]) {
       objects[actorKey] = {
@@ -116,7 +116,9 @@ export function exportToOcelTs(receipts: HookReceipt[]): OcelLogTs {
       seenObjects.add(actorKey);
     }
 
-    const timestampNs = receipt.timestamp ? BigInt(new Date(receipt.timestamp).getTime()) * 1000000n : null;
+    const timestampNs = receipt.timestamp
+      ? BigInt(new Date(receipt.timestamp).getTime()) * 1000000n
+      : null;
 
     events.push({
       id: receipt.hookRunId,
@@ -244,5 +246,3 @@ export function toOcelLogTs(log: OcelLog): OcelLogTs {
     changes: [],
   };
 }
-
-

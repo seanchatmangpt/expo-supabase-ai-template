@@ -25,7 +25,8 @@ jest.mock('../../../ui/glassmorphism/GlassCard', () => {
         data-tint={tint}
         data-with-border={withBorder}
         style={style}
-        {...props}>
+        {...props}
+      >
         {children}
       </View>
     ),
@@ -100,7 +101,8 @@ describe('GlassSpatialContainer', () => {
         withBorder={false}
         delay={500}
         entryDirection="left"
-        style={style}>
+        style={style}
+      >
         <Text>Content</Text>
       </GlassSpatialContainer>
     );

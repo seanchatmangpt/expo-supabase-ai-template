@@ -24,7 +24,7 @@ describe('ZKP Framework', () => {
       pi_c: ['77883344556677889900112233', '88883344556677889900112233', '1'],
     }),
     publicSignals: ['18'],
-    enclaveSignature: 'valid-signature',
+    enclaveSignature: '0x' + 'a'.repeat(40),
   };
 
   describe('ZkEngine', () => {

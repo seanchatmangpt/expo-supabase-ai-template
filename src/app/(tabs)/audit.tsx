@@ -5,8 +5,12 @@ import { AppSwarmManager, AgentInfo, AgentStatus } from '@pcp/v30/autonomous-swa
 import { AutonomicQAEngine, QACycleReport, QAViolation } from '@pcp/auto/AutonomicQAEngine';
 import { TelemetryManager } from '@pcp/membrane/managers/telemetry';
 import { LieDetector } from '@pcp/auto/LieDetector';
+import { ProtectedRoute } from '@/src/route-law/ProtectedRoute';
+import { useHaptics } from '../../framework/ui/haptics/useHaptics';
+import { HapticFeedbackPattern } from '../../framework/ui/haptics/IntelligentHaptics';
 
 export default function AuditScreen() {
+  const haptics = useHaptics();
   // Swarm and engine instance refs
   const swarmRef = useRef<AppSwarmManager | null>(null);
   const telemetryRef = useRef<TelemetryManager | null>(null);
@@ -15,7 +19,14 @@ export default function AuditScreen() {
   // Component states
   const [agents, setAgents] = useState<AgentInfo[]>([]);
   const [lastReport, setLastReport] = useState<QACycleReport | null>(null);
-  const [simulationLogs, setSimulationLogs] = useState<{ id: string; timestamp: string; message: string; type: 'info' | 'success' | 'warning' | 'error' | 'heal' }[]>([]);
+  const [simulationLogs, setSimulationLogs] = useState<
+    {
+      id: string;
+      timestamp: string;
+      message: string;
+      type: 'info' | 'success' | 'warning' | 'error' | 'heal';
+    }[]
+  >([]);
   const [chainHead, setChainHead] = useState<string>('');
   const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
 
@@ -49,8 +60,11 @@ export default function AuditScreen() {
       setLastReport(report);
       setChainHead(qEngine.getChainHead());
       setAgents([...sManager.getAgents()]);
-      
-      addLog('System initialized: 10/10 agents spawned. Healthy baseline checkpoints established.', 'success');
+
+      addLog(
+        'System initialized: 10/10 agents spawned. Healthy baseline checkpoints established.',
+        'success'
+      );
     });
 
     // Hook telemetry events into visualizer logs
@@ -58,14 +72,20 @@ export default function AuditScreen() {
       if (event.error) {
         addLog(`[TELEMETRY SPAN ERROR] ${event.error}`, 'error');
       } else {
-        addLog(`[TELEMETRY SPAN] Flow: ${event.flowName} (Trace: ${event.traceId?.slice(0, 12)}...)`, 'info');
+        addLog(
+          `[TELEMETRY SPAN] Flow: ${event.flowName} (Trace: ${event.traceId?.slice(0, 12)}...)`,
+          'info'
+        );
       }
     });
 
     // Start Lie Detector to aggressively enforce truth
     const detector = new LieDetector(sManager, qEngine);
     detector.start(3000);
-    addLog('LIE DETECTOR ACTIVATED. Continuously scanning for deviations from Autonomic Invariants...', 'success');
+    addLog(
+      'LIE DETECTOR ACTIVATED. Continuously scanning for deviations from Autonomic Invariants...',
+      'success'
+    );
 
     return () => {
       detector.stop();
@@ -81,7 +101,7 @@ export default function AuditScreen() {
   // Run a cycle to inspect and self-heal
   const runCycle = async (actionDesc: string) => {
     if (!engineRef.current || !swarmRef.current) return;
-    
+
     addLog(`Running QA check cycle... (${actionDesc})`, 'info');
     const report = await engineRef.current.runQACycle();
     setLastReport(report);
@@ -120,19 +140,21 @@ export default function AuditScreen() {
   // ── 1. Inject Chatman Breach ──────────────────────────────────
   const injectChatmanBreach = () => {
     if (!swarmRef.current) return;
+    haptics.trigger(HapticFeedbackPattern.WARNING);
     addLog('Injecting Chatman Invariant Breach on Agent #3...', 'warning');
     const agent3 = swarmRef.current.getAgent('agent-3')!;
     agent3.status = 'refactoring';
     agent3.memoryAnalyzed = 0;
     agent3.componentsRefactored = 0;
     setAgents([...swarmRef.current.getAgents()]);
-    
+
     setTimeout(() => runCycle('Chatman Breach Validation'), 1000);
   };
 
   // ── 2. Inject Transition Breach ───────────────────────────────
   const injectTransitionBreach = () => {
     if (!swarmRef.current) return;
+    haptics.trigger(HapticFeedbackPattern.WARNING);
     addLog('Injecting illegal Status Transition on Agent #5...', 'warning');
     const agent5 = swarmRef.current.getAgent('agent-5')!;
     agent5.status = 'unknown' as AgentStatus;
@@ -144,6 +166,7 @@ export default function AuditScreen() {
   // ── 3. Inject Entropy Overflow ────────────────────────────────
   const injectEntropyOverflow = () => {
     if (!swarmRef.current) return;
+    haptics.trigger(HapticFeedbackPattern.WARNING);
     addLog('Injecting State Entropy Overflow on Agent #0...', 'warning');
     const agent0 = swarmRef.current.getAgent('agent-0')!;
     agent0.componentsRefactored = 120; // safe limit is 100
@@ -155,8 +178,12 @@ export default function AuditScreen() {
   // ── 4. Inject Checkpoint Staleness ────────────────────────────
   const injectStaleCheckpoint = () => {
     if (!engineRef.current || !swarmRef.current) return;
-    addLog('Injecting Checkpoint Staleness (artificially aging historical epochs) on Agent #7...', 'warning');
-    
+    haptics.trigger(HapticFeedbackPattern.WARNING);
+    addLog(
+      'Injecting Checkpoint Staleness (artificially aging historical epochs) on Agent #7...',
+      'warning'
+    );
+
     const checkpointsMap = (engineRef.current as any).checkpoints;
     const agent7Cps = checkpointsMap.get('agent-7') || [];
     if (agent7Cps.length > 0) {
@@ -173,11 +200,12 @@ export default function AuditScreen() {
   // ── 5. Inject Checkpoint Corruption (Re-hydration fallback) ────
   const injectCheckpointCorruption = () => {
     if (!engineRef.current || !swarmRef.current) return;
+    haptics.trigger(HapticFeedbackPattern.WARNING);
     addLog('Corrupting checkpoint integrity on Agent #2 (hash mismatch)...', 'warning');
 
     const checkpointsMap = (engineRef.current as any).checkpoints;
     const agent2Cps = checkpointsMap.get('agent-2') || [];
-    
+
     // Ensure we have multiple checkpoints for historical fallback
     const agent2 = swarmRef.current.getAgent('agent-2')!;
     agent2.status = 'analyzing';
@@ -207,7 +235,7 @@ export default function AuditScreen() {
     swarmRef.current.tick();
     swarmRef.current.stop();
     setAgents([...swarmRef.current.getAgents()]);
-    
+
     setTimeout(() => runCycle('Swarm Tick Progress'), 800);
   };
 
@@ -254,14 +282,20 @@ export default function AuditScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <ProtectedRoute route={{ requiredIdentityBoundary: 'mfa_verified', requiredReceiptCommandId: 'cmd_audit_access' }}>
+      <View style={styles.container}>
       {/* Header with health state */}
       <View style={styles.header}>
         <View>
           <Text style={styles.title}>AUTONOMIC QA SYSTEM</Text>
           <Text style={styles.subtitle}>10-AGENT RESILIENCY SIMULATOR</Text>
         </View>
-        <View style={[styles.healthBadge, { backgroundColor: getHealthColor() + '20', borderColor: getHealthColor() }]}>
+        <View
+          style={[
+            styles.healthBadge,
+            { backgroundColor: getHealthColor() + '20', borderColor: getHealthColor() },
+          ]}
+        >
           <View style={[styles.pulseDot, { backgroundColor: getHealthColor() }]} />
           <Text style={[styles.healthText, { color: getHealthColor() }]}>
             {lastReport?.overallHealth || 'HEALTHY'}
@@ -285,7 +319,18 @@ export default function AuditScreen() {
           </View>
           <View style={styles.statBox}>
             <Text style={styles.statLabel}>ESCALATED ALARMS</Text>
-            <Text style={[styles.statVal, { color: lastReport?.totalViolations && lastReport.totalViolations > lastReport.totalRepairsSucceeded ? '#ef4444' : '#64748b' }]}>
+            <Text
+              style={[
+                styles.statVal,
+                {
+                  color:
+                    lastReport?.totalViolations &&
+                    lastReport.totalViolations > lastReport.totalRepairsSucceeded
+                      ? '#ef4444'
+                      : '#64748b',
+                },
+              ]}
+            >
               {lastReport ? lastReport.totalViolations - lastReport.totalRepairsSucceeded : 0}
             </Text>
           </View>
@@ -303,24 +348,41 @@ export default function AuditScreen() {
         <Text style={styles.sectionTitle}>SWARM MAP (10 AGENTS ACTIVE)</Text>
         <View style={styles.grid}>
           {agents.map((agent) => {
-            const isAgentHealthy = lastReport?.agentResults.find(r => r.agentId === agent.id)?.healthy ?? true;
+            const isAgentHealthy =
+              lastReport?.agentResults.find((r) => r.agentId === agent.id)?.healthy ?? true;
             return (
               <TouchableOpacity
                 key={agent.id}
                 style={[
                   styles.agentCard,
                   { borderColor: isAgentHealthy ? '#1e293b' : '#ef4444' },
-                  selectedAgent === agent.id && styles.agentCardSelected
+                  selectedAgent === agent.id && styles.agentCardSelected,
                 ]}
                 onPress={() => setSelectedAgent(selectedAgent === agent.id ? null : agent.id)}
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel={`Agent ${agent.id.split('-')[1]}, status ${agent.status}, health ${isAgentHealthy ? 'healthy' : 'unhealthy'}`}
+                accessibilityState={{ selected: selectedAgent === agent.id }}
               >
                 <View style={styles.agentCardHeader}>
                   <Text style={styles.agentName}># {agent.id.split('-')[1]}</Text>
-                  <View style={[styles.statusDot, { backgroundColor: agent.status === 'idle' ? '#64748b' : agent.status === 'analyzing' ? '#06b6d4' : '#8b5cf6' }]} />
+                  <View
+                    style={[
+                      styles.statusDot,
+                      {
+                        backgroundColor:
+                          agent.status === 'idle'
+                            ? '#64748b'
+                            : agent.status === 'analyzing'
+                              ? '#06b6d4'
+                              : '#8b5cf6',
+                      },
+                    ]}
+                  />
                 </View>
-                
+
                 <Text style={styles.agentStatus}>{agent.status.toUpperCase()}</Text>
-                
+
                 <View style={styles.agentMiniStats}>
                   <Text style={styles.miniLabel}>MEM: {agent.memoryAnalyzed}</Text>
                   <Text style={styles.miniLabel}>ENT: {agent.componentsRefactored}</Text>
@@ -334,24 +396,33 @@ export default function AuditScreen() {
         {selectedAgent && (
           <View style={styles.detailCard}>
             <Text style={styles.detailTitle}>Agent Detail: {selectedAgent.toUpperCase()}</Text>
-            {agents.find(a => a.id === selectedAgent) && (
+            {agents.find((a) => a.id === selectedAgent) && (
               <View style={styles.detailGrid}>
                 <View style={styles.detailItem}>
                   <Text style={styles.detailLabel}>Current State Status</Text>
-                  <Text style={styles.detailVal}>{agents.find(a => a.id === selectedAgent)!.status}</Text>
+                  <Text style={styles.detailVal}>
+                    {agents.find((a) => a.id === selectedAgent)!.status}
+                  </Text>
                 </View>
                 <View style={styles.detailItem}>
                   <Text style={styles.detailLabel}>Memory Blocks Analyzed</Text>
-                  <Text style={styles.detailVal}>{agents.find(a => a.id === selectedAgent)!.memoryAnalyzed}</Text>
+                  <Text style={styles.detailVal}>
+                    {agents.find((a) => a.id === selectedAgent)!.memoryAnalyzed}
+                  </Text>
                 </View>
                 <View style={styles.detailItem}>
                   <Text style={styles.detailLabel}>Refactor Invariant Entropy</Text>
-                  <Text style={styles.detailVal}>{agents.find(a => a.id === selectedAgent)!.componentsRefactored} / 100</Text>
+                  <Text style={styles.detailVal}>
+                    {agents.find((a) => a.id === selectedAgent)!.componentsRefactored} / 100
+                  </Text>
                 </View>
                 <View style={styles.detailItem}>
                   <Text style={styles.detailLabel}>Latest BLAKE3 Checkpoint</Text>
                   <Text style={styles.detailValHex}>
-                    {engineRef.current?.getLatestCheckpoint(selectedAgent)?.blake3Hash.slice(0, 24) || 'None'}...
+                    {engineRef.current
+                      ?.getLatestCheckpoint(selectedAgent)
+                      ?.blake3Hash.slice(0, 24) || 'None'}
+                    ...
                   </Text>
                 </View>
               </View>
@@ -362,32 +433,56 @@ export default function AuditScreen() {
         {/* Controls list */}
         <Text style={styles.sectionTitle}>SIMULATOR INJECTION HARNESS</Text>
         <View style={styles.controlButtonsGrid}>
-          <TouchableOpacity accessibilityRole="button" style={[styles.btn, styles.btnBreach]} onPress={injectChatmanBreach}>
+          <TouchableOpacity
+            accessibilityRole="button"
+            style={[styles.btn, styles.btnBreach]}
+            onPress={injectChatmanBreach}
+          >
             <Ionicons name="pulse" size={18} color="white" />
             <Text style={styles.btnText}>1. Chatman Breach</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity accessibilityRole="button" style={[styles.btn, styles.btnBreach]} onPress={injectTransitionBreach}>
+          <TouchableOpacity
+            accessibilityRole="button"
+            style={[styles.btn, styles.btnBreach]}
+            onPress={injectTransitionBreach}
+          >
             <Ionicons name="shuffle" size={18} color="white" />
             <Text style={styles.btnText}>2. Transition Breach</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity accessibilityRole="button" style={[styles.btn, styles.btnBreach]} onPress={injectEntropyOverflow}>
+          <TouchableOpacity
+            accessibilityRole="button"
+            style={[styles.btn, styles.btnBreach]}
+            onPress={injectEntropyOverflow}
+          >
             <Ionicons name="flame" size={18} color="white" />
             <Text style={styles.btnText}>3. Entropy Overflow</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity accessibilityRole="button" style={[styles.btn, styles.btnBreach]} onPress={injectStaleCheckpoint}>
+          <TouchableOpacity
+            accessibilityRole="button"
+            style={[styles.btn, styles.btnBreach]}
+            onPress={injectStaleCheckpoint}
+          >
             <Ionicons name="time" size={18} color="white" />
             <Text style={styles.btnText}>4. Checkpoint Staleness</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity accessibilityRole="button" style={[styles.btn, styles.btnBreach]} onPress={injectCheckpointCorruption}>
+          <TouchableOpacity
+            accessibilityRole="button"
+            style={[styles.btn, styles.btnBreach]}
+            onPress={injectCheckpointCorruption}
+          >
             <Ionicons name="git-pull-request" size={18} color="white" />
             <Text style={styles.btnText}>5. Corrupt & Rehydrate</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity accessibilityRole="button" style={[styles.btn, styles.btnTick]} onPress={simulateSwarmTick}>
+          <TouchableOpacity
+            accessibilityRole="button"
+            style={[styles.btn, styles.btnTick]}
+            onPress={simulateSwarmTick}
+          >
             <Ionicons name="play" size={18} color="white" />
             <Text style={styles.btnText}>Simulate Tick</Text>
           </TouchableOpacity>
@@ -401,14 +496,21 @@ export default function AuditScreen() {
         {/* Live log visualizer console */}
         <View style={styles.consoleHeader}>
           <Text style={styles.sectionTitle}>LIVE ACTIVITY LEDGER</Text>
-          <TouchableOpacity accessibilityRole="button" onPress={() => setSimulationLogs([])}>
+          <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityLabel="Clear activity logs"
+            onPress={() => setSimulationLogs([])}
+            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+          >
             <Text style={styles.clearText}>Clear</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.console}>
           {simulationLogs.length === 0 ? (
-            <Text style={styles.emptyConsole}>Visualizer log output will render here during checks...</Text>
+            <Text style={styles.emptyConsole}>
+              Visualizer log output will render here during checks...
+            </Text>
           ) : (
             simulationLogs.map((log) => {
               let logColor = '#cbd5e1';
@@ -428,6 +530,7 @@ export default function AuditScreen() {
         <View style={{ height: 40 }} />
       </ScrollView>
     </View>
+    </ProtectedRoute>
   );
 }
 
@@ -637,7 +740,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingVertical: 10,
+    paddingVertical: 13,
     paddingHorizontal: 12,
     borderRadius: 10,
     marginBottom: 10,
@@ -666,7 +769,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderColor: '#475569',
     borderRadius: 10,
-    paddingVertical: 10,
+    paddingVertical: 13,
     marginBottom: 20,
   },
   resetText: {

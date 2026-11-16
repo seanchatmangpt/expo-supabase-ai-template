@@ -16,15 +16,17 @@ export function PcpCapabilitiesProvider({ children }: Props) {
     <PcpFrameworkProvider membraneConfig={{ mode: 'strict' }}>
       <PostCyberpunkProvider systemSecret="zoe-secret" laws={[]}>
         <PcpAuthProvider>
-          <PcpMfaProvider 
-            onInitiateChallenge={async () => ({ id: 'mock', strategy: 'totp', expiresAt: Date.now() + 60000 })}
+          <PcpMfaProvider
+            onInitiateChallenge={async () => ({
+              id: 'mock',
+              strategy: 'totp',
+              expiresAt: Date.now() + 60000,
+            })}
             onVerifyCode={async () => ({ success: true })}
           >
             <GenExProvider>
               <TemporalProvider>
-                <ExperimentProvider configs={[]}>
-                  {children}
-                </ExperimentProvider>
+                <ExperimentProvider configs={[]}>{children}</ExperimentProvider>
               </TemporalProvider>
             </GenExProvider>
           </PcpMfaProvider>

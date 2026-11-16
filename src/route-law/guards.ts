@@ -46,11 +46,7 @@ export interface ReceiptGuardResult {
    * The specific reason the receipt was rejected, or null when confirmed.
    * Aligned with `ReceiptMissingReason` from ReceiptTheaterGuard.
    */
-  rejectionReason:
-    | 'RECEIPT_NOT_FOUND'
-    | 'RECEIPT_HASH_MISMATCH'
-    | 'VERIFICATION_ERROR'
-    | null;
+  rejectionReason: 'RECEIPT_NOT_FOUND' | 'RECEIPT_HASH_MISMATCH' | 'VERIFICATION_ERROR' | null;
   /** Human-readable explanation of the rejection, or null when confirmed */
   rejectionMessage: string | null;
 }
@@ -107,8 +103,7 @@ export function requireReceiptBeforeRender(
       receiptConfirmed: false,
       confirmedBlake3Hash: '',
       rejectionReason: 'VERIFICATION_ERROR',
-      rejectionMessage:
-        'requireReceiptBeforeRender: routeKey must be a non-empty string.',
+      rejectionMessage: 'requireReceiptBeforeRender: routeKey must be a non-empty string.',
     };
   }
 

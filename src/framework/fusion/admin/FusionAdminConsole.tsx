@@ -52,7 +52,8 @@ export const FusionAdminConsole: React.FC<FusionAdminConsoleProps> = ({
       activeNavigationId={activeTab}
       onNavigate={handleNavigate}
       testID={testID}
-      scrollable={activeTab !== 'telemetry'}>
+      scrollable={activeTab !== 'telemetry'}
+    >
       <View style={styles.container}>
         {activeTab === 'vitals' && (
           <View testID={`${testID}-vitals-tab`}>

@@ -25,3 +25,10 @@
 * [Typestate Conformance as Axiomatic Truth](explanation/typestate_conformance_axiomatic_truth.md)
 * [The Calculus of Autonomic Governance](theses/calculus_of_autonomic_governance.md)
 * [The Epistemology of ZKP in the AGI Court](theses/epistemology_of_zkp.md)
+* [The Metaphysics of Post-Quantum Cryptography](theses/quantum_resistant_jurisprudence.md)
+
+## Combinatorial Matrices (PhD-Level Synthesis)
+* [Matrix 01: Governance × AGI Court](combinatorial_matrices/01_governance_agi_court_synthesis.md)
+* [Matrix 02: Avatars × Reality Actuation](combinatorial_matrices/02_autonomic_avatars_reality_actuation.md)
+* [Matrix 03: RN Matrix × Governance](combinatorial_matrices/03_react_native_matrix_ostar_governance.md)
+* [Matrix 04: AGI Court × Reality Actuation](combinatorial_matrices/04_agi_court_reality_actuation.md)

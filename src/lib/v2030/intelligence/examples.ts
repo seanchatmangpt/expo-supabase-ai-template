@@ -9,13 +9,21 @@ const expected_path_hash = '9bf9bdfa89101030e2f9d854cfec56116ced11394c8e7e126bb6
 const ocel2 = {
   event_log: {
     events: [
-      { id: 'e1', activity: 'PublishSermon', timestamp: '2026-05-23T10:00:00Z', omap: ['sermon-1'] },
-      { id: 'e2', activity: 'SendNotification', timestamp: '2026-05-23T10:05:00Z', omap: ['sermon-1'] }
+      {
+        id: 'e1',
+        activity: 'PublishSermon',
+        timestamp: '2026-05-23T10:00:00Z',
+        omap: ['sermon-1'],
+      },
+      {
+        id: 'e2',
+        activity: 'SendNotification',
+        timestamp: '2026-05-23T10:05:00Z',
+        omap: ['sermon-1'],
+      },
     ],
-    objects: [
-      { id: 'sermon-1', type: 'CreativeWork', attributes: { title: 'Vision 2030' } }
-    ]
-  }
+    objects: [{ id: 'sermon-1', type: 'CreativeWork', attributes: { title: 'Vision 2030' } }],
+  },
 };
 
 const ocel2_batch_hash = sha256(canonicalStringify(ocel2));
@@ -28,7 +36,7 @@ export const truexVerificationFixture = {
   ocel2_batch_hash,
   receipt_hash,
   admission_status: 'accepted',
-  ocel2
+  ocel2,
 };
 
 /**
@@ -37,7 +45,13 @@ export const truexVerificationFixture = {
 export const jtbdConformanceFixture = {
   declaredWorkflow: ['PublishSermon', 'SendNotification', 'VerifyFeed', 'ArchiveRecord'],
   truthfulTrace: ['PublishSermon', 'SendNotification', 'VerifyFeed', 'ArchiveRecord'],
-  deviantTrace: ['PublishSermon', 'SendNotification', 'VerifyFeed', 'UpdateDatabase', 'ArchiveRecord']
+  deviantTrace: [
+    'PublishSermon',
+    'SendNotification',
+    'VerifyFeed',
+    'UpdateDatabase',
+    'ArchiveRecord',
+  ],
 };
 
 /**
@@ -45,27 +59,45 @@ export const jtbdConformanceFixture = {
  */
 export const conceptDriftFixture = {
   stableActivities: [
-    'PublishSermon', 'SendNotification', 'VerifyFeed',
-    'PublishSermon', 'SendNotification', 'VerifyFeed',
-    'PublishSermon', 'SendNotification', 'VerifyFeed',
-    'PublishSermon', 'SendNotification', 'VerifyFeed'
+    'PublishSermon',
+    'SendNotification',
+    'VerifyFeed',
+    'PublishSermon',
+    'SendNotification',
+    'VerifyFeed',
+    'PublishSermon',
+    'SendNotification',
+    'VerifyFeed',
+    'PublishSermon',
+    'SendNotification',
+    'VerifyFeed',
   ],
   driftingActivities: [
     // Stable phase (Windows 0 and 1)
-    'PublishSermon', 'SendNotification', 'VerifyFeed',
-    'PublishSermon', 'SendNotification', 'VerifyFeed',
+    'PublishSermon',
+    'SendNotification',
+    'VerifyFeed',
+    'PublishSermon',
+    'SendNotification',
+    'VerifyFeed',
     // Drift phase (Windows 2, 3 and 4 have 100% distinct activities)
-    'TriggerAutoAuditor', 'UpdateDatabase', 'ArchiveRecord',
-    'RenderOutput', 'UploadMedia', 'TrackProgress',
-    'CheckCompliance', 'PrintReport', 'ExportExcel'
-  ]
+    'TriggerAutoAuditor',
+    'UpdateDatabase',
+    'ArchiveRecord',
+    'RenderOutput',
+    'UploadMedia',
+    'TrackProgress',
+    'CheckCompliance',
+    'PrintReport',
+    'ExportExcel',
+  ],
 };
 
 /**
  * 4. RL Orchestration Fixture
  */
 export const rlOrchestratorFixture = {
-  cyclesCount: 30
+  cyclesCount: 30,
 };
 
 /**
@@ -73,11 +105,35 @@ export const rlOrchestratorFixture = {
  */
 export const complianceGuardFixture = {
   compliantTrace: [
-    { id: 'c1', actorKind: 'Sermon', actorId: 'abc123', command: 'PublishSermon', status: 'applied_local' },
-    { id: 'c2', actorKind: 'Sermon', actorId: 'abc123', command: 'SendNotification', status: 'applied_local' }
+    {
+      id: 'c1',
+      actorKind: 'Sermon',
+      actorId: 'abc123',
+      command: 'PublishSermon',
+      status: 'applied_local',
+    },
+    {
+      id: 'c2',
+      actorKind: 'Sermon',
+      actorId: 'abc123',
+      command: 'SendNotification',
+      status: 'applied_local',
+    },
   ],
   nonCompliantTrace: [
-    { id: 'c1', actorKind: 'Sermon', actorId: 'abc123', command: 'PublishSermon', status: 'rejected_remote' },
-    { id: 'c2', actorKind: 'Sermon', actorId: 'abc123', command: 'SendNotification', status: 'applied_local' }
-  ]
+    {
+      id: 'c1',
+      actorKind: 'Sermon',
+      actorId: 'abc123',
+      command: 'PublishSermon',
+      status: 'rejected_remote',
+    },
+    {
+      id: 'c2',
+      actorKind: 'Sermon',
+      actorId: 'abc123',
+      command: 'SendNotification',
+      status: 'applied_local',
+    },
+  ],
 };

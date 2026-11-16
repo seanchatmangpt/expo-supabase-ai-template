@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, ViewStyle } from 'react-native';
+import { useTheme } from '../../framework/ui/theme/useTheme';
 
 interface AdminCardProps {
   title?: string;
@@ -10,19 +11,55 @@ interface AdminCardProps {
   testID?: string;
 }
 
-export function AdminCard({ title, subtitle, children, style, headerRight, testID }: AdminCardProps) {
+export function AdminCard({
+  title,
+  subtitle,
+  children,
+  style,
+  headerRight,
+  testID,
+}: AdminCardProps) {
+  const theme = useTheme();
+
   return (
-    <View style={[styles.card, style]} testID={testID}>
+    <View
+      style={[
+        styles.card,
+        {
+          backgroundColor: theme.colors.card,
+          borderColor: theme.colors.border,
+        },
+        style,
+      ]}
+      testID={testID}
+    >
       {(title || subtitle || headerRight) && (
-        <View style={styles.header}>
+        <View style={[styles.header, { borderBottomColor: theme.colors.border }]}>
           <View style={styles.headerText}>
-            {title && <Text style={styles.title} testID={`${testID}-title`} accessibilityRole="header">{title}</Text>}
-            {subtitle && <Text style={styles.subtitle} testID={`${testID}-subtitle`}>{subtitle}</Text>}
+            {title && (
+              <Text
+                style={[styles.title, { color: theme.colors.text }]}
+                testID={`${testID}-title`}
+                accessibilityRole="header"
+              >
+                {title}
+              </Text>
+            )}
+            {subtitle && (
+              <Text
+                style={[styles.subtitle, { color: theme.colors.secondary }]}
+                testID={`${testID}-subtitle`}
+              >
+                {subtitle}
+              </Text>
+            )}
           </View>
           {headerRight && <View testID={`${testID}-header-right`}>{headerRight}</View>}
         </View>
       )}
-      <View style={styles.content} testID={`${testID}-content`}>{children}</View>
+      <View style={styles.content} testID={`${testID}-content`}>
+        {children}
+      </View>
     </View>
   );
 }

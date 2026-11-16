@@ -1,18 +1,28 @@
-# Project: Expo-Supabase Full-Stack Sweep
+# Project: UI/UX & Routing Remediation
 
 ## Architecture & Scope
-The goal of this sweep is to identify and resolve all remaining TypeScript violations, ESLint warnings, runtime bugs, and UX/routing issues in `/Users/sac/expo-supabase-ai-template`.
+The project focuses on fixing all critical UX/UI and routing issues in the TRUEX Expo template codebase, specifically:
+1. Navigation & Routing: cryptographic gating, context retention, quarantined routes security.
+2. Design System & Theme: `@pcp` theme unification, dynamic color sync, WCAG contrast.
+3. Accessibility: Touch targets >=44px, accessibility roles, A11yAuditor/AdaptivePressable.
+4. Form Handling: Keyboard safe inputs, decimal input parsing.
+5. Feedback & Animations: Reanimated transitions, skeleton loaders, IntelligentHaptics.
+6. Resilience: AutoFixer ErrorBoundary integration, dynamic dimensions, web safety.
 
 ## Milestones
 | # | Name | Scope | Dependencies | Status | Agent/Task ID |
 |---|------|-------|-------------|--------|---------------|
-| 1 | M1: Diagnostics | Run static analysis (`tsc`, `eslint`) and existing test suites to find all issues | None | DONE | 6e9eb0ae-34e9-42a6-881b-fd54d9440660, dcead676-3603-4f52-8246-d647216e565e, 9835a2ca-0279-4002-805a-0276c8b8057f |
-| 2 | M2: Compile & Lint Resolution | Fix all discovered TS/ESLint warnings and errors | M1 | DONE | 54318f08-a6ec-4462-af7e-fe4a7ad2952c, 4b46557b-78de-45b1-b1e5-9335b29b332d |
-| 3 | M3: UX & Component Integrity | Identify and resolve visual overflows, missing components, or broken links | M2 | DONE | 54318f08-a6ec-4462-af7e-fe4a7ad2952c, 4b46557b-78de-45b1-b1e5-9335b29b332d |
-| 4 | M4: Final Verification | Verify tsc/eslint has 0 errors/warnings and all tests run cleanly | M3 | DONE | b5a08856-a47e-446c-9716-b560288c320e, 4e04be5d-772f-45e2-ab64-bd5b21b30c0e |
+| 1 | M1: Exploration & Diagnostics | Scan codebase for target areas, run tests to establish baseline | None | DONE | 50510b52-5d22-4538-9bc0-e6a092600200 |
+| 2 | M2: Gating & Routing Remediation | Implement ProtectedRoute/ReceiptTheaterGuard gating, fix admin navigation, secure quarantined routes | M1 | DONE | b3192bdf-ca2a-4f63-9ff1-a16b983e3362 |
+| 3 | M3: Theme & Contrast Unification | Unify theme under @pcp primitives, sync color systems, fix Auth contrast | M1 | DONE | 4e7d2696-d04d-42fc-a34c-6cb8cf2d6227 |
+| 4 | M4: Accessibility & Forms | Touch targets >=44px, accessibility roles, KeyboardSafeForm, SemanticForm decimal parser | M1 | DONE | 2429e725-5fe2-4c16-befc-6f95e737f960 |
+| 5 | M5: Feedback, Animations & Recovery | Reanimated transitions, IntelligentHaptics, skeleton screens, dynamic dimensions, AutoFixer in ErrorBoundary | M1 | DONE | 9e6d09e1-0eb7-4684-945e-0605cf4eb959 |
+| 6 | M6: Verification & Hardening | Programmatic Jest test coverage, run tests and linter, final verification | M2-M5 | DONE | c1b29b7f-7a17-4c07-ba58-aafb221df461 |
 
 ## Interface Contracts & Guidelines
 - Strict TypeScript: No `any` where type safety is compromised, resolve all type issues.
-- Zero ESLint Warnings: Fix or configure out all warnings cleanly (no dummy suppressions unless fully justified).
-- All changes must be fully implemented, with zero placeholder logic.
-- Verify using independent worker type-checking and test suites.
+- Touch Targets: Ensure all touch targets of interactive elements are at least 44px.
+- Accessibility: Equip core UI components with default accessibility roles.
+- Animations & Feedback: Use Reanimated and IntelligentHaptics.
+- Keyboard Safety: Use KeyboardSafeForm or KeyboardAvoidingView.
+- Form Parsers: Support decimal inputs in SemanticForm.

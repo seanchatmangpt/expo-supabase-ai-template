@@ -129,7 +129,8 @@ export function AuthProvider<TUser = any>({
         transitionType,
         setIsTransitioning,
         setSession,
-      }}>
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

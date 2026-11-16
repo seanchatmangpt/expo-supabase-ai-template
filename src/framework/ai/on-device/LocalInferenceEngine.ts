@@ -17,6 +17,7 @@ import {
   AGENT_NATIVE_INITIAL_MARKING,
   AGENT_NATIVE_FINAL_PLACES,
 } from '../../2030/process-mining/conformance';
+import { FastTFLiteAdapter } from './FastTFLiteAdapter';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // TYPESTATE DEFINITIONS
@@ -345,7 +346,7 @@ export class LocalInferenceEngine implements ILocalInferenceEngine {
   private receiptChain: InferenceReceipt[] = [];
 
   constructor(adapter?: LLMAdapter) {
-    this.adapter = adapter ?? new DefaultRulesAdapter();
+    this.adapter = adapter ?? new FastTFLiteAdapter();
   }
 
   // ─── New typed API ──────────────────────────────────────────────────────────

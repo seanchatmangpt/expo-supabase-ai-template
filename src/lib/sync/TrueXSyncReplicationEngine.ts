@@ -499,12 +499,7 @@ export class TrueXSyncReplicationEngine {
     const admittedAt = new Date().toISOString();
     const eventCount = events.length;
 
-    const receiptHash = computeReceiptHash(
-      previousReceiptHash,
-      batchHash,
-      admittedAt,
-      eventCount
-    );
+    const receiptHash = computeReceiptHash(previousReceiptHash, batchHash, admittedAt, eventCount);
     const id = deriveReceiptId(receiptHash);
 
     const receipt: AdmissionReceipt = {
@@ -644,10 +639,11 @@ export class TrueXSyncReplicationEngine {
           receipt.dispatchAttempts = currentAttempt;
           receipt.lastError = errorMessage;
 
-          console.error(
-            '[TrueXSyncReplicationEngine] Batch quarantined after max attempts:',
-            { receiptId: receipt.id, attempts: currentAttempt, error: errorMessage }
-          );
+          console.error('[TrueXSyncReplicationEngine] Batch quarantined after max attempts:', {
+            receiptId: receipt.id,
+            attempts: currentAttempt,
+            error: errorMessage,
+          });
           return;
         }
 
@@ -711,7 +707,11 @@ export class InMemoryReplicationStorageAdapter implements ReplicationStorageAdap
   async insertAdmissionReceipt(receipt: AdmissionReceipt): Promise<void> {
     if (!this.receipts.has(receipt.id)) {
       // Deep-copy to prevent external mutation of the stored record
-      this.receipts.set(receipt.id, { ...receipt, queueIds: [...receipt.queueIds], eventIdempotencyKeys: [...receipt.eventIdempotencyKeys] });
+      this.receipts.set(receipt.id, {
+        ...receipt,
+        queueIds: [...receipt.queueIds],
+        eventIdempotencyKeys: [...receipt.eventIdempotencyKeys],
+      });
       this.receiptInsertionOrder.push(receipt.id);
     }
   }

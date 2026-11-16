@@ -12,7 +12,8 @@ describe('MFA Framework', () => {
     <MfaProvider
       onInitiateChallenge={mockOnInitiateChallenge}
       onVerifyCode={mockOnVerifyCode}
-      verificationGracePeriod={1000}>
+      verificationGracePeriod={1000}
+    >
       {children}
     </MfaProvider>
   );

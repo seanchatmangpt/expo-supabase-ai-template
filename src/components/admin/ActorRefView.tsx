@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { ActorRef } from '../../lib/actor/types';
+import { useTheme } from '../../framework/ui/theme/useTheme';
 
 interface ActorRefViewProps {
   actorRef: ActorRef | string;
@@ -8,6 +9,7 @@ interface ActorRefViewProps {
 }
 
 export function ActorRefView({ actorRef, testID }: ActorRefViewProps) {
+  const theme = useTheme();
   let parsed: ActorRef | null = null;
   let hasError = false;
 
@@ -23,7 +25,10 @@ export function ActorRefView({ actorRef, testID }: ActorRefViewProps) {
   if (hasError || !parsed) {
     return (
       <View
-        style={[styles.container, styles.errorContainer]}
+        style={[
+          styles.container,
+          styles.errorContainer,
+        ]}
         testID={testID}
         accessible={true}
         accessibilityLabel="Invalid Actor reference"
@@ -36,7 +41,13 @@ export function ActorRefView({ actorRef, testID }: ActorRefViewProps) {
 
   return (
     <View
-      style={styles.container}
+      style={[
+        styles.container,
+        {
+          backgroundColor: theme.colors.card,
+          borderColor: theme.colors.border,
+        },
+      ]}
       testID={testID}
       accessible={true}
       accessibilityLabel={`Actor reference: Kind ${parsed.kind}, ID ${parsed.id}`}

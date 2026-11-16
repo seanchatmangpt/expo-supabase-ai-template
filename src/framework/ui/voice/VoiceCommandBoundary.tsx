@@ -1,4 +1,12 @@
-import React, { createContext, useContext, useState, useCallback, useMemo, useEffect, useRef } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+  useRef,
+} from 'react';
 import { VoiceIntent, VoiceCommandBoundaryProps, VoiceContextValue } from './types';
 
 const VoiceContext = createContext<VoiceContextValue | undefined>(undefined);

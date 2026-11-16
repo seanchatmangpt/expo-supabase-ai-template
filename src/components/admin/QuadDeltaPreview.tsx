@@ -2,10 +2,12 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 interface QuadDeltaPreviewProps {
-  delta: {
-    add?: any[];
-    remove?: any[];
-  } | string;
+  delta:
+    | {
+        add?: any[];
+        remove?: any[];
+      }
+    | string;
   testID?: string;
 }
 
@@ -39,12 +41,13 @@ export function QuadDeltaPreview({ delta, testID }: QuadDeltaPreviewProps) {
   const renderQuad = (q: any, type: 'add' | 'remove', index: number) => {
     const color = type === 'add' ? '#34D399' : '#F87171'; // emerald-400 / red-400
     const prefix = type === 'add' ? '+' : '-';
-    
+
     const formatNode = (node: any) => {
       if (!node) return 'null';
-      const val = typeof node === 'string' ? node : (node.value || String(node));
-      return val.replace('https://schema.org/', 'schema:')
-                .replace('http://www.w3.org/1999/02/22-rdf-syntax-ns#', 'rdf:');
+      const val = typeof node === 'string' ? node : node.value || String(node);
+      return val
+        .replace('https://schema.org/', 'schema:')
+        .replace('http://www.w3.org/1999/02/22-rdf-syntax-ns#', 'rdf:');
     };
 
     return (

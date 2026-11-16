@@ -17,11 +17,14 @@ jest.mock('@react-native-async-storage/async-storage', () =>
   require('@react-native-async-storage/async-storage/jest/async-storage-mock')
 );
 
-jest.mock('react-native/Libraries/Utilities/DevSettings', () => ({
-  reload: jest.fn(),
-  addMenuItem: jest.fn(),
-}), { virtual: true });
-
+jest.mock(
+  'react-native/Libraries/Utilities/DevSettings',
+  () => ({
+    reload: jest.fn(),
+    addMenuItem: jest.fn(),
+  }),
+  { virtual: true }
+);
 
 // Mock database module globally to prevent native SQLite instantiation in non-db tests
 const mockDbInstance = {
@@ -53,8 +56,10 @@ const mockDbModule = {
     execSync: jest.fn(),
     execAsync: jest.fn().mockResolvedValue(undefined),
     runAsync: jest.fn().mockResolvedValue({ changes: 0, lastInsertRowId: 0 }),
+    runSync: jest.fn().mockReturnValue({ changes: 0, lastInsertRowId: 0 }),
     getFirstAsync: jest.fn().mockResolvedValue(null),
     getAllAsync: jest.fn().mockResolvedValue([]),
+    getAllSync: jest.fn().mockReturnValue([]),
     closeAsync: jest.fn().mockResolvedValue(undefined),
   },
   db: mockDbInstance,
@@ -119,14 +124,18 @@ jest.mock('expo-router/react-navigation', () => ({
 }));
 // Mock Worklets
 jest.mock('react-native-worklets', () => require('react-native-worklets/src/mock'));
-jest.mock('react-native-worklets-core', () => {
-  return {
-    makeMutable: jest.fn((v: any) => ({ value: v })),
-    makeShareable: jest.fn((v: any) => v),
-    runOnJS: jest.fn((v: any) => v),
-    runOnUI: jest.fn((v: any) => v),
-  };
-}, { virtual: true });
+jest.mock(
+  'react-native-worklets-core',
+  () => {
+    return {
+      makeMutable: jest.fn((v: any) => ({ value: v })),
+      makeShareable: jest.fn((v: any) => v),
+      runOnJS: jest.fn((v: any) => v),
+      runOnUI: jest.fn((v: any) => v),
+    };
+  },
+  { virtual: true }
+);
 
 // Mock Reanimated
 jest.mock('react-native-reanimated', () => {
@@ -144,12 +153,16 @@ jest.mock('@expo/vector-icons', () => {
 });
 
 // Mock react-native-mmkv globally
-jest.mock('react-native-nitro-modules', () => {
-  return {
-    NativeNitroModules: {},
-    buildNitroModule: jest.fn(),
-  };
-}, { virtual: true });
+jest.mock(
+  'react-native-nitro-modules',
+  () => {
+    return {
+      NativeNitroModules: {},
+      buildNitroModule: jest.fn(),
+    };
+  },
+  { virtual: true }
+);
 
 jest.mock('react-native-mmkv', () => {
   const instances: Record<string, any> = {};
@@ -225,17 +238,19 @@ jest.mock('expo-sqlite', () => {
     execSync: jest.fn(),
     execAsync: jest.fn().mockResolvedValue(undefined),
     runAsync: jest.fn().mockResolvedValue({ changes: 0, lastInsertRowId: 0 }),
+    runSync: jest.fn().mockReturnValue({ changes: 0, lastInsertRowId: 0 }),
     getFirstAsync: jest.fn().mockResolvedValue(null),
     getAllAsync: jest.fn().mockResolvedValue([]),
+    getAllSync: jest.fn().mockReturnValue([]),
     closeAsync: jest.fn().mockResolvedValue(undefined),
   };
   const mockExpoSQLite = {
     openDatabaseSync: jest.fn(() => mockDb),
     openDatabaseAsync: jest.fn().mockResolvedValue(mockDb),
-    NativeDatabase: jest.fn().mockImplementation(function() {
+    NativeDatabase: jest.fn().mockImplementation(function () {
       return mockDb;
     }),
-    SQLiteDatabase: jest.fn().mockImplementation(function() {
+    SQLiteDatabase: jest.fn().mockImplementation(function () {
       return mockDb;
     }),
   };
@@ -261,7 +276,9 @@ const mockSupabaseClient = {
     auth: {
       signOut: mockSignOut,
       getSession: jest.fn().mockResolvedValue({ data: { session: null }, error: null }),
-      onAuthStateChange: jest.fn().mockReturnValue({ data: { subscription: { unsubscribe: jest.fn() } } }),
+      onAuthStateChange: jest
+        .fn()
+        .mockReturnValue({ data: { subscription: { unsubscribe: jest.fn() } } }),
     },
   },
 };
@@ -292,7 +309,9 @@ let mockLatestReceipt: any = { id: 'mock-rec-id' };
 const mockActorOpsState = {
   _networkOnline: true,
   get networkOnline() {
-    return (global as any).mockNetworkOnline !== undefined ? (global as any).mockNetworkOnline : this._networkOnline;
+    return (global as any).mockNetworkOnline !== undefined
+      ? (global as any).mockNetworkOnline
+      : this._networkOnline;
   },
   set networkOnline(val) {
     this._networkOnline = val;
@@ -337,7 +356,6 @@ const mockUseActorOpsStore = jest.fn((selector: any) => {
     mockLatestReceipt = mockActorOpsState.latestReceipt;
   }
 });
-
 
 const mockPushChanges = jest.fn(() => Promise.resolve());
 const mockSyncEngine = {
@@ -520,4 +538,3 @@ beforeEach(() => {
   // Reapply default implementations
   setupMockImplementations();
 });
-

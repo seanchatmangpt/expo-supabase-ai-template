@@ -1,12 +1,5 @@
 import { OutboxDelta, OutboxHook, OutboxReceipt } from './types';
-
-function simpleHash(str: string): string {
-  let hash = 5381;
-  for (let i = 0; i < str.length; i++) {
-    hash = (hash * 33) ^ str.charCodeAt(i);
-  }
-  return (hash >>> 0).toString(16);
-}
+import { sha256 } from '../../lib/crypto/receipts';
 
 export class FrameworkOutboxManager<
   TDelta extends OutboxDelta = OutboxDelta,
@@ -39,12 +32,12 @@ export class FrameworkOutboxManager<
     if (!hook.receipts) return;
 
     // Simulate input/output hashes quickly
-    const inputHash = simpleHash(delta.subject);
-    const outputHash = simpleHash(delta.object);
-    const deltaHash = simpleHash(delta.predicate + delta.timestamp.toString());
+    const inputHash = sha256(delta.subject);
+    const outputHash = sha256(delta.object);
+    const deltaHash = sha256(delta.predicate + delta.timestamp.toString());
 
     // Link the chain
-    const receiptHash = simpleHash(this.lastReceiptHash + inputHash + outputHash + deltaHash);
+    const receiptHash = sha256(this.lastReceiptHash + inputHash + outputHash + deltaHash);
 
     const receipt: OutboxReceipt = {
       inputHash,

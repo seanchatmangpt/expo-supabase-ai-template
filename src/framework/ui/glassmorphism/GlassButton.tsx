@@ -70,7 +70,8 @@ export const GlassButton: React.FC<GlassButtonProps> = ({
         'px-6 py-3 rounded-xl items-center justify-center backdrop-blur-sm',
         disabled && 'opacity-50',
         className
-      )}>
+      )}
+    >
       {typeof children === 'string' ? (
         <Text
           style={[
@@ -80,7 +81,8 @@ export const GlassButton: React.FC<GlassButtonProps> = ({
               fontWeight: '600',
             },
             textStyle,
-          ]}>
+          ]}
+        >
           {children}
         </Text>
       ) : (

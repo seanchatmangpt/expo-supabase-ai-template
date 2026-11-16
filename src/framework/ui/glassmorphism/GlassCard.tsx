@@ -42,7 +42,8 @@ export const GlassCard: React.FC<GlassCardProps> = ({
         'rounded-2xl overflow-hidden backdrop-blur-md', // backdrop-blur-md for web
         className
       )}
-      {...props}>
+      {...props}
+    >
       {children}
     </View>
   );
